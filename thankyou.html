@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800;900&family=Lobster&display=swap" rel="stylesheet">
+
+<title>Thank You</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f6efe8;
+  font-family:'Poppins', sans-serif;
+}
+
+.container{
+  position:relative;
+  width:700px;
+  text-align:center;
+}
+
+/* TEXT */
+.title{
+  font-size:64px;
+  font-weight:900;
+  color:#000;
+  letter-spacing:-2px;
+}
+
+.bye{
+ 
+  top: 100px;
+  right:120px;
+ font-family: 'Pacifico', cursive;
+  font-weight: 900;
+  font-size:90px;
+  color:#ff5a2e;
+  transform:rotate(-5deg);
+}
+  
+.subtitle{
+  margin-top:10px;
+  font-size:17px;
+  color:#222;
+}
+
+/* STICKERS */
+.sticker{
+  position:absolute;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:38px;
+  box-shadow:0 6px 10px rgba(0,0,0,0.15);
+  cursor:pointer;
+
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* DIFFERENT SPEEDS (natural feel) */
+.strawberry{ animation-delay:0s; }
+.banana{ animation-delay:0.5s; }
+.chili{ animation-delay:1s; }
+.orange{ animation-delay:1.5s; }
+
+/* FLOAT ANIMATION */
+@keyframes float{
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+/* HOVER EFFECT */
+.sticker:hover{
+  animation-play-state: paused;
+  transform: translateY(-18px) scale(1.1) rotate(-8deg);
+  box-shadow:0 18px 25px rgba(0,0,0,0.3);
+}
+
+/* POSITIONS */
+.strawberry{
+  left:40px;
+  top:90px;
+  background:#ffd54a;
+}
+
+.banana{
+  left:110px;
+  top:130px;
+  background:#4e78ff;
+}
+
+.chili{
+  left:520px;
+  top:80px;
+  width:90px;
+  height:60px;
+  border-radius:50px;
+  background:#ff9ec5;
+  font-size:34px;
+}
+
+.orange{
+  right:40px;
+  top:130px;
+  background:#caa6ff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- stickers -->
+  <div class="sticker strawberry">🍓</div>
+  <div class="sticker banana">🍌</div>
+  <div class="sticker chili">🌶️</div>
+  <div class="sticker orange">🍊</div>
+
+  <!-- text -->
+  <div class="title">Thank You,</div>
+  <div class="bye">Bye!</div>
+
+  <div class="subtitle">
+   The story doesn’t end here.<br>
+    We’ll meet again — different time, same story.
+  </div>
+
+</div>
+
+</body>
+</html>

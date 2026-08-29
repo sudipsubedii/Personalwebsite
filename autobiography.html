@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life of an Earthian</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+    <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: Inter, sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .fade-enter { animation: fadeIn .35s ease-out both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .folder-shell {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1rem;
+      width: min(100%, 1180px);
+      margin: 0 auto;
+    }
+    .folder-carousel {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      user-select: none;
+      touch-action: pan-y;
+      display: flex;
+      justify-content: center;
+      min-width: 0;
+    }
+    .folder-track {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: .75rem;
+      width: max-content;
+      min-width: max-content;
+      margin: 0 auto;
+      transition: transform 900ms cubic-bezier(.22,1,.36,1);
+    }
+    .folder-tab {
+      flex: 0 0 160px;
+      width: 160px;
+      min-width: 160px;
+      min-height: 96px;
+      border-radius: 1.55rem;
+      transition: opacity 1.05s ease, filter 1.05s ease, transform 1.05s cubic-bezier(.22,1,.36,1), border-color .25s ease, background .25s ease, box-shadow .25s ease;
+      overflow: hidden;
+    }
+    .folder-tab:hover { transform: translateY(-2px) scale(1.01) !important; }
+    .folder-nav-btn {
+      width: 2.8rem;
+      height: 2.8rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(24,24,27,.12);
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 8px 18px rgba(15,23,42,.08);
+      flex: 0 0 auto;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .folder-nav-btn:hover { transform: translateY(-1px); }
+    .dark .folder-nav-btn { background: rgba(24,24,27,.8); border-color: rgba(255,255,255,.08); }
+
+    .header-button {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      height: 2.75rem; padding: 0 .9rem; border-radius: 9999px;
+      border: 1px solid rgba(24,24,27,.12); background: rgba(255,255,255,.9);
+      box-shadow: 0 8px 18px rgba(15,23,42,.06); color: #27272a;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .header-button:hover { transform: translateY(-1px); }
+    .dark .header-button { border-color: rgba(255,255,255,.08); background: rgba(24,24,27,.75); color: #f4f4f5; }
+    .header-icon { display:inline-flex; align-items:center; justify-content:center; width:1.1rem; height:1.1rem; }
+    .header-icon svg { width:1.05rem; height:1.05rem; stroke:currentColor; fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+    .header-button.is-unlocked { border-color: rgba(16,185,129,.45); color:#0f766e; }
+    .dark .header-button.is-unlocked { color:#34d399; }
+
+    .admin-form-card { border:1px solid rgba(24,24,27,.12); border-radius:1.5rem; background:rgba(255,255,255,.74); }
+    .dark .admin-form-card { border-color:rgba(255,255,255,.08); background:rgba(30,31,37,.7); }
+    .admin-form-row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.9rem; }
+    .admin-form-field { width:100%; border-radius:1rem; border:1px solid rgba(24,24,27,.15); background:rgba(255,255,255,.82); padding:.8rem .9rem; font-size:.92rem; }
+    .dark .admin-form-field { border-color:rgba(255,255,255,.08); background:rgba(24,24,27,.7); color:#e4e4e7; }
+    .admin-form-actions { display:flex; align-items:center; justify-content:flex-end; gap:.7rem; margin-top:1rem; }
+    .admin-form-submit, .admin-form-cancel { border-radius:999px; border:1px solid rgba(24,24,27,.12); padding:.7rem 1rem; font-size:.85rem; font-weight:600; }
+    .admin-form-submit { background:#18181b; color:#fff; }
+    .dark .admin-form-submit { background:#f4f4f5; color:#18181b; }
+    .admin-form-msg { font-size:.75rem; min-height:1rem; }
+    .admin-form-msg.error { color:#b91c1c; }
+    .admin-form-msg.success { color:#166534; }
+
+    .movie-genre-filter-shell { margin-top:1rem; margin-bottom:1.5rem; }
+    .movie-genre-filter {
+      display:flex; gap:.55rem; overflow-x:auto; overflow-y:hidden; padding:.15rem .1rem .35rem;
+      scrollbar-width:none; -ms-overflow-style:none; scroll-behavior:smooth;
+      overscroll-behavior-x:contain;
+    }
+    .movie-genre-filter::-webkit-scrollbar { display:none; }
+    .movie-genre-btn {
+      flex:0 0 auto; border:1px solid rgba(24,24,27,.12); background:rgba(255,255,255,.72);
+      color:#52525b; border-radius:999px; padding:.55rem .82rem; font-size:.72rem; font-weight:600;
+      line-height:1; white-space:nowrap; transition:background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+    .movie-genre-btn:hover { transform:translateY(-1px); border-color:rgba(24,24,27,.2); color:#18181b; }
+    .movie-genre-btn.is-active { background:#18181b; color:#fff; border-color:#18181b; box-shadow:0 6px 14px rgba(15,23,42,.08); }
+    .dark .movie-genre-btn { background:rgba(24,24,27,.72); border-color:rgba(255,255,255,.1); color:#a1a1aa; }
+    .dark .movie-genre-btn:hover { border-color:rgba(255,255,255,.18); color:#f4f4f5; }
+    .dark .movie-genre-btn.is-active { background:#f4f4f5; color:#18181b; border-color:#f4f4f5; }
+    @media (max-width: 767px) {
+      .movie-genre-filter { gap:.45rem; }
+      .movie-genre-btn { padding:.52rem .72rem; font-size:.68rem; }
+    }
+
+    .spotify-library-shell {
+      display:grid;
+      grid-template-columns:260px minmax(0,1fr);
+      border:1px solid rgba(24,24,27,.12);
+      border-radius:1.35rem;
+      background:rgba(255,255,255,.76);
+      overflow:hidden;
+      box-shadow:0 10px 24px rgba(15,23,42,.04);
+    }
+    .dark .spotify-library-shell {
+      border-color:rgba(255,255,255,.08);
+      background:rgba(24,24,27,.74);
+      box-shadow:none;
+    }
+    .spotify-library-sidebar {
+      min-width:0;
+      border-right:1px solid rgba(24,24,27,.08);
+      background:rgba(250,250,249,.72);
+      padding:.75rem;
+    }
+    .dark .spotify-library-sidebar {
+      border-right-color:rgba(255,255,255,.08);
+      background:rgba(18,18,20,.64);
+    }
+    .spotify-library-sidebar-label {
+      margin:.25rem .45rem .65rem;
+      font-size:.61rem;
+      font-weight:700;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgb(113 113 122);
+    }
+    .dark .spotify-library-sidebar-label { color:rgb(161 161 170); }
+    .spotify-playlist-nav {
+      display:flex;
+      flex-direction:column;
+      gap:.35rem;
+      max-height:540px;
+      overflow:auto;
+      padding-right:.15rem;
+      scrollbar-width:none;
+    }
+    .spotify-playlist-nav::-webkit-scrollbar { display:none; }
+    .spotify-playlist-item {
+      width:100%;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      gap:.45rem;
+      border:1px solid transparent;
+      border-radius:.9rem;
+      padding:.72rem .72rem;
+      text-align:left;
+      background:transparent;
+      color:#52525b;
+      transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease;
+    }
+    .spotify-playlist-item:hover { transform:translateY(-1px); background:rgba(24,24,27,.045); color:#18181b; }
+    .spotify-playlist-item.is-active {
+      border-color:rgba(24,24,27,.12);
+      background:#18181b;
+      color:#fff;
+      box-shadow:0 8px 18px rgba(15,23,42,.08);
+    }
+    .dark .spotify-playlist-item { color:#a1a1aa; }
+    .dark .spotify-playlist-item:hover { background:rgba(255,255,255,.05); color:#f4f4f5; }
+    .dark .spotify-playlist-item.is-active { background:#f4f4f5; color:#18181b; border-color:#f4f4f5; }
+    .spotify-playlist-item-main { min-width:0; border:0; background:transparent; padding:0; text-align:left; color:inherit; cursor:pointer; }
+    .spotify-playlist-item-kicker { display:block; margin-bottom:.18rem; font-size:.55rem; letter-spacing:.18em; text-transform:uppercase; opacity:.72; }
+    .spotify-playlist-item-title { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.82rem; font-weight:600; }
+    .spotify-playlist-item-remove { border:1px solid rgba(239,68,68,.2); color:#b91c1c; background:transparent; border-radius:999px; padding:.34rem .48rem; font-size:.62rem; font-weight:600; }
+    .dark .spotify-playlist-item-remove { color:#fca5a5; border-color:rgba(248,113,113,.25); }
+    .spotify-library-main { min-width:0; background:#181818; }
+    .spotify-library-main-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:1rem 1.15rem .85rem;
+      background:rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.09);
+    }
+    .spotify-playlist-kicker {
+      margin-bottom:.35rem;
+      font-size:.62rem;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.55);
+    }
+    .spotify-playlist-title {
+      font-size:1.05rem;
+      line-height:1.35;
+      font-weight:600;
+      letter-spacing:-.02em;
+      color:#fff;
+      word-break:break-word;
+    }
+    .spotify-playlist-open {
+      flex:0 0 auto;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      padding:.5rem .75rem;
+      font-size:.72rem;
+      font-weight:600;
+      color:#fff;
+      background:rgba(255,255,255,.08);
+    }
+    .spotify-playlist-frame {
+      display:block;
+      width:100%;
+      height:540px;
+      border:0;
+      background:#181818;
+    }
+    .spotify-playlist-empty { padding:1.5rem; font-size:.82rem; line-height:1.6; color:rgba(255,255,255,.7); }
+    @media (max-width: 900px) {
+      .spotify-library-shell { grid-template-columns:1fr; }
+      .spotify-library-sidebar { border-right:0; border-bottom:1px solid rgba(24,24,27,.08); }
+      .dark .spotify-library-sidebar { border-bottom-color:rgba(255,255,255,.08); }
+      .spotify-playlist-nav { flex-direction:row; overflow-x:auto; max-height:none; padding-bottom:.15rem; }
+      .spotify-playlist-item { width:220px; flex:0 0 220px; }
+      .spotify-playlist-frame { height:560px; }
+    }
+    @media (max-width: 600px) {
+      .spotify-playlist-item { width:190px; flex-basis:190px; }
+      .spotify-playlist-frame { height:520px; }
+    }
+
+    .compact-entry-capsule {
+      border:1px solid rgba(24,24,27,.12);
+      border-radius:1.25rem;
+      background:rgba(255,255,255,.78);
+      padding:0;
+      box-shadow:0 8px 16px rgba(15,23,42,.03);
+      transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+      overflow:hidden;
+    }
+    .compact-entry-capsule:hover { box-shadow:0 12px 22px rgba(15,23,42,.06); }
+    .dark .compact-entry-capsule { background:rgba(24,24,27,.72); border-color:rgba(255,255,255,.08); box-shadow:none; }
+    .archive-entry-card.is-expanded { border-color:rgba(24,24,27,.24); box-shadow:0 16px 36px rgba(15,23,42,.08); }
+    .dark .archive-entry-card.is-expanded { border-color:rgba(255,255,255,.14); }
+    .archive-entry-preview { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:1rem; width:100%; padding:1rem 1.1rem; }
+    .archive-entry-main-button { border:0; background:transparent; color:inherit; padding:0; text-align:left; cursor:pointer; min-width:0; }
+    .archive-entry-actions { display:flex; align-items:center; justify-content:flex-end; gap:.5rem; flex-wrap:wrap; }
+    .archive-entry-label, .compact-entry-label { display:inline-block; margin-bottom:.45rem; font-size:.64rem; letter-spacing:.28em; text-transform:uppercase; color:rgb(113 113 122); }
+    .dark .archive-entry-label, .dark .compact-entry-label { color:rgb(161 161 170); }
+    .archive-entry-title, .compact-entry-title { font-size:clamp(1rem,1.4vw,1.15rem); line-height:1.35; font-weight:600; letter-spacing:-.03em; color:#18181b; word-break:break-word; }
+    .dark .archive-entry-title, .dark .compact-entry-title { color:#f4f4f5; }
+    .archive-entry-meta, .compact-entry-meta { margin-top:.35rem; font-size:.8rem; color:rgb(82 82 91); line-height:1.55; }
+    .dark .archive-entry-meta, .dark .compact-entry-meta { color:rgb(161 161 170); }
+    .archive-preview-copy { margin-top:.55rem; font-size:.82rem; line-height:1.6; color:rgb(82 82 91); }
+    .dark .archive-preview-copy { color:rgb(161 161 170); }
+    .archive-expanded-panel { display:none; border-top:1px solid rgba(24,24,27,.1); padding:1.1rem; }
+    .dark .archive-expanded-panel { border-top-color:rgba(255,255,255,.08); }
+    .archive-entry-card.is-expanded .archive-expanded-panel { display:block; }
+    .archive-expanded-layout { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(260px,.9fr); gap:1.2rem; align-items:start; }
+    .archive-expanded-copy { font-size:1rem; line-height:1.95; color:rgb(39 39 42); }
+    .dark .archive-expanded-copy { color:rgb(228 228 231); }
+    .archive-expanded-meta { margin-bottom:.7rem; font-size:.67rem; letter-spacing:.28em; text-transform:uppercase; color:rgb(113 113 122); }
+    .dark .archive-expanded-meta { color:rgb(161 161 170); }
+    .archive-expanded-title { margin-bottom:1rem; font-size:clamp(1.35rem,2.4vw,2rem); line-height:1.18; font-weight:650; letter-spacing:-.04em; color:#18181b; }
+    .dark .archive-expanded-title { color:#f4f4f5; }
+    .archive-gallery { border-radius:1.25rem; overflow:hidden; }
+    .archive-main-image { display:block; width:100%; height:360px; object-fit:cover; border-radius:1.15rem; border:1px solid rgba(24,24,27,.08); background:rgba(24,24,27,.03); }
+    .dark .archive-main-image { border-color:rgba(255,255,255,.08); }
+    .archive-thumbs { display:grid; grid-template-columns:repeat(auto-fit,minmax(70px,1fr)); gap:.55rem; margin-top:.6rem; }
+    .archive-thumb-btn { border:0; padding:0; background:transparent; cursor:pointer; }
+    .archive-thumb-btn img { display:block; width:100%; height:72px; object-fit:cover; border-radius:.8rem; border:1px solid rgba(24,24,27,.08); }
+    .archive-thumb-btn.is-active img { outline:2px solid rgba(24,24,27,.72); outline-offset:2px; }
+    .dark .archive-thumb-btn img { border-color:rgba(255,255,255,.08); }
+    .dark .archive-thumb-btn.is-active img { outline-color:rgba(255,255,255,.8); }
+    .archive-detail-actions { display:flex; justify-content:flex-end; gap:.5rem; flex-wrap:wrap; margin-top:1rem; }
+
+    .compact-action-btn, .compact-secondary-btn, .movie-delete-btn, .song-delete-btn, .album-edit-btn, .album-add-photos-btn, .album-delete-btn, .timeline-edit-btn, .timeline-delete-btn {
+      display:inline-flex; align-items:center; justify-content:center; border-radius:999px; border:1px solid rgba(24,24,27,.12);
+      background:rgba(255,255,255,.9); color:#18181b; padding:.55rem .85rem; font-size:.74rem; font-weight:600; line-height:1;
+      transition:transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .compact-action-btn:hover, .compact-secondary-btn:hover, .movie-delete-btn:hover, .song-delete-btn:hover, .album-edit-btn:hover, .album-add-photos-btn:hover, .album-delete-btn:hover, .timeline-edit-btn:hover, .timeline-delete-btn:hover { transform:translateY(-1px); }
+    .dark .compact-action-btn, .dark .compact-secondary-btn, .dark .movie-delete-btn, .dark .song-delete-btn, .dark .album-edit-btn, .dark .album-add-photos-btn, .dark .album-delete-btn, .dark .timeline-edit-btn, .dark .timeline-delete-btn { background:rgba(24,24,27,.8); border-color:rgba(255,255,255,.08); color:#f4f4f5; }
+    .movie-delete-btn, .song-delete-btn, .album-delete-btn, .timeline-delete-btn { border-color:rgba(239,68,68,.2); color:#b91c1c; background:rgba(254,242,242,.8); }
+    .dark .movie-delete-btn, .dark .song-delete-btn, .dark .album-delete-btn, .dark .timeline-delete-btn { border-color:rgba(248,113,113,.25); color:#fca5a5; background:rgba(127,29,29,.2); }
+
+    .album-editor { margin-top:1rem; border:1px solid rgba(24,24,27,.12); border-radius:1.5rem; background:rgba(255,255,255,.75); padding:1rem; }
+    .dark .album-editor { background:rgba(30,31,37,.7); border-color:rgba(255,255,255,.08); }
+    .album-editor input, .album-editor textarea { width:100%; border-radius:1rem; border:1px solid rgba(24,24,27,.15); background:rgba(255,255,255,.82); padding:.8rem .9rem; font-size:.92rem; }
+    .dark .album-editor input, .dark .album-editor textarea { border-color:rgba(255,255,255,.08); background:rgba(24,24,27,.7); color:#e4e4e7; }
+    .album-editor textarea { min-height:150px; resize:vertical; }
+    .selected-preview { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.75rem; }
+    .selected-photo { position:relative; width:96px; height:96px; overflow:hidden; border-radius:1rem; border:1px solid rgba(24,24,27,.1); background:#fff; }
+    .selected-photo img { width:100%; height:100%; object-fit:cover; }
+    .selected-photo-remove { position:absolute; top:4px; right:4px; width:24px; height:24px; border-radius:999px; border:0; background:rgba(0,0,0,.7); color:#fff; font-size:12px; }
+    .existing-photo-list { display:flex; flex-wrap:wrap; gap:.5rem; }
+
+    .timeline-shell { position:relative; margin-top:1.4rem; width:100%; }
+    .timeline-shell::before { content:''; position:absolute; left:100px; top:.4rem; bottom:.4rem; width:1px; background:rgba(24,24,27,.12); pointer-events:none; }
+    .dark .timeline-shell::before { background:rgba(255,255,255,.08); }
+    .timeline-item { position:relative; display:grid; grid-template-columns:84px 32px minmax(0,1fr); align-items:start; margin-bottom:1rem; width:100%; }
+    .timeline-date { padding:1.15rem .75rem 0 0; text-align:right; font-size:.64rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:rgb(113 113 122); line-height:1.25; }
+    .dark .timeline-date { color:rgb(161 161 170); }
+    .timeline-dot { position:relative; z-index:2; justify-self:center; align-self:start; margin-top:1.42rem; width:.78rem; height:.78rem; border-radius:9999px; background:#18181b; box-shadow:0 0 0 5px rgba(24,24,27,.08); }
+    .dark .timeline-dot { background:#f4f4f5; box-shadow:0 0 0 5px rgba(255,255,255,.06); }
+    .timeline-body { min-width:0; padding:1rem 1.1rem; border:1px solid rgba(24,24,27,.12); border-radius:1.25rem; background:rgba(255,255,255,.76); }
+    .timeline-body { cursor:pointer; transition:border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+    .timeline-body.is-expanded { border-color:rgba(24,24,27,.22); box-shadow:0 12px 28px rgba(15,23,42,.06); }
+    .timeline-preview { margin-top:.45rem; font-size:.84rem; line-height:1.65; color:rgb(82 82 91); }
+    .dark .timeline-preview { color:rgb(161 161 170); }
+    .timeline-full { display:none; margin-top:.9rem; padding-top:.9rem; border-top:1px solid rgba(24,24,27,.1); }
+    .timeline-body.is-expanded .timeline-full { display:block; }
+    .timeline-read { float:right; margin-left:.75rem; border:1px solid rgba(24,24,27,.12); background:rgba(255,255,255,.9); color:#18181b; border-radius:999px; padding:.4rem .7rem; font-size:.7rem; font-weight:600; }
+    .dark .timeline-read { background:rgba(24,24,27,.8); border-color:rgba(255,255,255,.08); color:#f4f4f5; }
+    .dark .timeline-body { background:rgba(24,24,27,.72); border-color:rgba(255,255,255,.08); }
+    .timeline-item h3 { margin-bottom:.35rem; font-size:1.15rem; font-weight:600; letter-spacing:-.03em; color:#18181b; }
+    .dark .timeline-item h3 { color:#f4f4f5; }
+    .timeline-item p { line-height:1.8; color:rgb(82 82 91); }
+    .dark .timeline-item p { color:rgb(161 161 170); }
+    .timeline-photos { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:.6rem; margin-top:.9rem; }
+    .timeline-photos img { width:100%; height:110px; object-fit:cover; border-radius:.9rem; border:1px solid rgba(24,24,27,.08); }
+
+    @media (max-width: 900px) {
+      .folder-shell { gap:.65rem; }
+      .folder-tab { flex-basis:170px; width:170px; min-width:170px; }
+      .archive-expanded-layout { grid-template-columns:1fr; }
+      .archive-main-image { height:300px; }
+    }
+    @media (max-width: 767px) {
+      .admin-form-row { grid-template-columns:1fr; }
+      .archive-entry-preview { grid-template-columns:1fr; }
+      .archive-entry-actions { justify-content:flex-start; margin-top:.8rem; }
+      .timeline-shell::before { left:62px; }
+      .timeline-item { grid-template-columns:52px 20px minmax(0,1fr); }
+      .timeline-date { padding:.95rem .4rem 0 0; text-align:right; font-size:.58rem; letter-spacing:.08em; }
+      .timeline-dot { margin-top:1.2rem; }
+      .timeline-body { padding:.9rem; }
+      .folder-carousel { max-width:calc(100vw - 6rem); }
+      .folder-tab { flex-basis:72vw; width:72vw; min-width:72vw; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .folder-track, .folder-tab { transition:none !important; }
+    }
+
+    .dark body { background-color:#18191e; color:#d4d4d8; }
+    html.dark { background-color:#18191e; }
+    .dark .dark\:bg-\[\#0b0c10\] { background-color:#18191e; }
+    .dark .dark\:bg-zinc-950 { background-color:#1e1f25 !important; }
+    .dark .dark\:bg-zinc-900 { background-color:#252630 !important; }
+    .dark .dark\:bg-zinc-900\/70 { background-color:rgba(37,38,48,.7) !important; }
+    .dark .dark\:text-white { color:#e8e8ea !important; }
+    .dark .dark\:text-zinc-50 { color:#e4e4e7 !important; }
+    .dark .dark\:text-zinc-100 { color:#d4d4d8 !important; }
+    .dark .dark\:text-zinc-300 { color:#a1a1aa !important; }
+    .dark .dark\:text-zinc-400 { color:#71717a !important; }
+    .dark .dark\:border-zinc-800 { border-color:#2e2f3a !important; }
+    .dark .dark\:border-zinc-700 { border-color:#383945 !important; }
+    .dark .dark\:border-zinc-800\/70 { border-color:rgba(46,47,58,.7) !important; }
+  </style>
+</head>
+<body class="bg-[#faf9f5] text-zinc-900 transition-colors duration-500 dark:bg-[#18191e] dark:text-zinc-300">
+  <div id="welcome" class="fixed inset-0 z-[60] flex items-center justify-center bg-white/95 backdrop-blur-md dark:bg-[#18191e]/95">
+    <div class="text-center text-2xl sm:text-3xl font-light tracking-wide">Hey .. how's going</div>
+  </div>
+
+  <main class="mx-auto min-h-screen max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+    <header class="pt-1">
+      <div class="flex items-start justify-end">
+        <div class="flex items-center gap-2">
+          <div class="relative w-[min(72vw,360px)] sm:w-[420px]">
+            <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true"><circle cx="11" cy="11" r="5.5"></circle><path d="M16 16L21 21"></path></svg>
+            </span>
+            <input id="searchInput" type="text" placeholder="Search folders, descriptions, entries..." class="w-full rounded-full border border-zinc-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800/60" />
+            <div id="searchResults" class="absolute left-0 right-0 top-[calc(100%+10px)] z-30 hidden max-h-[320px] overflow-auto rounded-3xl border border-zinc-200 bg-[#fcfcfa] p-2 shadow-2xl dark:border-zinc-700 dark:bg-zinc-950 no-scrollbar"></div>
+          </div>
+          <button id="adminToggle" class="header-button" aria-label="Admin toggle">
+            <span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8.5A4 4 0 0 1 12 4.5A4 4 0 0 1 16 8.5V11"></path></svg></span>
+            <span class="header-label">Admin</span>
+          </button>
+          <button id="infoBtn" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100" aria-label="About">i</button>
+          <button id="themeToggle" class="header-button h-11 w-11 p-0" aria-label="Toggle dark mode">
+            <span id="themeIcon" class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 0 1 11.2 3a9 9 0 1 0 9.8 9.8Z"></path></svg></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.05em] text-zinc-950 dark:text-white">Life of an Earthian</h1>
+        <div class="mt-2 text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">Sudip Subedi</div>
+      </div>
+    </header>
+
+    <section class="mt-8">
+      <div class="folder-shell">
+        <button id="folderPrev" class="folder-nav-btn inline-flex items-center justify-center text-xl text-zinc-700 dark:text-zinc-100" aria-label="Previous folder">←</button>
+        <div class="folder-carousel" aria-label="Life archive folders carousel">
+          <div class="folder-track" id="folderTrack"></div>
+        </div>
+        <button id="folderNext" class="folder-nav-btn inline-flex items-center justify-center text-xl text-zinc-700 dark:text-zinc-100" aria-label="Next folder">→</button>
+      </div>
+    </section>
+
+    <section class="mt-8">
+      <div class="mb-4 flex items-end justify-between gap-4">
+        <div>
+          <div id="folderLabel" class="text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">experiences</div>
+          <h2 id="folderShort" class="mt-2 text-2xl sm:text-3xl font-semibold tracking-[-0.03em] text-zinc-950 dark:text-zinc-50">the moments that shaped me</h2>
+        </div>
+      </div>
+      <p id="folderIntro" class="max-w-3xl text-sm leading-7 text-zinc-600 dark:text-zinc-300">A quiet archive of the first lessons, the unexpected turns, and the moments that taught me how to keep going.</p>
+      <div id="entries" class="relative mt-7 space-y-4"></div>
+    </section>
+  </main>
+
+  <div id="infoModal" class="fixed inset-0 z-[70] hidden items-center justify-center bg-black/35 px-4 backdrop-blur-sm">
+    <div class="w-full max-w-2xl rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-700 dark:bg-zinc-950">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">about</div>
+          <h3 class="mt-2 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Sudip Subedi</h3>
+        </div>
+        <button id="closeInfo" class="rounded-full border border-zinc-200 px-3 py-1 text-sm text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900">Close</button>
+      </div>
+      <div class="mt-5 grid gap-5 md:grid-cols-[180px_minmax(0,1fr)] md:items-start">
+        <div class="overflow-hidden rounded-[1.75rem] border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/70">
+          <div class="flex aspect-[4/5] items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-300 text-zinc-500 dark:from-zinc-800 dark:to-zinc-700 dark:text-zinc-300">
+            <div class="text-center">
+              <div class="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-white text-2xl font-semibold text-zinc-700 shadow-sm dark:bg-zinc-950 dark:text-zinc-100">SS</div>
+              <div class="text-xs uppercase tracking-[0.3em]">photo</div>
+              <div class="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">replace with a real image</div>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="rounded-3xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+            <div class="text-[11px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">phone</div>
+            <div class="mt-2 text-lg font-medium text-zinc-950 dark:text-zinc-50">+977 98 0000 0000</div>
+          </div>
+          <p class="text-sm leading-7 text-zinc-600 dark:text-zinc-300">This website was created as a living autobiography: a minimal, calm, and personal digital space where life can be read like a timeline. It is meant to hold memories, movies, songs, food, places, people, and skills in one place, so the story feels easy to browse, share, and expand over time. The layout stays simple on purpose, because the focus is the life story itself rather than decoration.</p>
+          <p class="text-sm leading-7 text-zinc-600 dark:text-zinc-300">It is built to feel human and slowly unfolding, like turning pages in a private archive. Each folder keeps the tone soft and reflective, while still remaining practical, responsive, and easy to use on phones, tablets, and desktop screens.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminModal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/35 px-4 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-700 dark:bg-zinc-950">
+      <div class="text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">admin</div>
+      <h3 class="mt-2 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Unlock editor</h3>
+      <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Sign in with the Firebase admin account to unlock the editor.</p>
+      <input id="adminEmailInput" type="email" autocomplete="username" placeholder="Admin email" class="mt-5 w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800/60" />
+      <input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Password" class="mt-3 w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800/60" />
+      <div id="adminAuthMsg" class="mt-3 min-h-4 text-xs text-red-600 dark:text-red-400" aria-live="polite"></div>
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="cancelAdminBtn" class="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">Cancel</button>
+        <button id="unlockAdminBtn" class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 left-1/2 z-[80] hidden -translate-x-1/2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm text-zinc-900 shadow-xl dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"></div>
+
+ <script type="module">
+    // Firebase: browser SDK (no npm required)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      setDoc,
+      deleteDoc,
+      doc,
+      writeBatch
+    } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC7u3ivM0TFcJzDUg3QGmnKjXGLI-lcwxE",
+      authDomain: "life-of-an-earthian.firebaseapp.com",
+      databaseURL: "https://life-of-an-earthian-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "life-of-an-earthian",
+      storageBucket: "life-of-an-earthian.firebasestorage.app",
+      messagingSenderId: "1004852794852",
+      appId: "1:1004852794852:web:3737a471ab11839cbda3f1"
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+    const auth = getAuth(firebaseApp);
+    const db = getFirestore(firebaseApp);
+
+    const SONGS_STORAGE_KEY = 'life-earthian-songs';
+    const MOVIES_STORAGE_KEY = 'life-earthian-movies';
+    const TIMELINE_STORAGE_KEY = 'life-earthian-timeline-entries';
+    const ALBUM_STORAGE_KEYS = {
+      experiences: 'life-earthian-experiences-entries',
+      stories: 'life-earthian-stories-entries',
+      memories: 'life-earthian-memories-entries',
+      food: 'life-earthian-food-entries',
+      places: 'life-earthian-places-entries',
+      peoples: 'life-earthian-peoples-entries',
+      skills: 'life-earthian-skills-entries'
+    };
+    const albumSections = ['experiences','stories','memories','food','places','peoples','skills'];
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const movieGenres = ['Action','Adventure','Comedy','Drama','Romance','Horror','Thriller','Mystery','Sci-Fi','Fantasy','Crime','War','Animation','Biography','Western','Others'];
+    const movieGenreOptions = ['All', ...movieGenres];
+    let selectedMovieGenre = 'All';
+
+
+    const sections = {
+      experiences: { title:'experiences', short:'the moments that shaped me', intro:'A quiet archive of the first lessons, the unexpected turns, and the moments that taught me how to keep going.', icon:'✦', entries:[['early chapters','learning to notice small things','I learned that life changes through tiny details: one conversation, one rainy walk, one decision to try again.'],['growing years','building steadiness','I began to value patience, consistency, and the calm confidence that comes from doing ordinary things well.'],['recently','choosing a softer strength','I now carry my days with more care, making room for growth without losing the person I have become.']] },
+      stories: { title:'stories', short:'the moments I still retell', intro:'These are the little narratives I keep close—warm, human, and easy to return to on quiet days.', icon:'✦', entries:[['one memory','the return home after a long day','I still remember the feeling of coming home tired, carrying the kind of silence that makes the whole evening feel gentle.'],['another story','a promise made quietly','At one point I decided not to rush my life. That promise became a small private story I continue to honor.'],['the one I keep','finishing something difficult','The best stories are not loud ones; they are the ones where I kept going even when progress felt invisible.']] },
+      memories: { title:'memories', short:'the ones that still shine', intro:'A soft collection of people, places, and feelings that remain vivid long after the moment has passed.', icon:'✦', entries:[['first light','quiet mornings','Some of my happiest memories live in slow mornings, when the world was still and my thoughts felt open.'],['after that','shared laughter','I keep the sound of good laughter like a keepsake; it reminds me that life becomes lighter when shared.'],['still here','the people I miss and remember','Certain faces and voices remain with me, not as loss alone, but as a lasting kind of warmth.']] },
+      movies: { title:'movies', short:'the movies I liked', intro:'A small cinema shelf of films that mirror ambition, wonder, resilience, and the quiet beauty of becoming.', icon:'▶', entries:[['favorite watch','Interstellar','I return to stories that feel larger than life, where wonder and emotion meet in the same frame.','https://www.imdb.com/title/tt0816692/'],['comfort and courage','The Pursuit of Happyness','I admire stories that keep hope alive even when the path is hard and the next step is uncertain.','https://www.imdb.com/title/tt0454921/'],['a gentle pause','The Secret Life of Walter Mitty','I like films that remind me to step outside routine and live with a little more courage.','https://www.imdb.com/title/tt0359950/'],['the one with heart','3 Idiots','I always value stories that make learning feel human, funny, and full of meaning.','https://www.imdb.com/title/tt1187043/']] },
+      songs: { title:'songs', short:'the songs I listen to or share', intro:'A personal music shelf powered by Spotify playlists. Add a playlist once, and its tracks appear together in the player.', icon:'♪', entries:[['night mode','Late Night Reflection Mix','Soft music for evenings when I want the room to feel calm and the mind to slow down.'],['road time','Road Trip Chorus','A brighter set of tracks for movement, long drives, and the feeling of going somewhere new.'],['quiet mornings','Slow Morning Loop','Easy songs for slow starts, warm tea, and a gentle entry into the day.']] },
+      food: { title:'food', short:'the food I make or enjoy', intro:'Food is one of the simplest ways I remember a day. These notes keep the flavors close.', icon:'◌', entries:[{ id:'food-default-1', time:'home comfort', title:'warm, simple meals', story:'I gravitate toward meals that feel honest and satisfying, the kind that make a home feel complete.', photos:[] },{ id:'food-default-2', time:'made by hand', title:'tea, noodles, and small experiments', story:'I enjoy making small things well, learning from each try, and keeping the process relaxed.', photos:[] },{ id:'food-default-3', time:'shared table', title:'food that brings people together', story:'The best meals are the ones that create conversation, laughter, and an easy sense of belonging.', photos:[] }] },
+      places: { title:'places', short:'the places I go', intro:'A map of places that hold memory, from daily corners to destinations that widened my sense of the world.', icon:'⌂', entries:[{ id:'places-default-1', time:'nearby', title:'the familiar streets', story:'I keep an affection for the streets I know well, because they hold the rhythm of ordinary life.', photos:[] },{ id:'places-default-2', time:'farther out', title:'places that reset me', story:'Whenever I step into a new place, I feel my attention sharpen and my heart become more curious.', photos:[] },{ id:'places-default-3', time:'returning', title:'favorite quiet corners', story:'I often return to places that let me think, breathe, and gather myself again.', photos:[] }] },
+      peoples: { title:'peoples', short:'the people who stay close', intro:'The life archive would be incomplete without the people who have supported, challenged, and shaped my days.', icon:'☺', entries:[{ id:'peoples-default-1', time:'family', title:'the first circle', story:'They gave me my earliest sense of care, direction, and the meaning of being rooted somewhere.', photos:[] },{ id:'peoples-default-2', time:'friends', title:'the people who made time feel lighter', story:'A few good friends have helped me understand that being seen clearly is its own kind of gift.', photos:[] },{ id:'peoples-default-3', time:'everyday encounters', title:'people who leave a small mark', story:'Even brief conversations can change a day, and sometimes a day can change the way I see a person.', photos:[] }] },
+      skills: { title:'skills', short:'the things I keep improving', intro:'Skills are not just achievements here; they are habits, tools, and quiet forms of self-respect.', icon:'⚒', entries:[['learning','staying curious','I like learning by doing, asking better questions, and treating progress like a long conversation.'],['practice','turning consistency into craft','The more I repeat a thoughtful process, the more natural and reliable it becomes.'],['ongoing','building digital clarity','I value work that is organized, readable, and useful—because clarity itself is a skill.']] },
+      timeline: { title:'timeline', short:'a life told line by line', intro:'This final folder threads the whole archive together in order, so the journey can be read step by step.', icon:'⌛', entries:[
+        { id:'timeline-default-2001', year:2001, month:1, time:'January', title:'early understanding', story:'I started by noticing the world around me and learning how to feel my way into it.', photos:[] },
+        { id:'timeline-default-2012', year:2012, month:1, time:'January', title:'growing with intention', story:'I kept moving through school, relationships, work, and routines with a stronger sense of self.', photos:[] },
+        { id:'timeline-default-2020', year:2020, month:1, time:'January', title:'living more deliberately', story:'I try to build a life that feels honest, calm, and meaningful—one choice at a time.', photos:[] },
+        { id:'timeline-default-2026', year:2026, month:1, time:'January', title:'still unfolding', story:'The best part of the story is that it is not finished; there is still room for more pages.', photos:[] }
+      ] }
+    };
+
+    const order = ['experiences','stories','memories','movies','songs','food','places','peoples','skills','timeline'];
+    const currentPageKey = 'life-earthian-current-page';
+    let activeSection = localStorage.getItem(currentPageKey) || 'experiences';
+    let currentPage = activeSection;
+    let dark = localStorage.getItem('life-of-1-earthians-theme') === 'dark' || (!localStorage.getItem('life-of-1-earthians-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    let carouselIndex = Math.max(0, order.indexOf(activeSection) - 2);
+    let autoRotateTimer = null;
+    let carouselPaused = false;
+
+    const html = document.documentElement;
+    const entriesEl = document.getElementById('entries');
+    const folderLabel = document.getElementById('folderLabel');
+    const folderShort = document.getElementById('folderShort');
+    const folderIntro = document.getElementById('folderIntro');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const infoBtn = document.getElementById('infoBtn');
+    const infoModal = document.getElementById('infoModal');
+    const closeInfo = document.getElementById('closeInfo');
+    const adminToggle = document.getElementById('adminToggle');
+    const adminModal = document.getElementById('adminModal');
+    const adminPasswordInput = document.getElementById('adminPasswordInput');
+    const cancelAdminBtn = document.getElementById('cancelAdminBtn');
+    const unlockAdminBtn = document.getElementById('unlockAdminBtn');
+    const adminEmailInput = document.getElementById('adminEmailInput');
+    const adminAuthMsg = document.getElementById('adminAuthMsg');
+    const toast = document.getElementById('toast');
+
+    let adminUser = null;
+    let adminOpen = false;
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>'"]/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+    }
+
+    function normalizePhoto(photo) {
+      if (!photo) return null;
+      if (typeof photo === 'string') return { src: photo, alt: '' };
+      return { src: photo.src || '', alt: photo.alt || '', mediaId: photo.mediaId || undefined };
+    }
+
+    function parseLegacyTimelineDate(value, index) {
+      const raw = String(value || '');
+      const match = raw.match(/(\d{4})\s*\/\s*([^/]+)/i);
+      if (match) {
+        const year = Number(match[1]);
+        const monthText = match[2].trim().toLowerCase();
+        const monthIndex = monthNames.findIndex((m) => monthText.startsWith(m.toLowerCase().slice(0,3)));
+        return { year, month: monthIndex >= 0 ? monthIndex + 1 : 1 };
+      }
+      return { year: 2000 + index, month: 1 };
+    }
+
+    function normalizeEntry(sectionId, entry, index) {
+      if (Array.isArray(entry)) {
+        if (sectionId === 'movies') {
+          const genre = entry[4] || entry.genre || '';
+          return { id:`movie-${sectionId}-${index}`, time:entry[0] || 'favorite watch', title:entry[1] || 'Untitled movie', story:entry[2] || '', link:entry[3] || '', genre:typeof genre === 'string' ? genre.trim() : '', photos:[] };
+        }
+        if (sectionId === 'songs') {
+          return { id:`song-${sectionId}-${index}`, time:entry[0] || 'playlist', title:entry[1] || 'Untitled playlist', story:entry[2] || '', link:entry[3] || '', photos:[] };
+        }
+        if (sectionId === 'timeline') {
+          const date = parseLegacyTimelineDate(entry[0], index);
+          return { id:`timeline-${index}`, year:date.year, month:date.month, time:monthNames[date.month-1], title:entry[1] || 'Life event', story:entry[2] || '', photos:[] };
+        }
+        return { id:`${sectionId}-${index}`, time:entry[0] || '', title:entry[1] || '', story:entry[2] || '', photos:[] };
+      }
+      if (!entry || typeof entry !== 'object') return { id:`${sectionId}-${index}`, title:'', story:'', photos:[] };
+      const fallbackDate = sectionId === 'timeline' ? parseLegacyTimelineDate(entry.time, index) : null;
+      return {
+        id: entry.id || `${sectionId}-${index}`,
+        time: entry.time || (fallbackDate ? monthNames[fallbackDate.month-1] : ''),
+        title: entry.title || '',
+        story: entry.story || entry.text || '',
+        link: entry.link || '',
+        genre: entry.genre || '',
+        year: Number.isFinite(Number(entry.year)) ? Number(entry.year) : (fallbackDate ? fallbackDate.year : undefined),
+        month: Number.isFinite(Number(entry.month)) ? Math.min(12, Math.max(1, Number(entry.month))) : (fallbackDate ? fallbackDate.month : undefined),
+        photos: Array.isArray(entry.photos) ? entry.photos.map(normalizePhoto).filter(Boolean) : []
+      };
+    }
+
+    // -------------------------------------------------------------------------
+    // FIRESTORE CONTENT STORAGE
+    // -------------------------------------------------------------------------
+    // Public visitors read the entries collection. Only an authenticated admin
+    // should be allowed to write under the Firestore rules configured for this
+    // project.
+    const FIRESTORE_COLLECTION = 'entries';
+    const MEDIA_COLLECTION = 'media';
+    const FIRESTORE_DOC_SAFE_LIMIT = 850000;
+
+    function estimateUtf8Bytes(value) {
+      return new TextEncoder().encode(JSON.stringify(value)).length;
+    }
+
+    function firestoreDocId(sectionId, entryId) {
+      return `${sectionId}__${String(entryId || Date.now()).replace(/[^A-Za-z0-9_-]/g, '-')}`.slice(0, 1500);
+    }
+
+    async function uploadPhotoToFirestore(photo, sectionId, entryId, photoIndex) {
+      if (!photo?.src) return null;
+      // Existing remote/media reference: keep it.
+      if (photo.mediaId) return { mediaId: photo.mediaId, alt: photo.alt || '' };
+      // External URL: keep it without creating a media document.
+      if (/^https?:\/\//i.test(photo.src)) return { src: photo.src, alt: photo.alt || '' };
+
+      const payload = {
+        type: 'image',
+        sectionId,
+        entryId: String(entryId || ''),
+        index: Number(photoIndex) || 0,
+        alt: String(photo.alt || ''),
+        src: String(photo.src),
+        updatedAt: Date.now()
+      };
+      if (estimateUtf8Bytes(payload) > FIRESTORE_DOC_SAFE_LIMIT) {
+        throw new Error(`Image "${photo.alt || 'selected image'}" is still too large after compression. Choose a smaller image.`);
+      }
+      const mediaRef = await addDoc(collection(db, MEDIA_COLLECTION), payload);
+      return { mediaId: mediaRef.id, alt: payload.alt };
+    }
+
+    async function prepareEntryForFirestore(sectionId, entry, index) {
+      const normalized = normalizeEntry(sectionId, entry, index);
+      const savedPhotos = [];
+      for (let photoIndex = 0; photoIndex < normalized.photos.length; photoIndex += 1) {
+        const saved = await uploadPhotoToFirestore(normalized.photos[photoIndex], sectionId, normalized.id, photoIndex);
+        if (saved) savedPhotos.push(saved);
+      }
+      return {
+        entryId: normalized.id,
+        sectionId,
+        time: normalized.time || '',
+        title: normalized.title || '',
+        story: normalized.story || '',
+        link: normalized.link || '',
+        genre: normalized.genre || '',
+        year: Number.isFinite(Number(normalized.year)) ? Number(normalized.year) : null,
+        month: Number.isFinite(Number(normalized.month)) ? Number(normalized.month) : null,
+        photos: savedPhotos,
+        updatedAt: Date.now()
+      };
+    }
+
+    function normalizeFirestoreEntry(docData, mediaMap) {
+      const rawPhotos = Array.isArray(docData.photos) ? docData.photos : [];
+      const photos = rawPhotos.map((photo) => {
+        if (!photo) return null;
+        if (typeof photo === 'string') return { src: photo, alt: '' };
+        if (photo.mediaId) {
+          const media = mediaMap.get(photo.mediaId);
+          return media ? { src: media.src, alt: photo.alt || media.alt || '', mediaId: photo.mediaId } : null;
+        }
+        if (photo.src) return { src: photo.src, alt: photo.alt || '' };
+        return null;
+      }).filter(Boolean);
+
+      return normalizeEntry(docData.sectionId, {
+        id: docData.entryId || docData.id,
+        time: docData.time || '',
+        title: docData.title || '',
+        story: docData.story || '',
+        link: docData.link || '',
+        genre: docData.genre || '',
+        year: docData.year ?? undefined,
+        month: docData.month ?? undefined,
+        photos
+      }, 0);
+    }
+
+    async function loadAllEntriesFromFirestore() {
+      const [snapshot, metaSnapshot, mediaSnapshot] = await Promise.all([
+        getDocs(collection(db, FIRESTORE_COLLECTION)),
+        getDocs(collection(db, 'section_meta')),
+        getDocs(collection(db, MEDIA_COLLECTION))
+      ]);
+
+      const mediaMap = new Map();
+      mediaSnapshot.forEach((snap) => {
+        const data = snap.data();
+        if (data?.src) mediaMap.set(snap.id, data);
+      });
+
+      const grouped = {};
+      const remoteSections = new Set();
+      order.forEach((id) => { grouped[id] = []; });
+      metaSnapshot.forEach((snap) => {
+        const data = snap.data();
+        if (data?.sectionId && sections[data.sectionId]) remoteSections.add(data.sectionId);
+      });
+      snapshot.forEach((snap) => {
+        const data = snap.data();
+        if (!data.sectionId || !sections[data.sectionId] || data.isEmptyMarker) return;
+        remoteSections.add(data.sectionId);
+        grouped[data.sectionId].push(normalizeFirestoreEntry(data, mediaMap));
+      });
+
+      for (const sectionId of order) {
+        grouped[sectionId].sort((a, b) => {
+          if (sectionId === 'timeline') {
+            return ((Number(b.year) || 0) * 12 + (Number(b.month) || 1)) - ((Number(a.year) || 0) * 12 + (Number(a.month) || 1));
+          }
+          return String(a.title || '').localeCompare(String(b.title || ''));
+        });
+        if (remoteSections.has(sectionId)) sections[sectionId].entries = grouped[sectionId];
+      }
+      return { entryCount: snapshot.size, mediaCount: mediaSnapshot.size, metaCount: metaSnapshot.size };
+    }
+
+    async function replaceSectionInFirestore(sectionId, entries) {
+      if (!adminUser) {
+        showToast('Admin login required to save changes');
+        return false;
+      }
+      try {
+        const normalizedEntries = entries.map((entry, index) => normalizeEntry(sectionId, entry, index));
+        const preparedEntries = [];
+        for (let index = 0; index < normalizedEntries.length; index += 1) {
+          preparedEntries.push(await prepareEntryForFirestore(sectionId, normalizedEntries[index], index));
+        }
+
+        for (const payload of preparedEntries) {
+          if (estimateUtf8Bytes(payload) > FIRESTORE_DOC_SAFE_LIMIT) {
+            throw new Error(`Entry "${payload.title || 'Untitled'}" is too large for Firestore.`);
+          }
+        }
+
+        const existing = await getDocs(collection(db, FIRESTORE_COLLECTION));
+        const batch = writeBatch(db);
+        existing.forEach((snap) => {
+          if (snap.data()?.sectionId === sectionId) batch.delete(snap.ref);
+        });
+
+        preparedEntries.forEach((payload) => {
+          batch.set(doc(db, FIRESTORE_COLLECTION, firestoreDocId(sectionId, payload.entryId)), payload);
+        });
+        batch.set(doc(db, 'section_meta', sectionId), {
+          sectionId,
+          hasEntries: preparedEntries.length > 0,
+          updatedAt: Date.now()
+        });
+
+        await batch.commit();
+        sections[sectionId].entries = normalizedEntries;
+        return true;
+      } catch (error) {
+        console.error(`Firestore save failed for ${sectionId}:`, error);
+        const message = error?.code === 'permission-denied'
+          ? 'Firestore denied the save. Check your Firestore Rules and make sure you are logged in.'
+          : error?.message || 'Could not save to Firestore.';
+        showToast(message);
+        return false;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // ONE-TIME LEGACY MIGRATION
+    // -------------------------------------------------------------------------
+    // The old version used localStorage/IndexedDB. We read that data once,
+    // upload it to Firestore when the admin first signs in, then delete the
+    // old browser archive so it is no longer the source of truth.
+    function readLegacyLocalStorage(storageKey, fallback) {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        if (!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : fallback;
+      } catch { return fallback; }
+    }
+
+    async function openLegacyArchiveDB() {
+      return new Promise((resolve, reject) => {
+        if (!('indexedDB' in window)) { reject(new Error('IndexedDB unavailable')); return; }
+        const request = indexedDB.open('life-earthian-archive-db', 1);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Could not open legacy archive')); 
+      });
+    }
+
+    async function getLegacyIndexedDbSection(sectionId) {
+      try {
+        const legacyDb = await openLegacyArchiveDB();
+        return await new Promise((resolve, reject) => {
+          const tx = legacyDb.transaction('sections', 'readonly');
+          const req = tx.objectStore('sections').get(sectionId);
+          req.onsuccess = () => resolve(Array.isArray(req.result) ? req.result : null);
+          req.onerror = () => reject(req.error || new Error('Could not read legacy archive'));
+          tx.oncomplete = () => legacyDb.close();
+          tx.onerror = () => reject(tx.error || new Error('Could not read legacy archive'));
+        });
+      } catch {
+        return null;
+      }
+    }
+
+    async function readLegacySection(sectionId) {
+      const fallback = (sections[sectionId].entries || []).map((entry, index) => normalizeEntry(sectionId, entry, index));
+      if (sectionId === 'timeline' || albumSections.includes(sectionId)) {
+        const indexed = await getLegacyIndexedDbSection(sectionId);
+        if (indexed) return indexed.map((entry, index) => normalizeEntry(sectionId, entry, index));
+      }
+      const storageKey = sectionId === 'movies' ? MOVIES_STORAGE_KEY
+        : sectionId === 'songs' ? SONGS_STORAGE_KEY
+        : sectionId === 'timeline' ? TIMELINE_STORAGE_KEY
+        : ALBUM_STORAGE_KEYS[sectionId] || null;
+      return storageKey ? readLegacyLocalStorage(storageKey, fallback).map((entry, index) => normalizeEntry(sectionId, entry, index)) : fallback;
+    }
+
+    async function clearLegacyBrowserArchive() {
+      [SONGS_STORAGE_KEY, MOVIES_STORAGE_KEY, TIMELINE_STORAGE_KEY, ...Object.values(ALBUM_STORAGE_KEYS)].forEach((key) => localStorage.removeItem(key));
+      try { indexedDB.deleteDatabase('life-earthian-archive-db'); } catch {}
+    }
+
+    async function seedOrMigrateFirestore() {
+      const [remoteEntries, remoteMeta] = await Promise.all([
+        getDocs(collection(db, FIRESTORE_COLLECTION)),
+        getDocs(collection(db, 'section_meta'))
+      ]);
+      if (remoteEntries.size || remoteMeta.size) {
+        await loadAllEntriesFromFirestore();
+        return;
+      }
+
+      if (!adminUser) return;
+
+      const legacyBySection = {};
+      for (const sectionId of order) {
+        legacyBySection[sectionId] = await readLegacySection(sectionId);
+        const validationError = validateEntriesForFirestore(sectionId, legacyBySection[sectionId]);
+        if (validationError) {
+          showToast(`Cloud migration stopped: ${validationError}`);
+          return;
+        }
+      }
+
+      for (const sectionId of order) {
+        sections[sectionId].entries = legacyBySection[sectionId];
+        if (!await replaceSectionInFirestore(sectionId, legacyBySection[sectionId])) return;
+      }
+      await clearLegacyBrowserArchive();
+      await loadAllEntriesFromFirestore();
+      showToast('Archive moved to Firestore');
+    }
+
+    async function ensurePersistedCustomContent() {
+      try {
+        await seedOrMigrateFirestore();
+      } catch (error) {
+        console.error('Firestore load failed:', error);
+        showToast('Could not load cloud archive. Check Firebase rules and connection.');
+      }
+    }
+
+    async function setPersistedSectionEntries(sectionId, entries) {
+      return replaceSectionInFirestore(sectionId, entries);
+    }
+
+    function getThemeIconSvg() {
+      if (dark) return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5V5M12 19v2.5M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2.5 12H5M19 12h2.5M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"></path></svg>';
+      return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 0 1 11.2 3a9 9 0 1 0 9.8 9.8Z"></path></svg>';
+    }
+
+    function getLockIconSvg(unlocked) {
+      if (unlocked) return '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8.5A4 4 0 0 1 12 4.5A4 4 0 0 1 16 8.5"></path><path d="M16 8.5V7.5"></path></svg>';
+      return '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8.5A4 4 0 0 1 16 8.5V11"></path></svg>';
+    }
+
+    function applyTheme() {
+      html.classList.toggle('dark', dark);
+      localStorage.setItem('life-of-1-earthians-theme', dark ? 'dark' : 'light');
+      if (themeIcon) themeIcon.innerHTML = getThemeIconSvg();
+      if (themeToggle) themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+
+    function setAdminUI() {
+      if (!adminToggle) return;
+      adminToggle.innerHTML = `<span class="header-icon" aria-hidden="true">${getLockIconSvg(adminOpen)}</span><span class="header-label">Admin</span>`;
+      adminToggle.classList.toggle('is-unlocked', adminOpen);
+      adminToggle.setAttribute('aria-label', adminOpen ? 'Admin unlocked' : 'Admin locked');
+      adminToggle.setAttribute('aria-pressed', String(adminOpen));
+    }
+
+    function openAdminModal() {
+      adminModal.classList.remove('hidden'); adminModal.classList.add('flex');
+      if (adminEmailInput && adminUser?.email) adminEmailInput.value = adminUser.email;
+      if (adminPasswordInput) { adminPasswordInput.value = ''; adminPasswordInput.placeholder = 'Password'; }
+      if (adminAuthMsg) adminAuthMsg.textContent = '';
+      setTimeout(() => (adminEmailInput || adminPasswordInput)?.focus(), 30);
+    }
+    function closeAdminModal() { adminModal.classList.add('hidden'); adminModal.classList.remove('flex'); }
+    function showToast(text) { toast.textContent = text; toast.classList.remove('hidden'); clearTimeout(window.__toastTimer); window.__toastTimer = setTimeout(() => toast.classList.add('hidden'), 1500); }
+    function slugify(text) { return text.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)+/g,''); }
+    function isValidUrl(value) { try { const parsed = new URL(value); return ['http:','https:'].includes(parsed.protocol); } catch { return false; } }
+    function confirmDelete(label) { return window.confirm(`Remove this ${label}?`); }
+
+    async function deleteMovieEntry(index) {
+      const currentEntries = [...sections.movies.entries];
+      if (!currentEntries[index] || !confirmDelete('movie')) return;
+      if (!await setPersistedSectionEntries('movies', currentEntries.filter((_, i) => i !== index))) return;
+      renderSection('movies'); showToast('Movie removed');
+    }
+    async function deleteSongEntry(index) {
+      const currentEntries = [...sections.songs.entries];
+      if (!currentEntries[index] || !confirmDelete('playlist')) return;
+      if (!await setPersistedSectionEntries('songs', currentEntries.filter((_, i) => i !== index))) return;
+      renderSection('songs'); showToast('Playlist removed');
+    }
+    async function deleteAlbumEntry(sectionId, index) {
+      const currentEntries = [...sections[sectionId].entries];
+      if (!currentEntries[index] || !confirmDelete(getArchiveLabel(sectionId))) return;
+      if (!await setPersistedSectionEntries(sectionId, currentEntries.filter((_, i) => i !== index))) return;
+      renderSection(sectionId); showToast('Entry removed');
+    }
+    async function deleteTimelineEntry(index) {
+      const currentEntries = [...sections.timeline.entries];
+      if (!currentEntries[index] || !confirmDelete('timeline event')) return;
+      if (!await setPersistedSectionEntries('timeline', currentEntries.filter((_, i) => i !== index))) return;
+      renderSection('timeline'); showToast('Timeline event removed');
+    }
+
+    async function readFilesAsPhotos(files) {
+      const selected = Array.from(files || []);
+      const results = [];
+      for (const file of selected) {
+        if (!file.type.startsWith('image/')) continue;
+        try {
+          const dataUrl = await compressImageForStorage(file, 1400, 0.72);
+          results.push({ src: dataUrl, alt: file.name || 'Selected photo' });
+        } catch (error) {
+          console.error('Image processing failed:', file.name, error);
+          throw error;
+        }
+      }
+      return results;
+    }
+
+    function compressImageForStorage(file, maxDimension = 1000, quality = 0.55) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error || new Error('Could not read image'));
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const scale = Math.min(1, maxDimension / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+            const width = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
+            const height = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d', { alpha: false });
+            if (!ctx) { resolve(String(reader.result)); return; }
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const qualities = [quality, 0.45, 0.35, 0.28];
+            let best = '';
+            for (const q of qualities) {
+              const candidate = canvas.toDataURL('image/jpeg', q);
+              best = candidate;
+              if (candidate.length <= 650000) break;
+            }
+            resolve(best);
+          };
+          img.onerror = () => reject(new Error('Could not decode image'));
+          img.src = String(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderSelectedPreview(form, selectedPhotos) {
+      const container = form.querySelector('.selected-preview');
+      if (!container) return;
+      if (!selectedPhotos.length) {
+        container.innerHTML = '<div class="text-xs uppercase tracking-[0.22em] text-zinc-500 dark:text-zinc-400">No new photos selected</div>';
+        return;
+      }
+      container.innerHTML = selectedPhotos.map((photo, index) => `
+        <div class="selected-photo">
+          <img src="${esc(photo.src)}" alt="${esc(photo.alt || 'Selected photo')}" />
+          <button type="button" class="selected-photo-remove" data-remove-selected="${index}" aria-label="Remove selected photo">×</button>
+        </div>
+      `).join('');
+      container.querySelectorAll('[data-remove-selected]').forEach((button) => {
+        button.addEventListener('click', () => {
+          selectedPhotos.splice(Number(button.dataset.removeSelected), 1);
+          renderSelectedPreview(form, selectedPhotos);
+        });
+      });
+    }
+
+    function renderAlbumAdminForm(sectionId, entryIndex = -1, entry = null) {
+      if (!adminOpen || !albumSections.includes(sectionId)) return null;
+      const form = document.createElement('div');
+      form.className = 'album-editor';
+      const existingPhotos = entry && Array.isArray(entry.photos) ? entry.photos : [];
+      const selectedPhotos = [];
+      const itemTitle = entry?.title || '';
+      const itemStory = entry?.story || '';
+      const itemTime = entry?.time || 'memory';
+      const editing = Boolean(entry);
+      form.innerHTML = `
+        <div class="mb-3 text-[10px] uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">${editing ? 'edit' : 'new'} ${getArchiveLabel(sectionId)} entry</div>
+        <div class="space-y-3">
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Category / date</label><input name="time" value="${esc(itemTime)}" placeholder="home comfort / 2026" /></div>
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Entry title</label><input name="title" value="${esc(itemTitle)}" placeholder="Title or memory topic" /></div>
+          <div>
+            <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Photos</label>
+            <input name="photos" type="file" accept="image/*" multiple />
+            <div class="selected-preview"></div>
+          </div>
+          ${existingPhotos.length ? `<div class="space-y-2"><div class="text-[10px] uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Existing photos</div><div class="existing-photo-list">${existingPhotos.map((photo, photoIndex) => `<button type="button" class="compact-secondary-btn delete-photo-btn" data-photo-index="${photoIndex}">Remove photo ${photoIndex + 1}</button>`).join('')}</div></div>` : ''}
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">My story</label><textarea name="story" placeholder="Write the memory, context, feeling, and story...">${esc(itemStory)}</textarea></div>
+        </div>
+        <div class="mt-4 flex justify-end gap-2">
+          <button type="button" class="album-cancel-btn rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">Cancel</button>
+          <button type="button" class="album-save-btn rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900">${editing ? 'Save changes' : 'Save entry'}</button>
+        </div>
+      `;
+
+      const fileInput = form.querySelector('input[name="photos"]');
+      fileInput.addEventListener('change', async (event) => {
+        try {
+          const converted = await readFilesAsPhotos(event.target.files);
+          selectedPhotos.push(...converted);
+          renderSelectedPreview(form, selectedPhotos);
+          event.target.value = '';
+        } catch { showToast('Could not read one or more images'); }
+      });
+      renderSelectedPreview(form, selectedPhotos);
+
+      form.querySelector('.album-cancel-btn').addEventListener('click', () => renderSection(sectionId));
+      form.querySelector('.album-save-btn').addEventListener('click', async () => {
+        const title = form.querySelector('input[name="title"]').value.trim();
+        const time = form.querySelector('input[name="time"]').value.trim() || 'memory';
+        const story = form.querySelector('textarea[name="story"]').value.trim();
+        if (!title || !story) { showToast('Title and story are required'); return; }
+        const currentEntries = sections[sectionId].entries.map((currentEntry, index) => normalizeEntry(sectionId, currentEntry, index));
+        const nextEntry = {
+          id: editing ? entry.id : `${sectionId}-${Date.now()}`,
+          time,
+          title,
+          story,
+          photos: [...(entry?.photos || []), ...selectedPhotos]
+        };
+        if (editing) currentEntries[entryIndex] = nextEntry; else currentEntries.push(nextEntry);
+        if (!await setPersistedSectionEntries(sectionId, currentEntries)) return;
+        renderSection(sectionId);
+        showToast(editing ? 'Entry updated' : 'Entry added');
+      });
+      form.querySelectorAll('.delete-photo-btn').forEach((button) => {
+        button.addEventListener('click', async () => {
+          if (!entry) return;
+          const photoIndex = Number(button.dataset.photoIndex);
+          const target = sections[sectionId].entries[entryIndex];
+          if (!target) return;
+          const photos = Array.isArray(target.photos) ? target.photos : [];
+          if (!confirmDelete('photo')) return;
+          if (!await setPersistedSectionEntries(sectionId, sections[sectionId].entries.map((e, i) => i === entryIndex ? { ...e, photos: photos.filter((_, i) => i !== photoIndex) } : e))) return;
+          renderSection(sectionId); showToast('Photo removed');
+        });
+      });
+      return form;
+    }
+
+    function renderTimelineAdminForm(entryIndex = -1, entry = null) {
+      if (!adminOpen) return null;
+      const form = document.createElement('div');
+      form.className = 'admin-form-card mb-5 p-4 sm:p-5';
+      const editing = Boolean(entry);
+      const selectedPhotos = [];
+      const year = entry?.year || new Date().getFullYear();
+      const month = entry?.month || new Date().getMonth()+1;
+      form.innerHTML = `
+        <div><div class="text-[10px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">admin</div><h3 class="mt-1 text-lg font-semibold text-zinc-950 dark:text-zinc-50">${editing ? 'Edit timeline event' : 'Add timeline event'}</h3></div>
+        <div class="mt-4 space-y-4">
+          <div class="admin-form-row">
+            <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Year</label><input name="year" type="number" min="1900" max="2200" value="${year}" class="admin-form-field" required /></div>
+            <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Month</label><select name="month" class="admin-form-field">${monthNames.map((name, i) => `<option value="${i+1}" ${i+1 === month ? 'selected' : ''}>${name}</option>`).join('')}</select></div>
+          </div>
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Event title</label><input name="title" value="${esc(entry?.title || '')}" class="admin-form-field" placeholder="Event title" required /></div>
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Story</label><textarea name="story" class="admin-form-field" style="min-height:160px" placeholder="What happened? Why does it matter?" required>${esc(entry?.story || '')}</textarea></div>
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Photos (optional)</label><input name="photos" type="file" accept="image/*" multiple /><div class="selected-preview mt-3"></div></div>
+          ${entry?.photos?.length ? `<div><div class="mb-2 text-[10px] uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Existing photos</div><div class="existing-photo-list">${entry.photos.map((_, photoIndex) => `<button type="button" class="compact-secondary-btn timeline-remove-photo" data-photo-index="${photoIndex}">Remove photo ${photoIndex+1}</button>`).join('')}</div></div>` : ''}
+        </div>
+        <div class="admin-form-actions"><button type="button" class="admin-form-cancel bg-white dark:bg-zinc-900">Cancel</button><button type="button" class="admin-form-submit">${editing ? 'Save changes' : 'Add Event'}</button></div>
+      `;
+      const fileInput = form.querySelector('input[name="photos"]');
+      fileInput.addEventListener('change', async (event) => {
+        const converted = await readFilesAsPhotos(event.target.files);
+        selectedPhotos.push(...converted); renderSelectedPreview(form, selectedPhotos); event.target.value='';
+      });
+      renderSelectedPreview(form, selectedPhotos);
+      form.querySelector('.admin-form-cancel').addEventListener('click', () => renderSection('timeline'));
+      form.querySelector('.admin-form-submit').addEventListener('click', async () => {
+        const yearValue = Number(form.querySelector('[name="year"]').value);
+        const monthValue = Number(form.querySelector('[name="month"]').value);
+        const titleValue = form.querySelector('[name="title"]').value.trim();
+        const storyValue = form.querySelector('[name="story"]').value.trim();
+        if (!Number.isFinite(yearValue) || yearValue < 1900 || yearValue > 2200 || monthValue < 1 || monthValue > 12 || !titleValue || !storyValue) { showToast('Year, month, title and story are required'); return; }
+        const nextEntry = { id: entry?.id || `timeline-${Date.now()}`, year:yearValue, month:monthValue, time:monthNames[monthValue-1], title:titleValue, story:storyValue, photos:[...(entry?.photos || []), ...selectedPhotos] };
+        const entries = sections.timeline.entries.map((item, index) => normalizeEntry('timeline', item, index));
+        if (editing) entries[entryIndex] = nextEntry; else entries.push(nextEntry);
+        if (!await setPersistedSectionEntries('timeline', entries)) return;
+        renderSection('timeline'); showToast(editing ? 'Timeline event updated' : 'Timeline event added');
+      });
+      form.querySelectorAll('.timeline-remove-photo').forEach((button) => {
+        button.addEventListener('click', async () => {
+          if (!entry || !confirmDelete('photo')) return;
+          const photoIndex = Number(button.dataset.photoIndex);
+          const current = sections.timeline.entries.map((item, index) => normalizeEntry('timeline', item, index));
+          current[entryIndex].photos = current[entryIndex].photos.filter((_, i) => i !== photoIndex);
+          if (!await setPersistedSectionEntries('timeline', current)) return; renderSection('timeline'); showToast('Photo removed');
+        });
+      });
+      return form;
+    }
+
+    function movieGenreKey(value) {
+      const raw = String(value ?? '').trim();
+      const match = movieGenres.find((genre) => genre.toLowerCase() === raw.toLowerCase());
+      return match || 'Others';
+    }
+
+    function renderMovieGenreFilters() {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'movie-genre-filter-shell';
+      wrapper.setAttribute('aria-label', 'Movie genres');
+      const filter = document.createElement('div');
+      filter.className = 'movie-genre-filter no-scrollbar';
+      filter.innerHTML = movieGenreOptions.map((genre) => `
+        <button type="button" class="movie-genre-btn ${selectedMovieGenre === genre ? 'is-active' : ''}" data-movie-genre="${esc(genre)}" aria-pressed="${selectedMovieGenre === genre}">${esc(genre)}</button>
+      `).join('');
+      wrapper.appendChild(filter);
+
+      filter.querySelectorAll('[data-movie-genre]').forEach((button) => {
+        button.addEventListener('click', () => {
+          selectedMovieGenre = button.dataset.movieGenre || 'All';
+          renderSection('movies');
+        });
+      });
+      return wrapper;
+    }
+
+    function renderAdminComposer(sectionId) {
+      if (!adminOpen) return null;
+      if (albumSections.includes(sectionId)) {
+        const wrapper = document.createElement('div'); wrapper.className = 'admin-form-card mb-5 p-4 sm:p-5';
+        wrapper.appendChild(renderAlbumAdminForm(sectionId, -1, null)); return wrapper;
+      }
+      if (sectionId === 'timeline') return renderTimelineAdminForm();
+      if (sectionId === 'songs' || sectionId === 'movies') {
+        const isSongs = sectionId === 'songs';
+        const wrapper = document.createElement('div'); wrapper.className = 'admin-form-card mb-5 p-4 sm:p-5';
+        wrapper.innerHTML = `
+          <div class="flex items-center justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">admin</div><h3 class="mt-1 text-lg font-semibold text-zinc-950 dark:text-zinc-50">${isSongs ? 'Add Spotify Playlist' : 'Add Movie'}</h3></div></div>
+          <form class="mt-4" data-admin-form="${sectionId}">
+            <div class="admin-form-row">
+              <div>
+                <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">${isSongs ? 'Playlist name' : 'Movie name'}</label>
+                <input name="title" type="text" class="admin-form-field" placeholder="${isSongs ? 'Playlist name' : 'Movie name'}" required />
+              </div>
+              <div>
+                <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">${isSongs ? 'Spotify playlist link' : 'Movie link'}</label>
+                <input name="link" type="url" class="admin-form-field" placeholder="${isSongs ? 'https://open.spotify.com/playlist/...' : 'https://'}" required />
+              </div>
+            </div>
+            ${!isSongs ? `<div class="mt-4"><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400" for="movieGenreSelect">Movie genre</label><select id="movieGenreSelect" name="genre" class="admin-form-field" required><option value="" selected disabled>Select genre</option>${movieGenres.map((genre) => `<option value="${esc(genre)}">${esc(genre)}</option>`).join('')}</select></div>` : `<div class="mt-3 text-xs leading-6 text-zinc-500 dark:text-zinc-400">Paste a Spotify playlist link. The playlist and its tracks will appear together in your Songs section.</div>`}
+            <div class="admin-form-actions"><button type="button" class="admin-form-cancel bg-white dark:bg-zinc-900">Clear</button><button type="submit" class="admin-form-submit">${isSongs ? 'Add Playlist' : 'Add Movie'}</button></div>
+            <div class="admin-form-msg mt-3" aria-live="polite"></div>
+          </form>`;
+        const form = wrapper.querySelector('form'); const msg = wrapper.querySelector('.admin-form-msg');
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault(); const formData = new FormData(form);
+          const title = String(formData.get('title') || '').trim(); const link = String(formData.get('link') || '').trim(); const genre = String(formData.get('genre') || '').trim();
+          if (!title || !link || !isValidUrl(link)) { msg.textContent = 'Enter a valid title and http/https link.'; msg.className='admin-form-msg error mt-3'; return; }
+          if (isSongs && !getSpotifyEmbedUrl(link)) { msg.textContent = 'Paste a valid Spotify playlist, album, or track link.'; msg.className='admin-form-msg error mt-3'; return; }
+          if (!isSongs && !movieGenres.includes(genre)) { msg.textContent = 'Select a movie genre.'; msg.className='admin-form-msg error mt-3'; return; }
+          const newEntry = isSongs ? ['playlist',title,'Added by admin.',link] : ['favorite watch',title,'Added by admin.',link,genre];
+          const currentEntries = [...sections[sectionId].entries];
+          if (!await setPersistedSectionEntries(sectionId, [...currentEntries, newEntry].map((entry,index)=>normalizeEntry(sectionId,entry,index)))) return;
+          form.reset(); msg.textContent = `${isSongs ? 'Playlist' : 'Movie'} added successfully.`; msg.className='admin-form-msg success mt-3'; setTimeout(()=>renderSection(sectionId),150);
+        });
+        wrapper.querySelector('.admin-form-cancel').addEventListener('click',()=>form.reset());
+        return wrapper;
+      }
+      return null;
+    }
+
+    function getArchiveLabel(sectionId) {
+      const map = { movies:'movie', songs:'playlist', experiences:'experience', stories:'story', memories:'memory', skills:'skill', food:'food', places:'place', peoples:'person', timeline:'event' };
+      return map[sectionId] || 'entry';
+    }
+    function getArchivePreviewText(entry, fallback='No summary yet.') {
+      const text = String(entry.story || entry.text || '').replace(/\s+/g,' ').trim();
+      return text ? (text.length > 150 ? `${text.slice(0,147).trim()}…` : text) : fallback;
+    }
+
+    function renderGallery(entry, sectionId, idx) {
+      if (!entry.photos?.length) return '';
+      const galleryId = `gallery-${sectionId}-${idx}`;
+      return `<div class="archive-gallery" id="${galleryId}">
+        <img class="archive-main-image" data-main-image="${galleryId}" src="${esc(entry.photos[0].src)}" alt="${esc(entry.photos[0].alt || entry.title)}" />
+        ${entry.photos.length > 1 ? `<div class="archive-thumbs">${entry.photos.map((photo, photoIndex) => `<button type="button" class="archive-thumb-btn ${photoIndex===0?'is-active':''}" data-gallery-id="${galleryId}" data-photo-index="${photoIndex}"><img src="${esc(photo.src)}" alt="${esc(photo.alt || entry.title)}" /></button>`).join('')}</div>` : ''}
+      </div>`;
+    }
+
+    function getSpotifyEmbedUrl(value) {
+      try {
+        const parsed = new URL(String(value || '').trim());
+        const host = parsed.hostname.toLowerCase();
+        if (!host.includes('spotify.com')) return '';
+        const parts = parsed.pathname.split('/').filter(Boolean);
+        const supportedTypes = new Set(['playlist','album','track']);
+        const typeIndex = parts.findIndex((part) => supportedTypes.has(part.toLowerCase()));
+        if (typeIndex < 0 || !parts[typeIndex + 1]) return '';
+        const type = parts[typeIndex].toLowerCase();
+        const id = parts[typeIndex + 1].split('?')[0];
+        if (!/^[A-Za-z0-9]{8,}$/.test(id)) return '';
+        const theme = dark ? '0' : '1';
+        return `https://open.spotify.com/embed/${type}/${encodeURIComponent(id)}?utm_source=generator&theme=${theme}`;
+      } catch {
+        return '';
+      }
+    }
+
+    function renderSpotifyLibrary() {
+      const entries = sections.songs.entries.map((entry, index) => normalizeEntry('songs', entry, index));
+      const firstValid = entries.findIndex((entry) => Boolean(getSpotifyEmbedUrl(entry.link)));
+      if (!entries.length) {
+        return `<div class="spotify-library-shell"><div class="spotify-library-empty">No Spotify playlists added yet.</div></div>`;
+      }
+      const activeIndex = window.__spotifySelectedIndex ?? (firstValid >= 0 ? firstValid : 0);
+      window.__spotifySelectedIndex = Math.min(Math.max(activeIndex, 0), entries.length - 1);
+      const active = entries[window.__spotifySelectedIndex];
+      const embedUrl = getSpotifyEmbedUrl(active?.link);
+      const playlistItems = entries.map((entry, idx) => `
+        <div class="spotify-playlist-item ${idx === window.__spotifySelectedIndex ? 'is-active' : ''}" data-playlist-index="${idx}">
+          <button type="button" class="spotify-playlist-item-main" data-select-playlist="${idx}" aria-current="${idx === window.__spotifySelectedIndex ? 'true' : 'false'}">
+            <span class="spotify-playlist-item-kicker">playlist ${idx + 1}</span>
+            <span class="spotify-playlist-item-title">${esc(entry.title || 'Untitled playlist')}</span>
+          </button>
+          ${adminOpen ? `<button type="button" class="spotify-playlist-item-remove" data-playlist-remove="${idx}">Remove</button>` : ''}
+        </div>`).join('');
+      const mainContent = embedUrl ? `
+        <div class="spotify-library-main-header">
+          <div class="min-w-0">
+            <div class="spotify-playlist-kicker">songs · playlist</div>
+            <div class="spotify-playlist-title">${esc(active.title || 'Untitled playlist')}</div>
+          </div>
+          <a href="${esc(active.link)}" target="_blank" rel="noreferrer" class="spotify-playlist-open">Open Spotify</a>
+        </div>
+        <iframe class="spotify-playlist-frame" src="${esc(embedUrl)}" title="Spotify playlist: ${esc(active.title || 'Untitled playlist')}" loading="eager" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`
+        : `<div class="spotify-library-main-header"><div><div class="spotify-playlist-kicker">songs · playlist</div><div class="spotify-playlist-title">${esc(active?.title || 'Playlist')}</div></div>${active?.link ? `<a href="${esc(active.link)}" target="_blank" rel="noreferrer" class="spotify-playlist-open">Open Spotify</a>` : ''}</div><div class="spotify-playlist-empty">This Spotify link could not be embedded. Open it directly from Spotify instead.</div>`;
+
+      return `
+        <div class="spotify-library-shell fade-enter" data-section="songs">
+          <aside class="spotify-library-sidebar">
+            <div class="spotify-library-sidebar-label">Your playlists</div>
+            <div class="spotify-playlist-nav">${playlistItems}</div>
+          </aside>
+          <section class="spotify-library-main">${mainContent}</section>
+        </div>`;
+    }
+
+    function bindSpotifyLibrary() {
+      entriesEl.querySelectorAll('[data-select-playlist]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const nextIndex = Number(button.dataset.selectPlaylist);
+          if (!Number.isInteger(nextIndex) || !sections.songs.entries[nextIndex]) return;
+          window.__spotifySelectedIndex = nextIndex;
+          renderSection('songs');
+        });
+      });
+      entriesEl.querySelectorAll('[data-playlist-remove]').forEach((button) => {
+        button.addEventListener('click', async (event) => {
+          event.stopPropagation();
+          const index = Number(button.dataset.playlistRemove);
+          await deleteSongEntry(index);
+        });
+      });
+    }
+
+    function renderArchivePreviewCard(sectionId, entry, idx) {
+      const normalized = normalizeEntry(sectionId, entry, idx);
+      const isMovie = sectionId === 'movies';
+      const isSong = sectionId === 'songs';
+      const isExpandable = albumSections.includes(sectionId);
+      const actionLabel = isMovie ? 'Open Movie' : isSong ? 'Open Playlist' : '';
+      const deleteButton = adminOpen && isMovie ? `<button type="button" class="movie-delete-btn" data-index="${idx}">Remove</button>` : adminOpen && isSong ? `<button type="button" class="song-delete-btn" data-index="${idx}">Remove</button>` : '';
+      const extraMeta = isMovie && normalized.genre ? `<div class="compact-entry-meta">${esc(normalized.genre)}</div>` : '';
+      const linkButton = normalized.link ? `<a href="${esc(normalized.link)}" target="_blank" rel="noreferrer" class="compact-action-btn">${actionLabel}</a>` : '';
+      const copyButton = isSong && normalized.link ? `<button type="button" class="compact-secondary-btn copyBtn" data-copy="${esc(normalized.link)}">Copy link</button>` : '';
+      if (isExpandable) {
+        return `
+          <div class="compact-entry-capsule archive-entry-card" data-section="${sectionId}" data-index="${idx}">
+            <div class="archive-entry-preview">
+              <button type="button" class="archive-entry-main-button" data-expand-entry="true" aria-expanded="false">
+                <div class="archive-entry-label">${esc(getArchiveLabel(sectionId))}${normalized.time ? ` · ${esc(normalized.time)}`:''}</div>
+                <div class="archive-entry-title">${esc(normalized.title)}</div>
+                <div class="archive-preview-copy">${esc(getArchivePreviewText(normalized))}</div>
+              </button>
+              <div class="archive-entry-actions">${deleteButton}${adminOpen ? `<button type="button" class="compact-secondary-btn entry-edit-btn">Edit</button>` : ''}<button type="button" class="compact-secondary-btn read-entry-btn">Read</button></div>
+            </div>
+            <div class="archive-expanded-panel">
+              <div class="archive-expanded-layout">
+                <div>
+                  <div class="archive-expanded-meta">${esc(getArchiveLabel(sectionId))}${normalized.time ? ` · ${esc(normalized.time)}`:''}</div>
+                  <div class="archive-expanded-title">${esc(normalized.title)}</div>
+                  <div class="archive-expanded-copy">${String(normalized.story || '').split(/\n\s*\n|\r\n\s*\r\n/).filter(Boolean).map(p=>`<p class="mb-5">${esc(p)}</p>`).join('')}</div>
+                </div>
+                ${normalized.photos?.length ? `<div>${renderGallery(normalized, sectionId, idx)}</div>` : ''}
+              </div>
+              <div class="archive-detail-actions">${adminOpen ? `<button type="button" class="album-add-photos-btn add-photos-inline">Add Photos</button><button type="button" class="album-delete-btn delete-inline">Delete Entry</button>` : ''}</div>
+            </div>
+          </div>`;
+      }
+      return `
+        <div class="compact-entry-capsule archive-entry-card" data-section="${sectionId}" data-index="${idx}">
+          <div class="archive-entry-preview">
+            <div class="min-w-0">
+              <div class="archive-entry-label">${esc(getArchiveLabel(sectionId))}${normalized.time ? ` · ${esc(normalized.time)}`:''}</div>
+              <div class="archive-entry-title">${esc(normalized.title)}</div>
+              ${extraMeta}
+              ${!isMovie && !isSong && normalized.story ? `<div class="archive-preview-copy">${esc(getArchivePreviewText(normalized))}</div>` : ''}
+            </div>
+            <div class="archive-entry-actions">${linkButton}${copyButton}${deleteButton}</div>
+          </div>
+        </div>`;
+    }
+
+    function renderTimelineSection() {
+      const rawEntries = sections.timeline.entries.map((entry,index)=>normalizeEntry('timeline',entry,index));
+      rawEntries.sort((a,b)=>((b.year||0)*12+(b.month||1))-((a.year||0)*12+(a.month||1)));
+      sections.timeline.entries = rawEntries;
+      const shell = document.createElement('div'); shell.className='timeline-shell';
+      shell.innerHTML = rawEntries.map((entry,index)=>{
+        const photos = entry.photos?.length ? `<div class="timeline-photos">${entry.photos.map(photo=>`<img src="${esc(photo.src)}" alt="${esc(photo.alt || entry.title)}" />`).join('')}</div>` : '';
+        const storyText = entry.story || '';
+        const previewText = storyText.replace(/\s+/g,' ').trim();
+        const preview = previewText.length > 140 ? `${esc(previewText.slice(0,137))}…` : esc(previewText);
+        const paragraphs = storyText.split(/\n\s*\n|\r\n\s*\r\n/).filter(Boolean).map(p=>`<p class=\"mb-4 leading-8 text-zinc-700 dark:text-zinc-300\">${esc(p)}</p>`).join('');
+        return `<article class=\"timeline-item fade-enter\" data-timeline-index=\"${index}\">
+          <div class=\"timeline-date\">${esc(entry.year)}<br>${esc(monthNames[(entry.month||1)-1])}</div>
+          <span class=\"timeline-dot\" aria-hidden=\"true\"></span>
+          <div class=\"timeline-body\" tabindex=\"0\" role=\"button\" aria-expanded=\"false\">
+            <button type=\"button\" class=\"timeline-read\">Read</button>
+            <h3>${esc(entry.title || 'Life event')}</h3>
+            ${preview ? `<div class=\"timeline-preview\">${preview}</div>` : ''}
+            <div class=\"timeline-full\">
+              ${paragraphs || `<p class=\"leading-8 text-zinc-700 dark:text-zinc-300\">No story added yet.</p>`}
+              ${photos}
+              ${adminOpen ? `<div class=\"archive-detail-actions\"><button type=\"button\" class=\"timeline-edit-btn\">Edit</button><button type=\"button\" class=\"timeline-delete-btn\">Delete</button></div>` : ''}
+            </div>
+          </div>
+        </article>`;
+      }).join('');
+      entriesEl.appendChild(shell);
+      shell.querySelectorAll('.timeline-item').forEach((card,index)=>{
+        const entryIndex = rawEntries.findIndex((entry)=>entry.id === rawEntries[index].id);
+        const body = card.querySelector('.timeline-body');
+        const readBtn = card.querySelector('.timeline-read');
+        const toggleTimeline = (event)=>{
+          if (event.target.closest('.timeline-edit-btn, .timeline-delete-btn')) return;
+          const isOpen = body.classList.toggle('is-expanded');
+          body.setAttribute('aria-expanded', String(isOpen));
+          if (readBtn) readBtn.textContent = isOpen ? 'Hide' : 'Read';
+        };
+        body?.addEventListener('click', toggleTimeline);
+        body?.addEventListener('keydown', (event)=>{ if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); toggleTimeline(event); } });
+        card.querySelector('.timeline-edit-btn')?.addEventListener('click',(event)=>{
+          event.stopPropagation();
+          const wrapper = renderTimelineAdminForm(entryIndex, rawEntries[index]);
+          card.replaceWith(wrapper); window.scrollTo({top:wrapper.getBoundingClientRect().top + window.scrollY - 40, behavior:'smooth'});
+        });
+        card.querySelector('.timeline-delete-btn')?.addEventListener('click',(event)=>{ event.stopPropagation(); deleteTimelineEntry(entryIndex); });
+      });
+    }
+
+    function renderSection(id) {
+      activeSection = id;
+      currentPage = id;
+      localStorage.setItem(currentPageKey, id);
+      const sec = sections[id];
+      if (folderLabel) folderLabel.textContent = sec.title.toUpperCase();
+      folderShort.textContent = sec.short;
+      folderIntro.textContent = sec.intro;
+      renderFolderCarousel();
+      setActiveFolder(id);
+      entriesEl.innerHTML = '';
+      if (id === 'movies') {
+        entriesEl.appendChild(renderMovieGenreFilters());
+      }
+      const adminComposer = renderAdminComposer(id);
+      if (adminComposer) entriesEl.appendChild(adminComposer);
+      if (id === 'timeline') { renderTimelineSection(); return; }
+
+      const visibleEntries = id === 'movies' && selectedMovieGenre !== 'All'
+        ? sec.entries.filter((entry) => movieGenreKey(normalizeEntry('movies', entry, 0).genre) === selectedMovieGenre)
+        : sec.entries;
+
+      if (id === 'songs') {
+        entriesEl.innerHTML = renderSpotifyLibrary();
+        bindSpotifyLibrary();
+        return;
+      }
+
+      visibleEntries.forEach((entry) => {
+        const idx = sec.entries.indexOf(entry);
+        const article = document.createElement('article');
+        article.id = `entry-${id}-${idx}`;
+        article.className = 'relative fade-enter';
+        article.innerHTML = renderArchivePreviewCard(id, entry, idx);
+        entriesEl.appendChild(article);
+      });
+
+      bindArchiveInteractions(id);
+    }
+
+    function bindArchiveInteractions(sectionId) {
+      entriesEl.querySelectorAll('[data-expand-entry="true"], .read-entry-btn').forEach((control)=>{
+        control.addEventListener('click',(event)=>{
+          event.stopPropagation();
+          const card = control.closest('.archive-entry-card'); if (!card) return;
+          const open = card.classList.toggle('is-expanded');
+          card.querySelector('[data-expand-entry="true"]')?.setAttribute('aria-expanded', String(open));
+          const readBtn = card.querySelector('.read-entry-btn'); if (readBtn) readBtn.textContent = open ? 'Close' : 'Read';
+        });
+      });
+
+      entriesEl.querySelectorAll('.entry-edit-btn').forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+          event.stopPropagation();
+          const card = button.closest('.archive-entry-card');
+          const idx = Number(card.dataset.index);
+          const wrapper = renderAlbumAdminForm(sectionId, idx, normalizeEntry(sectionId, sections[sectionId].entries[idx], idx));
+          card.replaceWith(wrapper);
+          wrapper.scrollIntoView({behavior:'smooth', block:'center'});
+        });
+      });
+      entriesEl.querySelectorAll('.add-photos-inline').forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+          event.stopPropagation();
+          const card = button.closest('.archive-entry-card'); const idx = Number(card.dataset.index);
+          const wrapper = renderAlbumAdminForm(sectionId, idx, normalizeEntry(sectionId, sections[sectionId].entries[idx], idx));
+          card.replaceWith(wrapper); wrapper.scrollIntoView({behavior:'smooth',block:'center'});
+        });
+      });
+      entriesEl.querySelectorAll('.delete-inline').forEach((button)=>{
+        button.addEventListener('click',(event)=>{ event.stopPropagation(); const card=button.closest('.archive-entry-card'); deleteAlbumEntry(sectionId, Number(card.dataset.index)); });
+      });
+      entriesEl.querySelectorAll('.movie-delete-btn').forEach((button)=>button.addEventListener('click',()=>deleteMovieEntry(Number(button.dataset.index))));
+      entriesEl.querySelectorAll('.song-delete-btn').forEach((button)=>button.addEventListener('click',()=>deleteSongEntry(Number(button.dataset.index))));
+      entriesEl.querySelectorAll('.copyBtn').forEach(btn=>btn.addEventListener('click',async()=>{ try { await navigator.clipboard.writeText(btn.dataset.copy); showToast('Link copied'); } catch { showToast('Copy failed'); } }));
+      entriesEl.querySelectorAll('.archive-thumb-btn').forEach((thumb)=>thumb.addEventListener('click',(event)=>{
+        event.stopPropagation();
+        const galleryId=thumb.dataset.galleryId; const idx=Number(thumb.dataset.photoIndex); const gallery=document.getElementById(galleryId); const card=thumb.closest('.archive-entry-card'); const entryIndex=Number(card.dataset.index); const entry=normalizeEntry(sectionId,sections[sectionId].entries[entryIndex],entryIndex); const photo=entry.photos[idx];
+        if (!photo || !gallery) return;
+        const main=gallery.querySelector('[data-main-image]'); if (main) { main.src=photo.src; main.alt=photo.alt || entry.title; }
+        gallery.querySelectorAll('.archive-thumb-btn').forEach((btn)=>btn.classList.toggle('is-active', btn===thumb));
+      }));
+    }
+
+    function setActiveFolder(id) {
+      document.querySelectorAll('.folder-tab').forEach(btn=>{
+        const active = btn.dataset.section === id;
+        btn.classList.toggle('ring-1', active);
+        btn.classList.toggle('ring-zinc-400', active);
+        btn.classList.toggle('dark:ring-zinc-500', active);
+      });
+    }
+
+    function getVisibleCount() {
+      return window.innerWidth >= 1024 ? 5 : window.innerWidth >= 640 ? 3 : 1;
+    }
+
+    function renderFolderCarousel() {
+      const container = document.getElementById('folderTrack'); if (!container) return;
+      const items = order.filter((sectionId)=>Boolean(sections[sectionId]));
+      const visibleCount = Math.min(getVisibleCount(), items.length);
+      const positions = Array.from({length:visibleCount},(_,i)=>items[(carouselIndex+i+items.length)%items.length]);
+      const center = Math.floor(visibleCount/2);
+      container.innerHTML = positions.map((sectionId,position)=>{
+        const section=sections[sectionId];
+        let opacity=1, blur='0px', scale='1';
+        if (visibleCount === 5) {
+          if (position===0 || position===4) { opacity=.8; blur='1.4px'; scale='.96'; }
+          else if (position===1 || position===3) { opacity=.9; blur='.6px'; scale='.985'; }
+          else { opacity=1; blur='0px'; scale='1.02'; }
+        } else if (visibleCount===3) {
+          if (position!==1) { opacity=.7; blur='1.1px'; scale='.97'; } else { scale='1.02'; }
+        }
+        return `<button class="folder-tab border border-zinc-200 bg-white px-4 py-4 text-left shadow-sm dark:border-zinc-800 dark:bg-zinc-950" data-section="${esc(sectionId)}" style="opacity:${opacity};filter:blur(${blur});transform:scale(${scale});" aria-label="Open ${esc(section.title)}">
+          <div class="text-sm font-semibold uppercase tracking-[0.22em]">${esc(section.title)}</div>
+          <div class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">${esc(section.short)}</div>
+        </button>`;
+      }).join('');
+      container.querySelectorAll('.folder-tab').forEach((button)=>button.addEventListener('click',()=>{
+        // IMPORTANT: opening a folder never changes carouselIndex.
+        renderSection(button.dataset.section);
+      }));
+      setActiveFolder(activeSection);
+    }
+
+    function cycleCarousel(direction) {
+      const items=order.filter((sectionId)=>Boolean(sections[sectionId]));
+      carouselIndex=(carouselIndex+direction+items.length)%items.length;
+      renderFolderCarousel();
+    }
+
+    function startAutoRotate() {
+      clearInterval(autoRotateTimer);
+      autoRotateTimer = setInterval(()=>{
+        if (!carouselPaused) cycleCarousel(-1);
+      }, 4200);
+    }
+
+    function initializeCarousel() {
+      const prevBtn=document.getElementById('folderPrev'); const nextBtn=document.getElementById('folderNext'); const carousel=document.querySelector('.folder-carousel');
+      prevBtn?.addEventListener('click',()=>cycleCarousel(-1));
+      nextBtn?.addEventListener('click',()=>cycleCarousel(1));
+      carousel?.addEventListener('mouseenter',()=>{ carouselPaused=true; });
+      carousel?.addEventListener('mouseleave',()=>{ carouselPaused=false; });
+      renderFolderCarousel(); startAutoRotate();
+      window.addEventListener('resize',()=>renderFolderCarousel());
+    }
+
+    function createSearchResults(q) {
+      const query=q.trim().toLowerCase();
+      if (!query) { searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
+      const matches=[];
+      order.forEach(sectionId=>{
+        const sec=sections[sectionId]; (sec.entries||[]).forEach((entry,idx)=>{ const normalized=normalizeEntry(sectionId,entry,idx); const hay=`${sec.title} ${sec.short} ${sec.intro} ${normalized.time||''} ${normalized.title||''} ${normalized.story||''}`.toLowerCase(); if(hay.includes(query)) matches.push({sectionId,idx,section:sec.title,title:normalized.title||sec.title,short:sec.short}); });
+      });
+      const filtered=matches.slice(0,7);
+      searchResults.innerHTML=filtered.map(r=>`<button data-section="${esc(r.sectionId)}" data-index="${r.idx}" class="search-hit w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-950"><div class="text-xs uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">${esc(r.section)}</div><div class="mt-1 font-medium text-zinc-900 dark:text-zinc-50">${esc(r.title)}</div><div class="mt-1 text-sm text-zinc-600 dark:text-zinc-300">${esc(r.short)}</div></button>`).join('');
+      searchResults.classList.toggle('hidden', filtered.length===0);
+      searchResults.querySelectorAll('.search-hit').forEach(btn=>btn.addEventListener('click',()=>{
+        renderSection(btn.dataset.section); searchInput.value=''; searchResults.classList.add('hidden'); setTimeout(()=>document.getElementById(`entry-${btn.dataset.section}-${btn.dataset.index}`)?.scrollIntoView({behavior:'smooth',block:'center'}),100);
+      }));
+    }
+
+    searchInput.addEventListener('input',(e)=>createSearchResults(e.target.value));
+    document.addEventListener('click',(e)=>{ if(!searchResults.contains(e.target) && e.target!==searchInput) searchResults.classList.add('hidden'); });
+    themeToggle.addEventListener('click',()=>{
+      dark=!dark;
+      applyTheme();
+      if (activeSection === 'songs') renderSection('songs');
+    });
+    infoBtn.addEventListener('click',()=>{ infoModal.classList.remove('hidden'); infoModal.classList.add('flex'); });
+    closeInfo.addEventListener('click',()=>{ infoModal.classList.add('hidden'); infoModal.classList.remove('flex'); });
+    infoModal.addEventListener('click',(e)=>{ if(e.target===infoModal){ infoModal.classList.add('hidden'); infoModal.classList.remove('flex'); } });
+    adminToggle.addEventListener('click', async ()=>{
+      if(adminUser){
+        try {
+          await signOut(auth);
+          showToast('Admin locked');
+        } catch (error) {
+          console.error(error);
+          showToast('Could not lock admin');
+        }
+        return;
+      }
+      openAdminModal();
+    });
+    unlockAdminBtn.addEventListener('click', async ()=>{
+      const email = String(adminEmailInput?.value || '').trim();
+      const password = String(adminPasswordInput?.value || '');
+      if (!email || !password) {
+        if (adminAuthMsg) adminAuthMsg.textContent = 'Enter both email and password.';
+        return;
+      }
+      unlockAdminBtn.disabled = true;
+      if (adminAuthMsg) adminAuthMsg.textContent = 'Signing in…';
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        closeAdminModal();
+      } catch (error) {
+        console.error('Firebase Auth error:', error);
+        if (adminAuthMsg) adminAuthMsg.textContent = 'Invalid email/password or Firebase Auth is not configured.';
+        adminPasswordInput.value = '';
+      } finally {
+        unlockAdminBtn.disabled = false;
+      }
+    });
+    cancelAdminBtn.addEventListener('click',closeAdminModal);
+    adminModal.addEventListener('click',(e)=>{ if(e.target===adminModal) closeAdminModal(); });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ infoModal.classList.add('hidden'); infoModal.classList.remove('flex'); searchResults.classList.add('hidden'); closeAdminModal(); }});
+
+    onAuthStateChanged(auth, async (user) => {
+      adminUser = user || null;
+      adminOpen = Boolean(user);
+      setAdminUI();
+      applyTheme();
+      try {
+        if (user) await seedOrMigrateFirestore();
+        else await loadAllEntriesFromFirestore();
+      } catch (error) {
+        console.error('Cloud archive boot error:', error);
+        showToast('Could not load cloud archive.');
+      }
+      renderSection(activeSection);
+    });
+
+    applyTheme();
+    initializeCarousel();
+    renderSection(activeSection);
+
+    setTimeout(()=>{
+      const welcome=document.getElementById('welcome');
+      if(welcome){ welcome.classList.add('fade-exit'); setTimeout(()=>welcome.remove(),450); }
+    },2000);
+  </script>
+</body>
+</html>

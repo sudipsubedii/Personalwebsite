@@ -1,0 +1,1673 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- ==========================================================
+       TU FAVICON / BROWSER-TAB LOGO
+       Put your own PNG at assets/tu-logo.png to use the same logo
+       everywhere. The embedded fallback is the current TU logo.
+       ========================================================== -->
+  <link id="siteFavicon" rel="icon" type="image/png" href="assets/tu-logo.png">
+  <title>IOE GPA Calculator OLD course</title>
+  <style>
+
+    /* ==========================================================
+       CSS
+       ========================================================== */
+    :root{
+      --paper:#ffffff;
+      --line:#c7d1da;
+      --line-dark:#98a7b5;
+      --ink:#111827;
+      --soft:#f5f7f9;
+      --focus:#8eb7dc;
+      --blue:#2d74c9;
+      --blue-ink:#163f70;
+      --green:#147a3e;
+      --red:#b42318;
+    }
+
+    *{box-sizing:border-box;}
+
+    html,body{margin:0;padding:0;background:#fff;}
+
+    body{
+      color:var(--ink);
+      font-family:"Times New Roman", Times, serif;
+      font-size:13px;
+    }
+
+    .page{
+      width:min(1100px,100%);
+      margin:0 auto;
+      padding:10px 10px 24px;
+    }
+
+    .site-head{display:none;}
+
+    .controls{
+      display:grid;
+      grid-template-columns:1.35fr 1fr .9fr;
+      gap:7px;
+      margin:7px 0;
+    }
+
+    .field{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:2px;
+      padding:7px 9px;
+    }
+
+    .field label{
+      display:block;
+      margin-bottom:3px;
+      color:#1e3853;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .field select,.field input{
+      width:100%;
+      border:0;
+      outline:none;
+      background:transparent;
+      color:#17212b;
+      font-family:"Times New Roman", Times, serif;
+      font-size:13px;
+      padding:1px 0;
+    }
+
+    .help{
+      border:1px solid #222;
+      border-radius:3px;
+      background:#fff;
+      margin:8px 0 12px;
+      overflow:hidden;
+    }
+
+    .help summary{
+      cursor:pointer;
+      list-style:none;
+      padding:7px 11px;
+      font-family:"Times New Roman", Times, serif;
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      color:#18293a;
+      user-select:none;
+      outline:none;
+    }
+
+    .help summary::-webkit-details-marker{display:none;}
+    .help summary::before{content:"▸";margin-right:6px;font-size:9px;}
+    .help[open] summary::before{content:"▾";}
+
+    .help .help-body{
+      border-top:1px solid #c9d1d8;
+      padding:7px 12px 9px 27px;
+      font-size:10px;
+      line-height:1.45;
+    }
+
+    .help ol{margin:0;padding-left:14px;}
+    .help li{margin:2px 0;color:#334150;}
+
+    /* -------------------- TU GRADE SHEET -------------------- */
+    .sheet{
+      border:1px solid #c6d0da;
+      background:#fff;
+      box-shadow:none;
+      border-radius:4px;
+      overflow:hidden;
+    }
+
+    .sheet-head{
+      min-height:165px;
+      text-align:center;
+      padding:7px 10px 8px;
+      border-bottom:1px solid #d6dde4;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .tu-sheet-logo{
+      width:46px;
+      height:54px;
+      object-fit:contain;
+      object-position:center;
+      display:block;
+      margin:0 auto 2px;
+      flex:0 0 auto;
+    }
+
+    .uni{
+      font-size:15px;
+      line-height:1.05;
+      font-weight:700;
+    }
+
+    .inst{
+      margin-top:1px;
+      font-size:12px;
+      line-height:1.05;
+      font-weight:700;
+    }
+
+    .division{
+      margin-top:1px;
+      font-size:11px;
+      line-height:1.05;
+    }
+
+    .location{
+      margin-top:2px;
+      font-size:10px;
+      line-height:1.05;
+    }
+
+    .exam{
+      margin-top:6px;
+      font-size:12px;
+      line-height:1.05;
+      font-weight:700;
+    }
+
+    .grade-title{
+      margin-top:3px;
+      font-size:13px;
+      line-height:1.05;
+      font-weight:700;
+      text-decoration:underline;
+    }
+
+    /* ---------------- STUDENT INFORMATION ---------------- */
+    .details{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+      grid-template-areas:
+        "left1 right1"
+        "left2 right2"
+        "left3 right3";
+      column-gap:32px;
+      row-gap:3px;
+      padding:7px 12px 8px;
+      font-size:10px;
+      border-bottom:1px solid #e0e5ea;
+    }
+
+    .details .item{
+      display:grid;
+      grid-template-columns:70px minmax(0,1fr);
+      gap:5px;
+      align-items:baseline;
+      min-width:0;
+      width:100%;
+    }
+
+    .details .item:nth-child(1){grid-area:left1;}
+    .details .item:nth-child(2){grid-area:right1;}
+    .details .item:nth-child(3){grid-area:left2;}
+    .details .item:nth-child(4){grid-area:right2;}
+    .details .item:nth-child(5){grid-area:left3;}
+    .details .item:nth-child(6){grid-area:right3;}
+
+    .details .item:nth-child(even){
+      justify-self:end;
+      width:100%;
+    }
+
+    .details .label{
+      font-weight:400;
+      color:#111;
+      white-space:nowrap;
+    }
+
+    .details .item > span:not(.label){
+      min-width:0;
+      overflow-wrap:anywhere;
+      color:#111;
+      font-weight:700;
+    }
+
+    /* ---------------------- TABLE ----------------------- */
+    .table-wrap{overflow:auto;}
+
+    table{
+      width:100%;
+      min-width:980px;
+      border-collapse:collapse;
+      table-layout:fixed;
+      font-family:"Times New Roman", Times, serif;
+    }
+
+    th,td{
+      border:1px solid #c5d0db;
+      padding:5px 5px;
+      vertical-align:middle;
+    }
+
+    th{
+      background:#f6f8fa;
+      color:#152637;
+      text-align:center;
+      font-weight:700;
+    }
+
+    th.code{width:68px;}
+    th.title{width:285px;}
+    th.total{width:72px;}
+    th.grade{width:58px;}
+    th.remarks{width:95px;}
+    th.small{width:54px;}
+
+    td.center{text-align:center;}
+    td.title{font-size:13px;font-weight:400;}
+    td.practical-title{padding-left:12px;font-weight:400;}
+    .sub{font-size:9px;margin-top:1px;color:#6a7887;display:block;}
+
+    .mark{
+      width:100%;
+      height:30px;
+      padding:3px 6px;
+      border:1px solid #c8d1dc;
+      border-radius:4px;
+      text-align:center;
+      outline:none;
+      font-family:"Times New Roman", Times, serif;
+      font-size:12px;
+      background:#fff;
+      color:#111;
+    }
+
+    .mark:focus{
+      border-color:var(--focus);
+      box-shadow:0 0 0 1px rgba(78,126,172,.12);
+    }
+
+    .total-cell,.grade-cell,.remark-cell{
+      text-align:center;
+      font-weight:400;
+    }
+
+    .good{color:var(--green);}
+    .bad{color:var(--red);}
+    .practical-row td{background:#fbfcfd;}
+
+    /* -------------------- CALC SUMMARY ------------------- */
+    .summary{
+      display:grid;
+      grid-template-columns:1.45fr 1fr 1fr 1fr 1fr 1fr;
+      gap:7px;
+      padding:10px 12px 7px;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      padding:8px 10px;
+      background:#fff;
+      border-radius:2px;
+    }
+
+    .card.primary{
+      background:#f3f7fc;
+      border-color:#aec9e7;
+    }
+
+    .card small{
+      display:block;
+      font-size:9px;
+      color:#516276;
+    }
+
+    .card strong{
+      display:block;
+      margin-top:3px;
+      font-size:18px;
+    }
+
+    .primary strong{
+      font-size:24px;
+      color:#183d66;
+    }
+
+    /* --------- ACADEMIC GRAND TOTAL / PASS-FAIL ---------- */
+    .academic-summary{
+      display:flex;
+      align-items:stretch;
+      justify-content:flex-start;
+      gap:18px;
+      padding:4px 12px 12px;
+    }
+
+    .academic-summary-box{
+      width:min(430px,100%);
+      flex:0 0 min(430px,100%);
+      border:1px solid var(--line-dark);
+      background:#fff;
+    }
+
+    .sheet-credit{
+      flex:1 1 auto;
+      min-width:240px;
+      align-self:stretch;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      padding:0 4px 2px 6px;
+      font-size:11px;
+      line-height:1.55;
+      color:#18293a;
+    }
+
+    .sheet-credit strong{font-weight:700;}
+    .sheet-credit a{color:#1f5f9b;text-decoration:underline;cursor:pointer;position:relative;z-index:5;pointer-events:auto;}
+    .sheet-credit a:hover{color:#163f70;text-decoration:underline;}
+
+    .academic-summary-title{
+      padding:5px 8px;
+      border-bottom:1px solid var(--line);
+      background:#f6f8fa;
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.01em;
+    }
+
+    .academic-summary-row{
+      display:grid;
+      grid-template-columns:150px minmax(110px,1fr);
+      min-height:25px;
+    }
+
+    .academic-summary-row + .academic-summary-row{
+      border-top:1px solid var(--line);
+    }
+
+    .academic-summary-label,
+    .academic-summary-value{
+      padding:5px 8px;
+    }
+
+    .academic-summary-label{
+      border-right:1px solid var(--line);
+      font-weight:700;
+    }
+
+    .academic-summary-value{
+      text-align:left;
+      font-weight:700;
+    }
+
+    .academic-summary-passfail{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      border-top:1px solid var(--line);
+    }
+
+    .academic-summary-stat{
+      display:grid;
+      grid-template-columns:65px minmax(0,1fr);
+      min-height:25px;
+    }
+
+    .academic-summary-stat + .academic-summary-stat{
+      border-left:1px solid var(--line);
+    }
+
+    .academic-summary-stat .academic-summary-label{
+      border-right:1px solid var(--line);
+    }
+
+    /* ---------------------- BUTTONS ---------------------- */
+    .bottom-actions{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:9px;
+      flex-wrap:wrap;
+      margin:2px 0 0;
+      padding:0 12px 12px;
+    }
+
+    .btn{
+      border:1px solid #c7d1db;
+      background:#fff;
+      padding:6px 12px;
+      border-radius:3px;
+      cursor:pointer;
+      font-family:"Times New Roman", Times, serif;
+      font-size:12px;
+      color:#203549;
+      font-weight:700;
+    }
+
+    .btn:hover{background:#f7fafc;border-color:#aebbc7;}
+    .btn:disabled{cursor:wait;opacity:.7;}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+    /* -------------------- SOCIAL BUTTONS ----------------- */
+    .social-section{
+      margin-top:14px;
+      padding-top:13px;
+      border-top:1px solid #d7e0e8;
+      text-align:center;
+    }
+
+    .social-heading{
+      margin:0 0 12px;
+      font-size:15px;
+      color:#6f5432;
+      font-family:"Times New Roman", Times, serif;
+      font-weight:700;
+    }
+
+    .social-grid{
+      max-width:1040px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(160px,1fr));
+      gap:10px;
+    }
+
+    .social-btn{
+      min-height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:0 12px;
+      border:1px solid #d3dde7;
+      border-radius:6px;
+      background:#fff;
+      box-shadow:none;
+      color:#1d4ed8;
+      text-decoration:none;
+      font-family:"Times New Roman", Times, serif;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .social-icon{width:22px;height:22px;flex:0 0 22px;}
+    .social-btn.instagram{color:#e11d48;}
+    .social-btn.portfolio{color:#2563eb;}
+    .social-btn.linkedin{color:#0a66c2;}
+    .social-note,.footer{display:none;}
+
+    /* ----------------------- PRINT ----------------------- */
+    @media print{
+      @page{size:landscape;margin:8mm;}
+      html,body{background:#fff !important;}
+      body{font-family:"Times New Roman",Times,serif;}
+      .page{max-width:none;width:100%;padding:0;}
+      .controls,.help,.bottom-actions,.actions,.social-section,.footer,.site-head{display:none !important;}
+      .sheet{
+        display:block !important;
+        width:100%;
+        border:0;
+        border-radius:0;
+        overflow:visible;
+      }
+      .sheet-head{min-height:165px;}
+      .table-wrap{overflow:visible !important;}
+      table{min-width:0;width:100%;font-size:9px;}
+      th,td{padding:4px 3px;}
+      .mark{
+        height:auto;
+        padding:0;
+        border:0;
+        border-radius:0;
+        background:transparent;
+        font-size:9px;
+      }
+      .details{padding-bottom:7px;}
+      .academic-summary{
+        padding-bottom:0;
+      }
+    }
+
+    /* -------------------- RESPONSIVE -------------------- */
+    @media(max-width:900px){
+      .social-grid{grid-template-columns:repeat(3,minmax(120px,1fr));}
+      .summary{grid-template-columns:repeat(3,1fr);}
+      .summary .primary{grid-column:1/-1;}
+    }
+
+    @media(max-width:680px){
+      .social-grid{grid-template-columns:repeat(2,minmax(140px,1fr));}
+      .academic-summary{flex-direction:column;gap:8px;}
+      .academic-summary-box{width:100%;flex-basis:auto;}
+      .sheet-credit{min-width:0;width:100%;padding:0 4px 4px;font-size:10px;}
+      .controls{grid-template-columns:1fr;}
+      .details{
+        grid-template-columns:1fr;
+        grid-template-areas:
+          "left1"
+          "right1"
+          "left2"
+          "right2"
+          "left3"
+          "right3";
+        column-gap:0;
+      }
+      .details .item:nth-child(even){
+        justify-self:stretch;
+        width:100%;
+      }
+      .summary{grid-template-columns:1fr;}
+      .summary .primary{grid-column:auto;}
+      .academic-summary-row{grid-template-columns:125px minmax(0,1fr);}
+      .academic-summary-passfail{grid-template-columns:1fr;}
+      .academic-summary-stat + .academic-summary-stat{
+        border-left:0;
+        border-top:1px solid var(--line);
+      }
+      .social-grid{grid-template-columns:1fr;}
+      .bottom-actions .btn{width:100%;max-width:260px;}
+    }
+
+  </style>e>
+</head>
+<body>
+  <div class="page">
+
+    <!-- =========================
+         SITE HEADER
+         ========================= -->
+    <header class="site-head">
+      <div class="logo">TU</div>
+      <div>
+        <h1>Tribhuvan University</h1>
+        <p>Institute of Engineering · BCE GPA Calculator</p>
+      </div>
+    </header>
+
+    <!-- =========================
+         CALCULATOR CONTROLS
+         ========================= -->
+    <section class="controls">
+      <div class="field">
+        <label for="program">Faculty / Programme</label>
+        <select id="program"></select>
+      </div>
+
+      <div class="field">
+        <label for="yearPart">Year / Part</label>
+        <select id="yearPart"></select>
+      </div>
+
+      <div class="field">
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option>GPA Calculator</option>
+          <option>Grade Sheet</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="field">
+        <label for="studentName">Student Name</label>
+        <input id="studentName" placeholder="Enter your full name">
+      </div>
+
+      <div class="field">
+        <label for="symbolNo">Symbol No.</label>
+        <input id="symbolNo" placeholder="e.g. HCE078BCE085">
+      </div>
+
+      <div class="field">
+        <label for="campus">Campus</label>
+        <input id="campus" placeholder="Enter campus">
+      </div>
+    </section>
+
+    <!-- =========================
+         USER INSTRUCTIONS
+         ========================= -->
+    <details class="help">
+      <summary>HOW TO USE</summary>
+      <div class="help-body">
+        <ol>
+          <li>Select <strong>Faculty / Programme</strong> and <strong>Year / Part</strong>.</li>
+          <li>Enter Assessment and Final marks in the applicable columns.</li>
+          <li>Practical subjects appear on a separate row and are evaluated separately.</li>
+          <li>Use <strong>Calculate GPA</strong> to update the current part and overall result.</li>
+          <li>Your entries are saved automatically while switching Year / Part.</li>
+          <li>Use <strong>Print</strong> or <strong>Save as JPG</strong> for the grade sheet.</li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- =========================
+         GRADE SHEET
+         ========================= -->
+    <section class="sheet" id="gradeSheet">
+      <div class="sheet-head">
+        <!-- ========================= TU LOGO / REAL IMAGE =========================
+     Replace assets/tu-logo.png with your actual PNG file.
+     The fallback keeps the sheet usable until you add your own image.
+     ====================================================================== -->
+        <img class="tu-sheet-logo" src="assets/tu-logo.png" data-fallback-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAA2CAYAAAC4PKvBAAALSUlEQVR42u2ae3RVxdXAf3POuffm5ubeXPIkIeERHgkkIkGkYkSCQEJhUYtW0UqlVagGDVhLlxb160K0frVd1RZrtWKL1EIW4GptSxGoPIQCEkpAQwwQHknIgzzI6yb3cR7z/REMXwzIQ+gKa3XWun/cmX32/p09M3tm9hwhpeR6LArXafkv+PnK4k/a5XUHXtqiy5fKdEqadXldgf/0cJAhLsELR4LXj8c/rAvJsg7JnP52Vp8y2FgbuupeF9ciHE76qFXemWjnz9U6FR0WfcME/8r2iF7t8RUnAtJlU9Al7G82mZVkpzEEvzsekL0afGlpkFn97Cw/EaLVgOI2k7wUO0tKg713jL9Y4pcZXpUjPpNSnwXAnkYD3YJ4h+C54g7ZK8FXV+nc5FV57dg579aHYE1VCI9N8MqxUO/zeF5Ruxwfo1HWbnFG795W3GKR4VYxJczZ55O9BnxXfUh+1GCSECb4oFbv0e63YEejwQ+GOFh7yuBg01cPj1clHObubJNDXSon/Rbra40Lyg11CY62SybGqGy53S2uGniorlx2vHoPUkqss9Xq0K9hlu2FL7zg51Y3em9hyegXqQ1YGBKePPk2C6tXd8mpQ8Z2Pv95F8ckA2A1VF4cDlCEQAgwLInjsT8S0X+4AND+v6A9boCwxt0rQxuXASDDPChJGSiJacjGCkS4F+GJRfp9mId3Yh4vZOmN3yc7VuNfDQZN9VUsOPwrPn9FERaBOmg0Sv+RYJlghBDeeKzao6jpdyDc0VhVnyHC+4BmQ/pb0T9889xLCoF6djBr2XO7oHuAA4TNWCSMj9dKpaUWM9CKdXQ3In4w0tcEloUM+DDLD4IQLE++n6TkgfhNSXGbxW/LlnXTJQM+zIpPEJq987/vDMLfgnWyCCU5AyUqEev0ccBCiUuBUKDb86ro9LoI9+K++zlx0TEe3L5S6uueQ5dgfj5mbA60YVkYh7Z0yih2RuTsY3FqGDsaDepLC1m/b85Fu//nKXkAhDuctAc6eKL899itnmFSiUzAdfu30Te/jm36j3BMmtsNXDufcseEB4W+Z420Kj49V6kHu6ABlgx9kllJdio6Oifk1vb1OBes6Wo3Pt2EvnU59px81LTxZyuDzHjvNcbf8Ba/y3SyqjLECzY3zx/5eQ8GLWMiwhODiBnUA/qC4AAyJx/51jyU6GREn0TMso+72o47B7A59QHyXArrqkPcU7eRsXc/Qnji0C4DPn+TFJ5Y1IE34Uod21U/SvfLGXs2s7JiKrdEabw28Ds8VFnAQP+5yaqmjEHED0bf9z7a1PzLi+PuzFyhZkxGu202yoBRYHd2tT2T+hTZsRolPpPCJosXHQe6QQMIdxye3DyBqnbTG5E5VbzcsoadjSZVAYuRkSpLBy88BxSXgtL/BlA0DNWJY/R0cdkLkJaTj/7ROwhVRRuW1bnXjs6iuN94JsRorKnUebx8BXEuBx2nT3ZNFl9hkQyu2kz9rDkytHYb7Z+UdJtIicNG8XBlAYdaTCbHaezun8OuPmM6gRJSEXYnxsENKLkLrnwBOvPu01KVJigqZukOxqS+zuzMYZR1WGw8Xk9J0SwcQ8bgnfsbAdC46BkZeu8vPfTY5zyA85FZoPsJ/Okp/FWHSbpjH48NsiME7Nm/lw0H52GfPB+ruhTL5SVq9s/EFS/5UbP/VxhHdqOOmAi2ML7bso3qoMUHtTovNBTgXvAuSlI6AM3vrJKh9/5C+JJnSThxSCScOCTcBSsJWzgf899FGIWHCe+fIRx3Po3n7ud4pvwN1lXrqAJq+2ayNnoK+ta3MA99+KXQl7zkN/9jmTS3v4Nsq0OJSmJK+usYIT+7xhi40sd3GagZNkoqHg9K6lDs03JRM9LBNAj84Y/oGzahxMYQv3tLl3zbpjdkfOtMpvRzEaEJth+t5MDOHLSvP4l3xhPiK2+yvNPyRcjuQoRFoKTcTH7pMl42tnaD7gyZOlZjI9jtmJWnMPbuw9i9F/3vG8A0sWpPdw8AOY+KX1S9ybZ6g5EeFV9EX5YN/+FFoS9rd/jyuF9in/ksKCp3jbuJr4na8wvabDjz5qFERmIc/OQL1nqau69hI5FtVew6YzA72c7SfnMuieeSwOft98lXA4M5UnIAEeZCNtdgFK3vGYWyxiE0jYixowVCoK//ABQFEeFCGZGGbXpuN3lf4V+l1VjJkqO/ZEudwUm/xa3RKo/sv3gi6aJjfEd9SE7b1UFWtEZ4ez3L9zyE7Y55GB+/h2ytw/GdV0AIhNONWVqDb+58nIuewPvYPNH2z+1SHTaEwMpVBN9egXvtuygxGjLkRzic+N+ci5qahTxTyaQ+C4kdMopIm2BDrU5htou0SJu4YvCv72yV0Q6VOIfglbIQa5p/T46jHuGMwPj0n1inj6GOyMZ26ywiRk8XLavXyY5nl2C/71sosTEYxSWYO3cT/rOlqCnh4I4mWLAY61QJSr80tNQs9ML32ZV6H9/wPMRPR4Txfo1OrB3+luW+snC4qiIoD7RIxkdrFFR2nmxeSpyNUbIV4YlHHXxz5xDJnE7E2RUu8v5viYRjnwrbhPEgFMIeuI++pfuF587pwnXDROEaOFJgGqCqKH1TsdoakS21LI5/sDPfWBIgziHYUm/y4emgvCLwxYcC3Jloo+BUiJqzOoo67Ky4cRFmZTEoGkr8EMwju3s8qyYIHPdMQh0W31NxyI8SNxjhjEA2VLB68q8p9p/bNsU6BHMG2FlUHLz8yflyqV/2cypEaoLP2qzuaQjHJPSDGzsXJWlhFP2Njppj3bwjjSDGwU3ItjPdnm0v3iat+hNYVSWYR/dgnT7OE2R3k9l7xmRslIrPkKwsP7/XLwj+/OEgU+I0NtfpfLHHmkzBCxPfJvjOAqy642DoBJY/Snvpni7B0Ae/JrThVWTLubDZUXNMBtf+BCUpHdukRxBOD0tvfwPrC7aL2yy2NxhE2RV+VBy49Mn53X0+WReEGQk25h/wX7C73j/2DLKp9rIOuTani6y0IShR/ThdXc5Q15MXlP2fNAd/KA+RN9DOj4c7v/wEVHimM/y9lO5kXZXOxrrOU/s3EjQONJvEhwniHQpHfRaDXQpum+Bgs4kpJalulYaQJGRJwlXBzkazm+7B7SfZW/ljhD0cq/YoeVPX0xTmJWRB6KzbwxSoCUgO+yxui1ZxqrC5zkTe5f3yE9CjRUG+mWhjU53RBQ1wg0dFFSCBuoBklFcl1i4Y5FLwmxK3JkgJV9jfYuJQBGlulfIOi0r/Occsq/gVatptoPvZEXkThYaHmR6VgAk+U1LSajIt3sb+FpNWXVLcYnJvsh2PZvJ4Ubt8LdMlzuvxlScDcnl55/nPaxNc0mVCRytW9WcXFUsMnOb1Q4s7jXr7MjP7r+AIv/g+yS5oPps/+miCR1zVhFDTW/OlWfT3zvRFZBxWzZGek8kRjm3yfPQd76LcOIU+97/4lRJCVyUFZ8vNR3gTCMtbgfDEn1dGvXEamDoEWr4y9FUDj+g/XCijphFc/TTC6UZJyugOPTATNTkds2wP6pT83pWt7XPvTwTBDtSMSajJ6d2NJGcgohJBD+Cd/rjoVeAAavbDWNWlmKdKEGcnnpo2AXVAJvr2FYgJD/fOG4nISd8TZslWZH05tvEPIhzhKPGDsBrKkRK8t3xT9EpwAG1KPiKiDyIqCSUhDX37CvRtb2OburD33gEBeMbNFCKqH/quAtRhWQh3LOrIXNzDb+3d14UAas4CrFPFSDMEmg01J/+q27gm4J4Rtwp1zF0YuwrQbr4bd2KKuOpGpJTX5NdWeUQ2PHWzvFb6r9lHCBFJQ4WW+9i1Un9t7vL/E+W/Xwj9p8v/AaWIPFZVBYb6AAAAAElFTkSuQmCC" alt="Tribhuvan University logo" onerror="if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src=this.dataset.fallbackSrc;}">
+        <div class="uni">Tribhuvan University</div>
+        <div class="inst">Institute of Engineering</div>
+        <div class="division">Examination Control Division</div>
+        <div class="location">Chakupat, Lalitpur</div>
+        <div class="exam">REGULAR EXAMINATION</div>
+        <div class="grade-title">GRADE SHEET</div>
+      </div>
+
+      <div class="details">
+        <div class="item"><span class="label">Name:</span><span id="showName">________________________</span></div>
+        <div class="item"><span class="label">Symbol No.:</span><span id="showSymbol">_______________</span></div>
+        <div class="item"><span class="label">Level:</span><span>Bachelor in Engineering</span></div>
+        <div class="item"><span class="label">Programme:</span><span id="showProgramme">Bachelor of Civil Engineering</span></div>
+        <div class="item"><span class="label">Campus:</span><span id="showCampus">____________________</span></div>
+        <div class="item"><span class="label">Year / Part:</span><span id="showYearPart">I / I</span></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="code" rowspan="2">Code</th>
+              <th class="title" rowspan="2">Title</th>
+              <th colspan="2">Full Marks</th>
+              <th colspan="2">Pass Mark</th>
+              <th colspan="2">Marks Obtained</th>
+              <th class="total" rowspan="2">Total<br>Marks</th>
+              <th class="grade" rowspan="2">Grade</th>
+              <th class="remarks" rowspan="2">Remarks</th>
+            </tr>
+            <tr>
+              <th class="small">Asst.</th>
+              <th class="small">Final</th>
+              <th class="small">Asst.</th>
+              <th class="small">Final</th>
+              <th class="small">Asst.</th>
+              <th class="small">Final</th>
+            </tr>
+          </thead>
+          <tbody id="courseBody"></tbody>
+        </table>
+      </div>
+
+      <div class="summary">
+        <div class="card primary"><small>Current Part GPA</small><strong id="gpa">— / 4.00</strong></div>
+        <div class="card"><small>Overall GPA</small><strong id="overallGpa">— / 4.00</strong></div>
+        <div class="card"><small>Overall TU %</small><strong id="overallPct">—</strong></div>
+        <div class="card"><small>Graded Components</small><strong id="completed">0</strong></div>
+        <div class="card"><small>Remaining</small><strong id="remaining">0</strong></div>
+        <div class="card"><small>Failed Components</small><strong id="failed">0</strong></div>
+      </div>
+
+      <div class="academic-summary" aria-label="Academic result summary">
+        <div class="academic-summary-box">
+          <div class="academic-summary-title">Academic Summary</div>
+          <div class="academic-summary-row">
+            <div class="academic-summary-label">Grand Total — Full Marks</div>
+            <div class="academic-summary-value" id="grandFull">0</div>
+          </div>
+          <div class="academic-summary-row">
+            <div class="academic-summary-label">Grand Total — Marks Secured</div>
+            <div class="academic-summary-value" id="grandObtained">0</div>
+          </div>
+          <div class="academic-summary-row">
+            <div class="academic-summary-label">Percentage</div>
+            <div class="academic-summary-value" id="grandPct">—</div>
+          </div>
+          <div class="academic-summary-passfail">
+            <div class="academic-summary-stat">
+              <div class="academic-summary-label">Pass</div>
+              <div class="academic-summary-value good" id="passCount">0</div>
+            </div>
+            <div class="academic-summary-stat">
+              <div class="academic-summary-label">Fail</div>
+              <div class="academic-summary-value bad" id="failCount">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sheet-credit" aria-label="Calculator credit">
+          <div><strong>Made by :</strong> Sudip Subedi</div>
+          <div><strong>Concept :</strong> <a href="https://ioe.bibeksubedi0001.com.np/" target="_blank" rel="noopener noreferrer">https://ioe.bibeksubedi0001.com.np/</a></div>
+        </div>
+      </div>
+
+      <div class="actions bottom-actions">
+        <button class="btn" id="reset" type="button">↻&nbsp;&nbsp;Reset All</button>
+        <button class="btn" id="print" type="button">▣&nbsp;&nbsp;Print</button>
+        <button class="btn primary" id="calculate" type="button">Calculate GPA</button>
+        <button class="btn" id="saveImage" type="button">⇩&nbsp;&nbsp;Save as JPG</button>
+      </div>
+    </section>
+
+    <section class="social-section" aria-label="Connect with me">
+      <div class="social-heading">CONNECT WITH ME</div>
+      <div class="social-grid">
+        <a class="social-btn linkedin" href="https://www.linkedin.com/in/sudip-subedi-bb3b39237/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.2 8.2H3V21h3.2V8.2ZM4.6 3A1.9 1.9 0 1 0 4.6 6.8 1.9 1.9 0 0 0 4.6 3ZM21 13.7c0-3.5-1.9-5.2-4.5-5.2-2.1 0-3 1.2-3.5 2v-2.3H9.8V21H13v-6.3c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V21h3.2l.3-7.3Z"/></svg>
+          <span>LinkedIn</span>
+        </a>
+        <a class="social-btn instagram" href="https://www.instagram.com/sudip.__/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
+          <span>Instagram</span>
+        </a>
+        <a class="social-btn portfolio" href="https://sudipsubedi01.com.np/" target="_blank" rel="noopener noreferrer" aria-label="Portfolio">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          <span>Portfolio</span>
+        </a>
+      </div>
+      <p class="social-note">LinkedIn, Instagram and Portfolio links open in a new tab.</p>
+    </section>
+
+    
+
+    <footer class="footer"></footer>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       1. PROGRAM DATA
+       2. STATE
+       3. CALCULATION FUNCTIONS
+       4. RENDERING
+       5. EVENT HANDLERS
+       ============================================================ -->
+  <script>
+    /* ============================================================
+       SITE FAVICON
+       Use assets/tu-logo.png when available; otherwise fall back
+       to the same embedded TU PNG used by the grade sheet.
+       ============================================================ */
+    (function initSiteFavicon() {
+      const favicon = document.getElementById('siteFavicon');
+      const fallback = 'data:image/png;base64,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';
+      if (!favicon) return;
+      favicon.addEventListener('error', function onFaviconError() {
+        favicon.removeEventListener('error', onFaviconError);
+        favicon.href = fallback;
+      });
+      // When opened locally, test the placeholder path and keep the
+      // embedded logo available as a reliable fallback.
+      const testImage = new Image();
+      testImage.onload = () => { favicon.href = 'assets/tu-logo.png'; };
+      testImage.onerror = () => { favicon.href = fallback; };
+      testImage.src = 'assets/tu-logo.png';
+    })();
+
+
+    /* ============================================================
+       1. PROGRAM DATA
+       ------------------------------------------------------------
+       Each course explicitly stores its own examination structure.
+
+       theoryAsst      = theory internal / assessment full marks
+       theoryFinal     = theory external / final full marks
+       practicalAsst   = practical internal full marks
+       practicalFinal  = practical external full marks
+
+       IMPORTANT:
+       Do not use one generic full-mark value for every subject.
+       Update the values here when verifying a historical IOE batch.
+       ============================================================ */
+    const PROGRAMS = {"BCE":{"title":"Bachelor of Civil Engineering","years":"4 years · Legacy IOE/TU · transcript-verified marks structure","source":"Uploaded TU Academic Transcript (Issue No. 194) · pages 2–5","terms":[["Year I · Part I",[{"name":"Computer Programming","code":"CT401","theoryAsst":20,"theoryFinal":80,"practicalAsst":50,"practicalFinal":0},{"name":"Engineering Drawing I (Practical)","code":"ME401","practicalAsst":60,"practicalFinal":40},{"name":"Fundamentals of Thermodynamics & Heat Transfer","code":"ME402","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Workshop Technology","code":"ME403","theoryAsst":10,"theoryFinal":0,"practicalAsst":40,"practicalFinal":0},{"name":"Engineering Mathematics I","code":"SH401","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Engineering Chemistry","code":"SH403","theoryAsst":20,"theoryFinal":80,"practicalAsst":20,"practicalFinal":30}]],["Year I · Part II",[{"name":"Applied Mechanics","code":"CE451","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Basic Electrical Engineering","code":"EE451","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Basic Electronics Engineering","code":"EX451","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Engineering Drawing II (Practical)","code":"ME451","practicalAsst":60,"practicalFinal":40},{"name":"Engineering Mathematics II","code":"SH451","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Engineering Physics","code":"SH452","theoryAsst":20,"theoryFinal":80,"practicalAsst":20,"practicalFinal":30}]],["Year II · Part I",[{"name":"Applied Mechanics (Dynamics)","code":"CE501","theoryAsst":10,"theoryFinal":40,"practicalAsst":0,"practicalFinal":0},{"name":"Strength of Materials","code":"CE502","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Engineering Geology I","code":"CE503","theoryAsst":10,"theoryFinal":40,"practicalAsst":25,"practicalFinal":0},{"name":"Surveying I","code":"CE504","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":25},{"name":"Fluid Mechanics","code":"CE505","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Civil Engineering Materials","code":"CE506","theoryAsst":10,"theoryFinal":40,"practicalAsst":25,"practicalFinal":0},{"name":"Engineering Mathematics III","code":"SH501","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0}]],["Year II · Part II",[{"name":"Building Drawing (Practical)","code":"AR556","practicalAsst":20,"practicalFinal":30},{"name":"Theory of Structures I","code":"CE551","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Soil Mechanics","code":"CE552","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Engineering Geology II","code":"CE553","theoryAsst":10,"theoryFinal":40,"practicalAsst":25,"practicalFinal":0},{"name":"Surveying II","code":"CE554","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":25},{"name":"Hydraulics","code":"CE555","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Probability & Statistics","code":"SH552","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0}]],["Year III · Part I",[{"name":"Theory of Structures II","code":"CE601","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Foundation Engineering","code":"CE602","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Concrete Technology & Masonry Structure","code":"CE603","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Survey Camp (Practical)","code":"CE604","practicalAsst":50,"practicalFinal":50},{"name":"Water Supply Engineering","code":"CE605","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Engineering Hydrology","code":"CE606","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Numerical Methods","code":"SH603","theoryAsst":20,"theoryFinal":80,"practicalAsst":50,"practicalFinal":0}]],["Year III · Part II",[{"name":"Design of Steel & Timber Structure","code":"CE651","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Building Technology","code":"CE652","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Transportation Engineering","code":"CE653","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Irrigation & Drainage Engineering","code":"CE654","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Engineering Economics","code":"CE655","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Sanitary Engineering","code":"CE656","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Communication English","code":"SH651","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0}]],["Year IV · Part I",[{"name":"Project Engineering","code":"CE701","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Design of RCC Structure","code":"CE702","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Transportation Engineering II","code":"CE703","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Hydropower Engineering","code":"CE704","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Estimating & Costing","code":"CE705","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Project I (Practical)","code":"CE707","practicalAsst":50,"practicalFinal":50},{"name":"Rock Engineering (Elective I)","code":"CE72508","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0}]],["Year IV · Part II",[{"name":"Computational Techniques in Civil Engineering","code":"CE751","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Engineering Professional Practice","code":"CE752","theoryAsst":10,"theoryFinal":40,"practicalAsst":0,"practicalFinal":0},{"name":"Technology Environment & Society","code":"CE753","theoryAsst":10,"theoryFinal":40,"practicalAsst":0,"practicalFinal":0},{"name":"Construction Management","code":"CE754","theoryAsst":20,"theoryFinal":80,"practicalAsst":0,"practicalFinal":0},{"name":"Project II (Practical)","code":"CE755","practicalAsst":50,"practicalFinal":50},{"name":"Rock Slope Engineering (Elective II)","code":"CE76507","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0},{"name":"Time Series Analysis (Elective III)","code":"CE78505","theoryAsst":20,"theoryFinal":80,"practicalAsst":25,"practicalFinal":0}]]],"aggregateWeights":{"Year I":20,"Year II":20,"Year III":30,"Year IV":30},"gradingNote":"Transcript states: 40% minimum is required in internal and external examinations, and separately in theory and practical examinations.","aggregateNote":"Year weights: I=20%, II=20%, III=30%, IV=30%."}};
+
+
+    /* ============================================================
+       2. APPLICATION STATE + SMALL UTILITIES
+       ============================================================ */
+    const STORAGE_KEY = 'tu-bce-gpa-calculator-v2';
+
+    let state = {};
+    let currentSelection = { program: 'BCE', part: 0 };
+
+    function loadStoredData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        state = saved.state && typeof saved.state === 'object' ? saved.state : {};
+        currentSelection = saved.currentSelection && typeof saved.currentSelection === 'object'
+          ? saved.currentSelection
+          : currentSelection;
+
+        const details = saved.details && typeof saved.details === 'object' ? saved.details : {};
+        if ($('studentName')) $('studentName').value = details.studentName || '';
+        if ($('symbolNo')) $('symbolNo').value = details.symbolNo || '';
+        if ($('campus')) $('campus').value = details.campus || '';
+      } catch (error) {
+        console.warn('Could not restore saved GPA data.', error);
+        state = {};
+      }
+    }
+
+    function saveStoredData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          state,
+          currentSelection,
+          details: {
+            studentName: $('studentName')?.value || '',
+            symbolNo: $('symbolNo')?.value || '',
+            campus: $('campus')?.value || ''
+          }
+        }));
+      } catch (error) {
+        console.warn('Could not save GPA data.', error);
+      }
+    }
+
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function parseMark(value) {
+      const text = String(value ?? '').trim().toUpperCase();
+
+      if (!text) return null;
+      if (text === 'P' || text === 'W') return text;
+
+      const number = Number(text);
+      return Number.isFinite(number) ? number : NaN;
+    }
+
+    /* TU percentage -> US-equivalent grade-point mapping supplied by the user. */
+    function percentageToUSGradePoint(percentage) {
+      if (percentage >= 65) return 4.0;
+      if (percentage >= 50) return 3.0;
+      if (percentage >= 40) return 2.0;
+      return 0.0;
+    }
+
+    function setCell(row, className, value, good = false, bad = false) {
+      const cell = row.querySelector(`.${className}`);
+      cell.textContent = value;
+      cell.classList.remove('good', 'bad');
+
+      if (good) cell.classList.add('good');
+      if (bad) cell.classList.add('bad');
+    }
+
+
+    /* ============================================================
+       3. COURSE CALCULATION
+       ------------------------------------------------------------
+       Theory and practical are deliberately separate.
+       No theory + practical combined percentage is used here.
+       ============================================================ */
+    function evaluateComponentRow(row) {
+      const intFull = Number(row.dataset.intFull) || 0;
+      const extFull = Number(row.dataset.extFull) || 0;
+      const intValue = parseMark(row.querySelector('.int-mark')?.value);
+      const extValue = extFull > 0 ? parseMark(row.querySelector('.ext-mark')?.value) : null;
+      const values = extFull > 0 ? [intValue, extValue] : [intValue];
+
+      if (values.includes('W')) {
+        setCell(row, 'total', '—');
+        setCell(row, 'grade', '—');
+        setCell(row, 'remark', 'W');
+        return { status: 'withdrawal' };
+      }
+      if (values.includes('P')) {
+        setCell(row, 'total', '—');
+        setCell(row, 'grade', '—');
+        setCell(row, 'remark', 'Pass', true);
+        return { status: 'pass' };
+      }
+      if (values.some(v => v === null)) {
+        setCell(row, 'total', '—');
+        setCell(row, 'grade', '—');
+        setCell(row, 'remark', '—');
+        return { status: 'empty' };
+      }
+      if (values.some(v => Number.isNaN(v)) || intValue < 0 || intValue > intFull || (extValue !== null && (extValue < 0 || extValue > extFull))) {
+        setCell(row, 'total', 'ERR');
+        setCell(row, 'grade', '—');
+        setCell(row, 'remark', 'Invalid', false, true);
+        return { status: 'invalid' };
+      }
+
+      const obtained = intValue + (extValue || 0);
+      const full = intFull + extFull;
+      const percentage = full > 0 ? (obtained / full) * 100 : 0;
+      const gradePoint = percentageToUSGradePoint(percentage);
+
+      const intPassed = intFull === 0 || intValue >= intFull * 0.40;
+      const extPassed = extFull === 0 || (extValue !== null && extValue >= extFull * 0.40);
+      const passed = intPassed && extPassed;
+
+      setCell(row, 'total', String(obtained));
+      setCell(row, 'grade', gradePoint.toFixed(1), gradePoint === 4.0, gradePoint === 0.0);
+      setCell(row, 'remark', passed ? (gradePoint === 0 ? 'Fail' : 'Grade') : 'Component Fail', false, !passed || gradePoint === 0);
+
+      return { status: 'graded', gradePoint, passed, percentage, obtained, full };
+    }
+
+
+    /* ============================================================
+       4. DATA ENTRY / ROW RENDERING
+       ============================================================ */
+    function saveRowState(row) {
+      const programKey = $('program').value;
+      const courseId = row.dataset.courseId;
+      const partIndex = Number($('yearPart').value || 0);
+      const group = row.dataset.component;
+
+      if (!courseId || !group) return;
+
+      state[programKey] ||= {};
+      state[programKey][partIndex] ||= {};
+      state[programKey][partIndex][courseId] ||= {};
+      state[programKey][partIndex][courseId][group] = {
+        int: row.querySelector('.int-mark')?.value || '',
+        ext: row.querySelector('.ext-mark')?.value || ''
+      };
+      saveStoredData();
+    }
+
+    function inputField(className, value, max, placeholder='?') {
+      return `<input class="mark ${className}" placeholder="${placeholder}" inputmode="decimal" max="${max}" value="${escapeHtml(value || '')}">`;
+    }
+
+    function componentRow(programKey, partIndex, courseIndex, course, saved, kind, name, intFull, extFull, savedGroup, indent=false) {
+      const id = `${programKey}_${partIndex}_${courseIndex}_${kind}`;
+      const intPass = intFull ? Math.round(intFull * 0.40) : 0;
+      const extPass = extFull ? Math.round(extFull * 0.40) : 0;
+      const practical = kind === 'practical';
+      const label = practical ? 'Practical' : 'Theory';
+      const savedValues = saved[savedGroup] || {};
+      const titleClass = practical ? 'practical-title' : 'title';
+
+      return `
+        <tr data-id="${escapeHtml(id)}" data-course-id="${escapeHtml(`${programKey}_${partIndex}_${courseIndex}`)}" data-kind="component" data-component="${kind}" data-int-full="${intFull}" data-ext-full="${extFull}">
+          <td class="center">${escapeHtml(course.code)}</td>
+          <td class="${titleClass}">${escapeHtml(name)}<span class="sub">${label}</span></td>
+          <td class="center">${intFull || '—'}</td>
+          <td class="center">${extFull || '—'}</td>
+          <td class="center">${intFull ? intPass : '—'}</td>
+          <td class="center">${extFull ? extPass : '—'}</td>
+          <td>${intFull ? inputField('int-mark', savedValues.int, intFull) : '—'}</td>
+          <td>${extFull ? inputField('ext-mark', savedValues.ext, extFull) : '—'}</td>
+          <td class="total-cell total dash">—</td>
+          <td class="grade-cell grade dash">—</td>
+          <td class="remark-cell remark dash">—</td>
+        </tr>
+      `;
+    }
+
+    function courseRows(programKey, partIndex, courseIndex, course, saved) {
+      const rows = [];
+      const hasTheory = (Number(course.theoryAsst) || 0) > 0 || (Number(course.theoryFinal) || 0) > 0;
+      const pInt = Number(course.practicalAsst ?? course.practical ?? 0) || 0;
+      const pExt = Number(course.practicalFinal ?? 0) || 0;
+      const hasPractical = pInt > 0 || pExt > 0;
+
+      if (hasTheory) rows.push(componentRow(programKey, partIndex, courseIndex, course, saved, 'theory', course.name, Number(course.theoryAsst)||0, Number(course.theoryFinal)||0, 'theory'));
+      if (hasPractical) {
+        const practicalName = hasTheory ? `${course.name} (Practical)` : course.name;
+        rows.push(componentRow(programKey, partIndex, courseIndex, course, saved, 'practical', practicalName, pInt, pExt, 'practical'));
+      }
+      return rows.join('');
+    }
+
+
+    function bindInputs() {
+      document.querySelectorAll('#courseBody input.mark').forEach((input) => {
+        input.addEventListener('input', () => {
+          const row = input.closest('tr');
+          saveRowState(row);
+          evaluateComponentRow(row);
+          updateSummary();
+        });
+      });
+    }
+
+    function calculateRow(row) {
+      return evaluateComponentRow(row);
+    }
+
+
+    /* ============================================================
+       5. TABLE + SUMMARY RENDERING
+       ============================================================ */
+    function render() {
+      const programKey = $('program').value;
+      const partIndex = Number($('yearPart').value || 0);
+      const program = PROGRAMS[programKey];
+
+      const [partTitle, courses] = program.terms[partIndex];
+
+      state[programKey] ||= {};
+
+      $('showProgramme').textContent = program.title;
+      $('showYearPart').textContent = partTitle;
+
+      $('courseBody').innerHTML = courses.map((course, index) => {
+        const id = `${programKey}_${partIndex}_${index}`;
+        const saved = state[programKey]?.[partIndex]?.[id] || {};
+
+        return courseRows(programKey, partIndex, index, course, saved);
+      }).join('');
+
+      bindInputs();
+      updateSummary();
+    }
+
+
+    /* ============================================================
+       GRAND TOTAL / PASS-FAIL SUMMARY
+       Current displayed Year / Part only; theory and practical
+       remain separate component rows and are counted separately.
+       ============================================================ */
+    function updateAcademicSummary() {
+      let grandFull = 0;
+      let grandObtained = 0;
+      let passCount = 0;
+      let failCount = 0;
+
+      document.querySelectorAll('#courseBody tr').forEach((row) => {
+        const intFull = Number(row.dataset.intFull) || 0;
+        const extFull = Number(row.dataset.extFull) || 0;
+        grandFull += intFull + extFull;
+
+        const result = evaluateComponentRow(row);
+
+        if (result.status === 'graded') {
+          grandObtained += result.obtained;
+          if (result.passed) passCount += 1;
+          else failCount += 1;
+        } else if (result.status === 'pass') {
+          passCount += 1;
+        }
+      });
+
+      $('grandFull').textContent = String(grandFull);
+      $('grandObtained').textContent = String(grandObtained);
+      $('grandPct').textContent = grandFull > 0
+        ? `${((grandObtained / grandFull) * 100).toFixed(2)}%`
+        : '—';
+      $('passCount').textContent = String(passCount);
+      $('failCount').textContent = String(failCount);
+    }
+
+    function updateSummary() {
+      // Current selected Year / Part
+      let currentWeightTotal = 0;
+      let currentWeightedGP = 0;
+      let gradedRows = 0;
+      let fourPointRows = 0;
+      let failedRows = 0;
+
+      document.querySelectorAll('#courseBody tr').forEach((row) => {
+        const result = calculateRow(row);
+        if (result.status === 'graded') {
+          gradedRows += 1;
+          const rowWeight = Number(result.full) || 0;
+          currentWeightTotal += rowWeight;
+          currentWeightedGP += result.gradePoint * rowWeight;
+          if (result.gradePoint === 4.0) fourPointRows += 1;
+          if (!result.passed) failedRows += 1;
+        }
+      });
+
+      const totalRows = document.querySelectorAll('#courseBody tr').length;
+      const currentGPA = currentWeightTotal > 0 ? currentWeightedGP / currentWeightTotal : null;
+
+      // All saved Year / Part data. This means switching parts no longer
+      // loses anything, and the final GPA can be calculated from the whole degree.
+      let overallWeightTotal = 0;
+      let overallWeightedGP = 0;
+      let yearBuckets = {};
+
+      const program = PROGRAMS[$('program').value];
+      (program?.terms || []).forEach(([partTitle, courses], partIndex) => {
+        const savedPart = state[$('program').value]?.[partIndex];
+        if (!savedPart) return;
+
+        const yearMatch = String(partTitle).match(/Year (I|II|III|IV)/);
+        const yearKey = yearMatch ? `Year ${yearMatch[1]}` : partTitle;
+        yearBuckets[yearKey] ||= { weightTotal: 0, weightedGP: 0, obtained: 0, full: 0 };
+
+        courses.forEach((course, courseIndex) => {
+          const baseId = `${$('program').value}_${partIndex}_${courseIndex}`;
+          ['theory', 'practical'].forEach((kind) => {
+            const id = `${baseId}_${kind}`;
+            const savedContainer = state[$('program').value]?.[partIndex]?.[`${$('program').value}_${partIndex}_${courseIndex}`];
+            const saved = savedContainer || {};
+            const savedValues = saved[kind];
+            if (!savedValues) return;
+            if (!saved) return;
+
+            const fullInt = kind === 'theory' ? Number(course.theoryAsst) || 0 : Number(course.practicalAsst ?? course.practical ?? 0) || 0;
+            const fullExt = kind === 'theory' ? Number(course.theoryFinal) || 0 : Number(course.practicalFinal) || 0;
+            const rawInt = parseMark(savedValues.int);
+            const rawExt = fullExt > 0 ? parseMark(savedValues.ext) : null;
+
+            if (rawInt === null || (fullExt > 0 && rawExt === null)) return;
+            if (rawInt === 'P' || rawInt === 'W' || rawExt === 'P' || rawExt === 'W') return;
+            if (Number.isNaN(rawInt) || (rawExt !== null && Number.isNaN(rawExt))) return;
+            if (rawInt < 0 || rawInt > fullInt || (rawExt !== null && (rawExt < 0 || rawExt > fullExt))) return;
+
+            const full = fullInt + fullExt;
+            if (!full) return;
+
+            const obtained = rawInt + (rawExt || 0);
+            const pct = obtained / full * 100;
+            const gp = percentageToUSGradePoint(pct);
+
+            overallWeightTotal += full;
+            overallWeightedGP += gp * full;
+            yearBuckets[yearKey].weightTotal += full;
+            yearBuckets[yearKey].weightedGP += gp * full;
+            yearBuckets[yearKey].obtained += obtained;
+            yearBuckets[yearKey].full += full;
+          });
+        });
+      });
+
+      const overallGPA = overallWeightTotal > 0 ? overallWeightedGP / overallWeightTotal : null;
+
+      // Calculate an overall TU percentage using the transcript's year weights
+      // when there is data for those years. Otherwise show the simple entered-mark percentage.
+      const yearWeights = program?.aggregateWeights || { 'Year I': 20, 'Year II': 20, 'Year III': 30, 'Year IV': 30 };
+      let weightedYearPct = 0;
+      let availableYearWeight = 0;
+      Object.entries(yearBuckets).forEach(([yearKey, bucket]) => {
+        if (bucket.full > 0 && Object.prototype.hasOwnProperty.call(yearWeights, yearKey)) {
+          weightedYearPct += (bucket.obtained / bucket.full * 100) * (yearWeights[yearKey] / 100);
+          availableYearWeight += yearWeights[yearKey];
+        }
+      });
+      const simpleOverallPct = overallWeightTotal > 0 ? (
+        [...Object.values(yearBuckets)].reduce((a, b) => a + b.obtained, 0) /
+        [...Object.values(yearBuckets)].reduce((a, b) => a + b.full, 0) * 100
+      ) : null;
+      const overallPct = availableYearWeight > 0 ? weightedYearPct / (availableYearWeight / 100) : simpleOverallPct;
+
+      $('completed').textContent = gradedRows;
+      $('failed').textContent = failedRows;
+      $('remaining').textContent = totalRows - gradedRows;
+      $('gpa').textContent = currentGPA === null ? '— / 4.00' : `${currentGPA.toFixed(2)} / 4.00`;
+      $('overallGpa').textContent = overallGPA === null ? '— / 4.00' : `${overallGPA.toFixed(2)} / 4.00`;
+      $('overallPct').textContent = overallPct === null ? '—' : `${overallPct.toFixed(2)}%`;
+
+      updateAcademicSummary();
+    }
+
+
+    /* ============================================================
+       6. PROGRAMME / PART SELECTORS
+       ============================================================ */
+    function updateHeaderDetails() {
+      $('showName').textContent = $('studentName').value || '________________________';
+      $('showSymbol').textContent = $('symbolNo').value || '_______________';
+      $('showCampus').textContent = $('campus').value || '—';
+    }
+
+    function fillProgrammes() {
+      loadStoredData();
+      $('program').innerHTML = Object.entries(PROGRAMS)
+        .map(([key, program]) => `<option value="${escapeHtml(key)}">${escapeHtml(key)} — ${escapeHtml(program.title)}</option>`)
+        .join('');
+
+      $('program').value = Object.prototype.hasOwnProperty.call(PROGRAMS, currentSelection.program)
+        ? currentSelection.program
+        : 'BCE';
+      updateHeaderDetails();
+      populateParts();
+    }
+
+    function populateParts() {
+      const program = PROGRAMS[$('program').value];
+
+      $('yearPart').innerHTML = program.terms
+        .map(([partTitle], index) => `<option value="${index}">${escapeHtml(partTitle)}</option>`)
+        .join('');
+
+      const requestedPart = Number(currentSelection.part);
+      $('yearPart').value = Number.isInteger(requestedPart) && requestedPart >= 0 && requestedPart < program.terms.length
+        ? String(requestedPart)
+        : '0';
+      currentSelection = { program: $('program').value, part: Number($('yearPart').value) };
+      saveStoredData();
+      render();
+    }
+
+
+    /* ============================================================
+       7. EVENTS
+       ============================================================ */
+    $('program').addEventListener('change', () => {
+      currentSelection.program = $('program').value;
+      currentSelection.part = 0;
+      populateParts();
+      saveStoredData();
+    });
+    $('yearPart').addEventListener('change', () => {
+      currentSelection.program = $('program').value;
+      currentSelection.part = Number($('yearPart').value || 0);
+      saveStoredData();
+      render();
+    });
+
+    ['studentName', 'symbolNo', 'campus'].forEach((id) => {
+      $(id).addEventListener('input', () => {
+        $('showName').textContent = $('studentName').value || '________________________';
+        $('showSymbol').textContent = $('symbolNo').value || '_______________';
+        $('showCampus').textContent = $('campus').value || '—';
+        saveStoredData();
+      });
+    });
+
+    $('calculate').addEventListener('click', () => {
+      try {
+        updateHeaderDetails();
+        updateSummary();
+      } catch (error) {
+        console.error('GPA calculation failed:', error);
+        alert('GPA calculation failed. Please check the entered marks.');
+      }
+    });
+
+    $('reset').addEventListener('click', () => {
+      if (!confirm('Reset all entered marks and student details?')) return;
+      state = {};
+      currentSelection = { program: 'BCE', part: 0 };
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem('tu-bce-gpa-calculator-v2');
+      } catch (error) {
+        console.warn('Could not clear localStorage.', error);
+      }
+      $('studentName').value = '';
+      $('symbolNo').value = '';
+      $('campus').value = '';
+      $('program').value = 'BCE';
+      populateParts();
+      updateHeaderDetails();
+    });
+
+    $('print').addEventListener('click', () => {
+      try {
+        updateHeaderDetails();
+        updateSummary();
+        if (typeof window.print !== 'function') throw new Error('window.print unavailable');
+        setTimeout(() => window.print(), 50);
+      } catch (error) {
+        console.error('Print failed:', error);
+        alert('Unable to open the print dialog. Please use Ctrl+P / Cmd+P.');
+      }
+    });
+
+    /* ============================================================
+       12. SAVE AS IMAGE
+       ------------------------------------------------------------
+       Render the SAME live grade-sheet DOM into a canvas. This is a
+       DOM-to-canvas renderer rather than a second simplified sheet:
+       element geometry, computed typography, borders, backgrounds,
+       images, and entered mark values are read directly from the live
+       DOM. This avoids SVG foreignObject canvas-taint restrictions.
+       ============================================================ */
+
+    function copyComputedStyles(sourceRoot, targetRoot) {
+      const sourceElements = [sourceRoot, ...sourceRoot.querySelectorAll('*')];
+      const targetElements = [targetRoot, ...targetRoot.querySelectorAll('*')];
+
+      sourceElements.forEach((sourceEl, index) => {
+        const targetEl = targetElements[index];
+        if (!targetEl || targetEl.nodeType !== 1) return;
+
+        const computed = getComputedStyle(sourceEl);
+        let styleText = '';
+        for (let i = 0; i < computed.length; i += 1) {
+          const property = computed[i];
+          styleText += `${property}:${computed.getPropertyValue(property)};`;
+        }
+        targetEl.setAttribute('style', styleText);
+      });
+    }
+
+    function syncClonedFormValues(sourceRoot, targetRoot) {
+      const sourceInputs = sourceRoot.querySelectorAll('input');
+      const targetInputs = targetRoot.querySelectorAll('input');
+      sourceInputs.forEach((sourceInput, index) => {
+        const targetInput = targetInputs[index];
+        if (!targetInput) return;
+        targetInput.setAttribute('value', sourceInput.value || '');
+        targetInput.value = sourceInput.value || '';
+      });
+    }
+
+    function blobToDataUrl(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error || new Error('Could not read image blob.'));
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    async function imageSourceToDataUrl(img) {
+      const src = img.currentSrc || img.src || '';
+      if (!src) return '';
+      if (src.startsWith('data:image/')) return src;
+
+      try {
+        const response = await fetch(src, {cache:'no-store'});
+        if (!response.ok) throw new Error(`Image request failed: ${response.status}`);
+        return await blobToDataUrl(await response.blob());
+      } catch (_) {
+        const fallback = img.dataset.fallbackSrc || '';
+        return fallback.startsWith('data:image/') ? fallback : '';
+      }
+    }
+
+    function cssPx(value, fallback = 0) {
+      const n = parseFloat(value);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function isVisibleForExport(element) {
+      const style = getComputedStyle(element);
+      return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0;
+    }
+
+    function drawBoxBackgroundAndBorders(ctx, element, sheetRect) {
+      if (!isVisibleForExport(element)) return;
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      const x = rect.left - sheetRect.left;
+      const y = rect.top - sheetRect.top;
+      const w = rect.width;
+      const h = rect.height;
+      if (w <= 0 || h <= 0) return;
+
+      const background = style.backgroundColor;
+      if (background && background !== 'rgba(0, 0, 0, 0)' && background !== 'transparent') {
+        ctx.fillStyle = background;
+        ctx.fillRect(x, y, w, h);
+      }
+
+      const sides = [
+        ['borderTopWidth','borderTopColor','borderTopStyle','top'],
+        ['borderRightWidth','borderRightColor','borderRightStyle','right'],
+        ['borderBottomWidth','borderBottomColor','borderBottomStyle','bottom'],
+        ['borderLeftWidth','borderLeftColor','borderLeftStyle','left']
+      ];
+
+      sides.forEach(([widthProp,colorProp,styleProp,side]) => {
+        const lineWidth = cssPx(style[widthProp]);
+        if (lineWidth <= 0 || style[styleProp] === 'none' || style[styleProp] === 'hidden') return;
+        ctx.fillStyle = style[colorProp];
+        if (side === 'top') ctx.fillRect(x, y, w, lineWidth);
+        if (side === 'right') ctx.fillRect(x + w - lineWidth, y, lineWidth, h);
+        if (side === 'bottom') ctx.fillRect(x, y + h - lineWidth, w, lineWidth);
+        if (side === 'left') ctx.fillRect(x, y, lineWidth, h);
+      });
+    }
+
+    function drawTextNode(ctx, node, sheetRect) {
+      const text = node.nodeValue || '';
+      if (!text.trim()) return;
+      const parent = node.parentElement;
+      if (!parent || !isVisibleForExport(parent)) return;
+
+      const style = getComputedStyle(parent);
+      const fontSize = cssPx(style.fontSize, 13);
+      const fontFamily = style.fontFamily || '"Times New Roman", Times, serif';
+      const fontWeight = style.fontWeight || '400';
+      const fontStyle = style.fontStyle || 'normal';
+      const fontVariant = style.fontVariant || 'normal';
+      ctx.font = `${fontStyle} ${fontVariant} ${fontWeight} ${fontSize}px ${fontFamily}`;
+      ctx.fillStyle = style.color || '#111827';
+      ctx.textBaseline = 'alphabetic';
+
+      // Build the exact visual lines from character geometry. Using the full
+      // text for every Range rectangle duplicates wrapped labels; grouping
+      // individual characters by their rendered y-position preserves the
+      // browser's actual wrapping instead.
+      const lines = [];
+      let current = null;
+      const charRanges = [];
+
+      for (let i = 0; i < text.length; i += 1) {
+        const range = document.createRange();
+        range.setStart(node, i);
+        range.setEnd(node, i + 1);
+        const rect = Array.from(range.getClientRects()).find(r => r.width > 0 && r.height > 0);
+        if (!rect) continue;
+        charRanges.push({char:text[i], rect});
+      }
+
+      charRanges.forEach(({char, rect}) => {
+        const yKey = Math.round(rect.top * 10) / 10;
+        if (!current || Math.abs(current.y - yKey) > 1) {
+          current = {y:yKey, chars:[], left:rect.left, right:rect.right, top:rect.top, height:rect.height};
+          lines.push(current);
+        }
+        current.chars.push(char);
+        current.left = Math.min(current.left, rect.left);
+        current.right = Math.max(current.right, rect.right);
+      });
+
+      if (!lines.length) return;
+
+      const parentRect = parent.getBoundingClientRect();
+      const align = style.textAlign;
+      const decoration = style.textDecorationLine || '';
+
+      lines.forEach((line) => {
+        let lineText = line.chars.join('');
+        if (style.whiteSpace !== 'pre' && style.whiteSpace !== 'pre-wrap') {
+          lineText = lineText.replace(/\\s+/g, ' ');
+        }
+        lineText = lineText.trim();
+        if (!lineText) return;
+
+        let x = line.left - sheetRect.left;
+        let textAlign = 'left';
+        if (align === 'center') {
+          x = parentRect.left - sheetRect.left + parentRect.width / 2;
+          textAlign = 'center';
+        } else if (align === 'right' || align === 'end') {
+          x = parentRect.right - sheetRect.left;
+          textAlign = 'right';
+        }
+
+        ctx.textAlign = textAlign;
+        const y = line.top - sheetRect.top + line.height * 0.79;
+        ctx.fillText(lineText, x, y);
+
+        if (decoration.includes('underline')) {
+          const measured = ctx.measureText(lineText).width;
+          let ux = x;
+          if (textAlign === 'center') ux -= measured / 2;
+          if (textAlign === 'right') ux -= measured;
+          ctx.fillRect(ux, y + 1, measured, Math.max(1, fontSize / 14));
+        }
+      });
+    }
+
+    function drawInputValue(ctx, input, sheetRect) {
+      if (!isVisibleForExport(input)) return;
+      const value = input.value || '';
+      const rect = input.getBoundingClientRect();
+      const style = getComputedStyle(input);
+      const x = rect.left - sheetRect.left;
+      const y = rect.top - sheetRect.top;
+
+      if (rect.width <= 0 || rect.height <= 0) return;
+
+      const fontSize = cssPx(style.fontSize, 12);
+      const fontFamily = style.fontFamily || '"Times New Roman", Times, serif';
+      ctx.font = `${style.fontStyle || 'normal'} ${style.fontWeight || '400'} ${fontSize}px ${fontFamily}`;
+      ctx.fillStyle = style.color || '#111827';
+      ctx.textBaseline = 'middle';
+
+      let tx = x + rect.width / 2;
+      let align = 'center';
+      if (style.textAlign === 'left') { tx = x + cssPx(style.paddingLeft, 4); align = 'left'; }
+      if (style.textAlign === 'right') { tx = x + rect.width - cssPx(style.paddingRight, 4); align = 'right'; }
+      ctx.textAlign = align;
+      ctx.fillText(value, tx, y + rect.height / 2);
+    }
+
+    async function drawImageElement(ctx, img, sheetRect, imageDataUrl) {
+      if (!imageDataUrl || !isVisibleForExport(img)) return;
+      const rect = img.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+
+      const image = new Image();
+      image.src = imageDataUrl;
+      await new Promise((resolve) => {
+        image.onload = resolve;
+        image.onerror = resolve;
+      });
+      if (!image.naturalWidth || !image.naturalHeight) return;
+
+      const style = getComputedStyle(img);
+      const objectFit = style.objectFit || 'fill';
+      let dx = rect.left - sheetRect.left;
+      let dy = rect.top - sheetRect.top;
+      let dw = rect.width;
+      let dh = rect.height;
+
+      if (objectFit === 'contain') {
+        const scale = Math.min(dw / image.naturalWidth, dh / image.naturalHeight);
+        dw = image.naturalWidth * scale;
+        dh = image.naturalHeight * scale;
+        dx += (rect.width - dw) / 2;
+        dy += (rect.height - dh) / 2;
+      } else if (objectFit === 'cover') {
+        const scale = Math.max(dw / image.naturalWidth, dh / image.naturalHeight);
+        const sw = dw / scale;
+        const sh = dh / scale;
+        ctx.drawImage(image, (image.naturalWidth-sw)/2, (image.naturalHeight-sh)/2, sw, sh, dx, dy, dw, dh);
+        return;
+      }
+
+      ctx.drawImage(image, dx, dy, dw, dh);
+    }
+
+    async function exportRenderedGradeSheetAsJpg() {
+      const sheet = $('gradeSheet');
+      if (!sheet) throw new Error('Grade sheet not found.');
+
+      updateHeaderDetails();
+      updateSummary();
+
+      const actionBlock = sheet.querySelector('.bottom-actions');
+      const previousDisplay = actionBlock ? actionBlock.style.display : '';
+      if (actionBlock) actionBlock.style.display = 'none';
+
+      try {
+        await new Promise(requestAnimationFrame);
+
+        const sheetRect = sheet.getBoundingClientRect();
+        const width = Math.max(1, Math.ceil(Math.max(sheet.scrollWidth, sheetRect.width)));
+        const height = Math.max(1, Math.ceil(Math.max(sheet.scrollHeight, sheetRect.height)));
+        const scale = Math.max(2, Math.min(3, window.devicePixelRatio || 2));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.ceil(width * scale);
+        canvas.height = Math.ceil(height * scale);
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Canvas is unavailable.');
+        ctx.setTransform(scale, 0, 0, scale, 0, 0);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, width, height);
+
+        const excluded = (element) => element === actionBlock || !!element.closest('.bottom-actions');
+
+        // First paint all visible element boxes/borders in the same DOM order.
+        const elements = [sheet, ...sheet.querySelectorAll('*')];
+        elements.forEach((element) => {
+          if (!excluded(element)) drawBoxBackgroundAndBorders(ctx, element, sheetRect);
+        });
+
+        // Embed every image from the live DOM before painting it.
+        const images = Array.from(sheet.querySelectorAll('img')).filter(img => !excluded(img));
+        const imageData = await Promise.all(images.map(imageSourceToDataUrl));
+        for (let i = 0; i < images.length; i += 1) {
+          await drawImageElement(ctx, images[i], sheetRect, imageData[i]);
+        }
+
+        // Paint live input values and ordinary DOM text nodes.
+        sheet.querySelectorAll('input').forEach((input) => {
+          if (!excluded(input)) drawInputValue(ctx, input, sheetRect);
+        });
+
+        const walker = document.createTreeWalker(sheet, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) {
+          const node = walker.currentNode;
+          if (node.parentElement && !excluded(node.parentElement)) textNodes.push(node);
+        }
+        textNodes.forEach((node) => drawTextNode(ctx, node, sheetRect));
+
+        const jpg = await new Promise((resolve, reject) => {
+          canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Could not create JPG.')), 'image/jpeg', 0.95);
+        });
+
+        const safeName =
+          ($('studentName').value || 'TU-GPA')
+            .trim()
+            .replace(/[^a-z0-9]+/gi, '-')
+            .replace(/^-+|-+$/g, '') || 'TU-GPA';
+
+        const downloadUrl = URL.createObjectURL(jpg);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `${safeName}-grade-sheet.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
+      } finally {
+        if (actionBlock) actionBlock.style.display = previousDisplay;
+      }
+    }
+
+    $('saveImage').addEventListener('click', async () => {
+      const button = $('saveImage');
+      const original = button.innerHTML;
+
+      button.disabled = true;
+      button.textContent = 'Saving…';
+
+      try {
+        updateHeaderDetails();
+        updateSummary();
+
+        await exportRenderedGradeSheetAsJpg();
+      } catch (error) {
+        console.error('Save as JPG failed:', error);
+        alert(
+          'Could not save the grade sheet as JPG. Please check that the logo path is accessible and try Chrome or Edge.'
+        );
+      } finally {
+        button.disabled = false;
+        button.innerHTML = original;
+      }
+    });
+
+    window.addEventListener('beforeunload', saveStoredData);
+
+    // Initial page load.
+    fillProgrammes();
+
+  </script>
+</body>
+</html>

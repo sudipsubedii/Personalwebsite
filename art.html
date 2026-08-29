@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Story of a Shutterbug — Sudip Subedi</title>
+<style>
+:root{
+  --bg:#f0ede8;
+  --card:#ffffff;
+  --text:#111111;
+  --muted:#666666;
+  --border:rgba(0,0,0,.1);
+  --shadow:0 4px 18px rgba(0,0,0,.08);
+  --shadow-strong:0 10px 32px rgba(0,0,0,.14);
+  --pill:#ffffff;
+  --pill-border:rgba(0,0,0,.12);
+}
+[data-theme="dark"]{
+  --bg:#0d0d0d;
+  --card:#1a1a1a;
+  --text:#f0f0f0;
+  --muted:#888888;
+  --border:rgba(255,255,255,.1);
+  --shadow:0 4px 18px rgba(0,0,0,.4);
+  --shadow-strong:0 10px 32px rgba(0,0,0,.6);
+  --pill:#222222;
+  --pill-border:rgba(255,255,255,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;min-height:100vh;
+  transition:background .3s,color .3s;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;border:none;cursor:pointer}
+
+/* CONTROLS — minimal floating utility group */
+.top-controls{
+  position:fixed;top:18px;right:18px;z-index:80;
+  display:flex;align-items:center;gap:8px;
+}
+.admin-launch{
+  min-height:42px;padding:0 14px;border-radius:999px;
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:12px;font-weight:800;letter-spacing:.01em;
+  transition:transform .18s,box-shadow .18s,background .18s,border-color .18s;
+}
+.admin-launch:hover{transform:translateY(-1px);box-shadow:var(--shadow-strong)}
+.admin-launch svg{width:15px;height:15px;stroke:currentColor}
+.admin-launch.is-locked{background:rgba(0,0,0,.045)}
+[data-theme="dark"] .admin-launch.is-locked{background:rgba(255,255,255,.045)}
+.admin-launch .admin-state-dot{
+  width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.45;
+}
+.icon-btn{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--card);border:1px solid var(--border);
+  box-shadow:var(--shadow);display:grid;place-items:center;
+  color:var(--text);transition:transform .18s,box-shadow .18s,background .18s;
+}
+.icon-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-strong)}
+.icon-btn svg{stroke:var(--text)}
+#infoLaunch{font-size:14px;font-weight:800;line-height:1}
+#infoLaunch span{transform:translateY(-.5px)}
+
+/* SOCIAL RAIL */
+.follow-rail{
+  position:fixed;left:18px;top:150px;z-index:35;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  transition:opacity .25s,transform .25s;
+}
+.follow-rail.hide{opacity:0;transform:translateX(-20px)}
+.follow-rail .label{
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  font-size:10px;font-weight:800;letter-spacing:.28em;color:var(--muted);margin-bottom:4px;
+}
+.social-btn{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--card);border:1px solid var(--border);
+  box-shadow:var(--shadow);display:grid;place-items:center;color:var(--text);
+  transition:transform .18s,box-shadow .18s;
+}
+.social-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-strong)}
+.social-btn svg{stroke:var(--text);width:18px;height:18px}
+
+/* LAYOUT */
+.page{position:relative;z-index:1;min-height:100vh;padding:18px 22px 60px}
+
+/* HERO */
+.hero{max-width:1220px;margin:0 auto;padding-top:44px;text-align:center}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:.26em;color:var(--muted);margin-bottom:8px}
+h1{font-size:clamp(40px,6vw,88px);line-height:.94;font-weight:900;letter-spacing:-.06em;color:var(--text)}
+.author{margin-top:10px;font-size:15px;color:var(--muted)}
+.tagline{
+  display:inline-flex;align-items:center;gap:10px;
+  margin:24px auto 0;padding:11px 18px;border-radius:999px;
+  background:var(--card);border:1px solid var(--border);
+  box-shadow:var(--shadow);font-size:13px;font-weight:700;color:var(--text);
+}
+
+/* FILTERS */
+.filters-wrap{max-width:1320px;margin:28px auto 0;text-align:center}
+.filter-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px}
+.pill{
+  background:var(--pill);border:1px solid var(--pill-border);
+  color:var(--text);padding:9px 14px;border-radius:999px;
+  font-size:13px;font-weight:700;box-shadow:var(--shadow);
+  transition:transform .18s,background .18s,color .18s;
+}
+.pill:hover{transform:translateY(-1px)}
+.pill.active{background:#111;color:#fff;border-color:#111}
+[data-theme="dark"] .pill.active{background:#efefef;color:#111;border-color:#efefef}
+
+/* MASONRY */
+.gallery-shell{max-width:1480px;margin:20px auto 0;padding-bottom:40px}
+.masonry{columns:5 200px;column-gap:14px}
+.card{
+  break-inside:avoid;display:inline-block;width:100%;
+  border-radius:20px;overflow:hidden;
+  background:var(--card);border:1px solid var(--border);
+  box-shadow:var(--shadow);cursor:pointer;position:relative;
+  margin-bottom:14px;
+  transition:transform .22s,box-shadow .22s;
+}
+.card:hover{transform:translateY(-5px);box-shadow:var(--shadow-strong)}
+.thumb-wrap{position:relative;overflow:hidden;background:#d0ccc6;line-height:0}
+.thumb{width:100%;display:block;object-fit:cover;transition:transform .5s}
+.card:hover .thumb{transform:scale(1.04)}
+/* VIDEO THUMBNAIL — dark overlay + play icon */
+.vid-thumb{
+  width:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);
+  position:relative;
+}
+.vid-thumb .play-icon{
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);
+  display:grid;place-items:center;
+}
+.vid-thumb .play-icon svg{margin-left:3px}
+.vid-thumb .vid-label{
+  position:absolute;bottom:10px;left:12px;
+  font-size:11px;font-weight:700;color:rgba(255,255,255,.7);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.play-badge{
+  position:absolute;top:10px;left:10px;
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#ff1d1d;box-shadow:0 4px 12px rgba(255,0,0,.35);
+}
+.card-body{padding:9px 12px 12px}
+.badge{
+  display:inline-block;padding:3px 8px;border-radius:999px;
+  background:rgba(0,0,0,.06);color:var(--text);
+  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;
+}
+[data-theme="dark"] .badge{background:rgba(255,255,255,.1)}
+.title{font-size:13px;font-weight:800;letter-spacing:-.02em;color:var(--text);line-height:1.2;margin-bottom:2px}
+.meta{font-size:11px;font-weight:600;color:var(--muted)}
+.hidden{display:none!important}
+.count-bar{text-align:center;font-size:12px;color:var(--muted);font-weight:600;margin-top:6px;margin-bottom:10px}
+
+/* AUTH + ADMIN UPLOAD */
+.auth-overlay{
+  position:fixed;inset:0;z-index:130;display:none;align-items:center;justify-content:center;
+  padding:16px;background:rgba(0,0,0,.72);backdrop-filter:blur(10px);
+}
+.auth-overlay.open{display:flex}
+.auth-panel{
+  width:min(440px,100%);background:var(--card);color:var(--text);
+  border:1px solid var(--border);border-radius:24px;padding:24px;
+  box-shadow:0 32px 90px rgba(0,0,0,.5);
+}
+.auth-panel h2{font-size:22px;letter-spacing:-.04em}
+.auth-panel p{font-size:12px;color:var(--muted);line-height:1.5;margin-top:6px}
+.auth-field{margin-top:14px}
+.auth-field label{
+  display:block;font-size:10px;font-weight:900;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:7px;
+}
+.auth-field input{
+  width:100%;background:var(--bg);color:var(--text);
+  border:1px solid var(--border);border-radius:14px;padding:12px;
+  font:inherit;outline:none;
+}
+.auth-field input:focus{border-color:rgba(127,127,127,.7);box-shadow:0 0 0 3px rgba(127,127,127,.12)}
+.auth-actions{display:flex;gap:9px;margin-top:16px}
+.auth-submit{
+  flex:1;min-height:44px;border-radius:14px;background:#111;color:#fff;
+  font-size:13px;font-weight:900;padding:0 14px;
+}
+[data-theme="dark"] .auth-submit{background:#efefef;color:#111}
+.auth-secondary{
+  min-height:44px;border-radius:14px;background:var(--bg);color:var(--text);
+  border:1px solid var(--border);font-size:13px;font-weight:800;padding:0 14px;
+}
+.auth-status{min-height:18px;margin-top:10px;font-size:12px;font-weight:700;color:var(--muted)}
+.auth-close{
+  width:38px;height:38px;border-radius:50%;background:var(--bg);
+  color:var(--text);border:1px solid var(--border);display:grid;place-items:center;
+}
+.auth-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.admin-user{
+  position:fixed;top:74px;right:18px;z-index:40;display:none;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:999px;background:var(--card);
+  border:1px solid var(--border);box-shadow:var(--shadow);font-size:11px;font-weight:800;color:var(--text);
+}
+.admin-user.show{display:flex}
+.admin-user button{
+  background:transparent;color:var(--muted);font-size:11px;font-weight:800;padding:0;
+}
+.admin-user button:hover{color:var(--text)}
+
+/* ADMIN UPLOAD */
+.admin-overlay{
+  position:fixed;inset:0;z-index:120;display:none;align-items:flex-start;justify-content:center;
+  padding:86px 16px 16px;background:rgba(0,0,0,.68);backdrop-filter:blur(10px);
+}
+.admin-overlay.open{display:flex}
+.admin-panel{
+  width:min(640px,100%);max-height:calc(100vh - 102px);overflow:auto;
+  background:var(--card);color:var(--text);border:1px solid var(--border);
+  border-radius:24px;box-shadow:0 32px 90px rgba(0,0,0,.45);padding:22px;
+}
+.admin-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
+.admin-head h2{font-size:20px;line-height:1.1;letter-spacing:-.03em}
+.admin-head p{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}
+.admin-close{
+  width:38px;height:38px;border-radius:50%;background:var(--bg);
+  color:var(--text);border:1px solid var(--border);display:grid;place-items:center;
+}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.admin-field{margin-top:12px}
+.admin-field label{
+  display:block;font-size:10px;font-weight:900;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:7px;
+}
+.admin-field input,.admin-field select,.admin-field textarea{
+  width:100%;background:var(--bg);color:var(--text);border:1px solid var(--border);
+  border-radius:14px;padding:11px 12px;font:inherit;outline:none;
+}
+.admin-field textarea{min-height:104px;resize:vertical}
+.admin-field input:focus,.admin-field select:focus,.admin-field textarea:focus{
+  border-color:rgba(127,127,127,.7);box-shadow:0 0 0 3px rgba(127,127,127,.12);
+}
+.admin-actions{display:flex;align-items:center;gap:9px;margin-top:16px}
+.admin-submit{
+  flex:1;min-height:44px;border-radius:14px;background:#111;color:#fff;
+  font-size:13px;font-weight:900;padding:0 16px;
+}
+[data-theme="dark"] .admin-submit{background:#efefef;color:#111}
+.admin-submit:disabled{opacity:.5;cursor:not-allowed}
+.admin-secondary{
+  min-height:44px;border-radius:14px;background:var(--bg);color:var(--text);
+  border:1px solid var(--border);font-size:13px;font-weight:800;padding:0 14px;
+}
+.admin-progress{height:8px;border-radius:99px;background:var(--bg);overflow:hidden;margin-top:14px;border:1px solid var(--border);display:none}
+.admin-progress span{display:block;height:100%;width:0;background:#111;transition:width .2s}
+[data-theme="dark"] .admin-progress span{background:#efefef}
+.admin-status{font-size:12px;font-weight:700;color:var(--muted);margin-top:9px;min-height:18px}
+.admin-note{
+  margin-top:14px;padding:10px 12px;border-radius:14px;background:var(--bg);
+  border:1px solid var(--border);font-size:11px;line-height:1.5;color:var(--muted);
+}
+.admin-note strong{color:var(--text)}
+@media(max-width:620px){.admin-grid{grid-template-columns:1fr}.top-controls{top:12px;right:12px;gap:6px}.admin-launch{min-height:40px;padding:0 12px}.icon-btn{width:40px;height:40px}}
+
+/* MODAL — IMMERSIVE APPLE-PHOTOS-STYLE VIEWER */
+.modal-overlay{position:fixed;inset:0;z-index:160;display:none;background:rgba(7,7,7,.93);backdrop-filter:blur(18px) saturate(115%);overflow:hidden}
+.modal-overlay.open{display:block}
+.modal-overlay::before{content:"";position:absolute;inset:-8%;z-index:0;background-image:var(--viewer-bg,none);background-size:cover;background-position:center;filter:blur(34px) saturate(110%);transform:scale(1.08);opacity:.10;pointer-events:none}
+.modal-card{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible}
+#modalContent{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:6vh 5vw 9vh;background:transparent;min-height:0}
+.modal-img-wrap,.modal-vid-wrap{width:100%;height:100%;background:transparent;line-height:0;display:flex;align-items:center;justify-content:center}
+.modal-img-wrap img,.modal-vid-wrap video{display:block;max-width:92vw;max-height:84vh;width:auto;height:auto;object-fit:contain;object-position:center center;border-radius:2px;box-shadow:0 24px 80px rgba(0,0,0,.26)}
+.modal-vid-wrap video{background:#000}
+.viewer-glass{position:fixed;z-index:20;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.16);background:rgba(24,24,24,.30);color:#fff;box-shadow:0 12px 36px rgba(0,0,0,.28);backdrop-filter:blur(22px) saturate(130%);-webkit-backdrop-filter:blur(22px) saturate(130%);transition:opacity .2s ease,transform .2s ease,background .2s ease,border-color .2s ease}
+.modal-controls{position:fixed;top:18px;right:18px;z-index:40;display:flex;gap:8px}
+.mini-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(20,20,20,.30);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:800;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.20);transition:background .18s ease,transform .18s ease,border-color .18s ease,color .18s ease}
+.mini-btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px);border-color:rgba(255,255,255,.35)}
+.mini-btn.active{background:rgba(255,255,255,.88);color:#111;border-color:transparent}
+.mini-btn.danger:hover,.mini-btn.danger:focus-visible{background:rgba(255,65,65,.84);color:#fff;border-color:rgba(255,130,130,.7)}
+.mini-btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.viewer-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:35;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(20,20,20,.24);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.22);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transition:opacity .2s,transform .2s,background .2s,border-color .2s}
+.viewer-nav:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.30)}
+.viewer-nav:active{transform:translateY(-50%) scale(.96)}
+.viewer-prev{left:18px}.viewer-next{right:18px}.viewer-nav[disabled]{opacity:.20;pointer-events:none}
+.modal-controls,
+.viewer-nav,
+.viewer-counter{
+  transition:opacity .24s ease,filter .24s ease,transform .2s ease,background .2s ease,border-color .2s ease;
+}
+.modal-overlay:not(.proximity-active) .viewer-nav,
+.modal-overlay:not(.proximity-active) .viewer-counter,
+.modal-overlay:not(.proximity-active) .modal-controls{
+  opacity:.72;
+}
+.modal-overlay.proximity-active .viewer-nav,
+.modal-overlay.proximity-active .viewer-counter,
+.modal-overlay.proximity-active .modal-controls{
+  opacity:1;
+}
+.modal-info{position:fixed;z-index:30;top:82px;right:20px;bottom:86px;width:min(330px,calc(100vw - 40px));padding:22px 18px 18px;background:rgba(20,20,20,.38);color:#f6f6f6;border:1px solid rgba(255,255,255,.16);border-radius:26px;overflow:auto;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(28px);backdrop-filter:blur(26px) saturate(125%);-webkit-backdrop-filter:blur(26px) saturate(125%);box-shadow:0 24px 70px rgba(0,0,0,.34);transition:opacity .24s ease,transform .24s ease,visibility .24s ease}
+.modal-info.show{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0)}
+.info-title{font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;opacity:.72;margin-bottom:8px}.info-shot-title{font-size:25px;font-weight:850;line-height:1.16;letter-spacing:-.03em;margin-bottom:9px;color:inherit}.info-description{font-size:14px;line-height:1.58;color:inherit;opacity:.86;white-space:pre-wrap;word-break:break-word;margin-bottom:18px}.info-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:10px}.info-chip{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.06);border-radius:16px;padding:11px 12px}.info-chip .k{display:block;font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.56;margin-bottom:4px}.info-chip .v{font-size:13px;font-weight:760;color:inherit;line-height:1.3;word-break:break-word}.info-details{margin-top:12px;border-top:1px solid rgba(255,255,255,.10);padding-top:10px}.info-details summary{list-style:none;cursor:pointer;font-size:12px;font-weight:800;opacity:.82;display:flex;align-items:center;justify-content:space-between}.info-details summary::-webkit-details-marker{display:none}.info-details summary::after{content:'+';font-size:18px;line-height:1;opacity:.65}.info-details[open] summary::after{content:'–'}.info-details-content{margin-top:10px;display:grid;gap:8px}
+
+
+.viewer-thumbnails{
+  position:fixed;
+  left:50%;
+  bottom:46px;
+  transform:translateX(-50%);
+  z-index:36;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:min(78vw,920px);
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:4px 2px;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  opacity:.32;
+  filter:saturate(.82);
+  transition:opacity .24s ease,filter .24s ease,transform .24s ease;
+  pointer-events:auto;
+}
+.modal-overlay.proximity-active .viewer-thumbnails{
+  opacity:1;
+  filter:saturate(1);
+}
+.viewer-thumbnails::-webkit-scrollbar{display:none}
+.viewer-thumb{
+  flex:0 0 auto;
+  width:62px;
+  height:48px;
+  padding:2px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;
+  background:rgba(20,20,20,.30);
+  backdrop-filter:blur(16px) saturate(125%);
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+  overflow:hidden;
+  cursor:pointer;
+  opacity:.68;
+  transition:opacity .18s ease,transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.viewer-thumb:hover{opacity:.95;transform:translateY(-1px)}
+.viewer-thumb.active{opacity:1;border-color:rgba(255,255,255,.92);box-shadow:0 0 0 2px rgba(255,255,255,.12),0 10px 28px rgba(0,0,0,.24)}
+.viewer-thumb img,.viewer-thumb .thumb-video{width:100%;height:100%;display:block;object-fit:cover;border-radius:7px}
+.viewer-thumb .thumb-video{display:grid;place-items:center;background:rgba(255,255,255,.07);color:rgba(255,255,255,.84)}
+.viewer-thumb .thumb-video svg{width:15px;height:15px}
+.viewer-counter{
+  position:fixed;
+  left:50%;
+  bottom:14px;
+  transform:translateX(-50%);
+  z-index:37;
+  color:rgba(255,255,255,.78);
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:.02em;
+  text-shadow:0 2px 10px rgba(0,0,0,.35);
+  pointer-events:none;
+}
+.modal-stage-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent}
+.viewer-stage-image{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  touch-action:none;
+  cursor:default;
+}
+.viewer-stage-image.zoomable{cursor:grab}
+.viewer-stage-image.zoomable.dragging{cursor:grabbing}
+.viewer-stage-image img{
+  max-width:none !important;
+  max-height:none !important;
+  width:auto !important;
+  height:auto !important;
+  object-fit:contain;
+  transform-origin:center center;
+  user-select:none;
+  -webkit-user-drag:none;
+  will-change:transform;
+}
+.viewer-zoom-hint{
+  position:fixed;
+  left:50%;
+  bottom:78px;
+  transform:translateX(-50%);
+  z-index:38;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(20,20,20,.34);
+  border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.76);
+  font-size:10px;
+  font-weight:800;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.viewer-zoom-hint.show{opacity:1}
+
+.info-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.info-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 12px;border-radius:13px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;text-decoration:none;font:inherit;font-size:12px;font-weight:800;cursor:pointer;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:background .18s ease,border-color .18s ease,transform .18s ease,color .18s ease}
+.info-action:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);transform:translateY(-1px)}
+.info-action:disabled,.info-action[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.info-action.danger:hover,.info-action.danger:focus-visible{background:rgba(255,65,65,.82);border-color:rgba(255,130,130,.7);color:#fff}
+.info-action svg{width:16px;height:16px;flex:0 0 auto}
+@media(max-width:760px){
+  .info-actions{gap:7px}
+  .info-action{flex:1 1 calc(33.333% - 7px);min-width:92px}
+}
+.delete-dialog{position:fixed;inset:0;z-index:400;pointer-events:auto;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.42);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.delete-dialog.open{display:flex}.delete-card{width:min(420px,100%);border-radius:24px;padding:22px;background:rgba(25,25,25,.80);border:1px solid rgba(255,255,255,.14);color:#fff;backdrop-filter:blur(28px);box-shadow:0 28px 80px rgba(0,0,0,.38)}.delete-card h3{font-size:20px;letter-spacing:-.03em}.delete-card p{font-size:13px;line-height:1.5;opacity:.72;margin-top:7px}.delete-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.delete-actions button{min-height:40px;padding:0 15px;border-radius:12px;font-weight:850}.delete-cancel{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.12)}.delete-confirm{background:#fff;color:#111;border:0}.delete-confirm:hover{background:#ff5b5b;color:#fff}
+@media(max-width:760px){
+  .viewer-thumbnails{width:94vw;bottom:44px;gap:6px}
+  .viewer-thumb{width:58px;height:44px}
+  .viewer-counter{bottom:12px}
+  .viewer-zoom-hint{bottom:96px}
+#modalContent{padding:6vh 2vw 15vh}.modal-img-wrap img,.modal-vid-wrap video{max-width:96vw;max-height:76vh}.viewer-nav{width:42px;height:42px}.viewer-prev{left:10px}.viewer-next{right:10px}.modal-controls{top:12px;right:12px}.modal-info{left:12px;right:12px;top:auto;bottom:18px;width:auto;max-height:58vh;padding:18px;border-radius:22px;transform:translateY(22px)}.modal-info.show{transform:translateY(0)}.info-shot-title{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.modal-info,.mini-btn,.viewer-nav,.info-action,.viewer-thumb,.viewer-zoom-hint{transition:none}}
+
+/* RESPONSIVE */
+@media(max-width:900px){.follow-rail{display:none}.hero{padding-top:68px}.masonry{columns:3 170px}}
+@media(max-width:560px){.page{padding:12px}.masonry{columns:2 130px}.modal-info{width:min(320px,84%);padding-top:66px}}
+
+.about-popover{
+  position:fixed;top:68px;right:18px;z-index:85;
+  width:min(280px,calc(100vw - 36px));
+  padding:16px 17px;border-radius:18px;
+  background:var(--card);color:var(--text);
+  border:1px solid var(--border);box-shadow:var(--shadow-strong);
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .18s ease,transform .18s ease,visibility .18s ease;
+}
+.about-popover.open{opacity:1;visibility:visible;transform:translateY(0)}
+.about-popover h3{font-size:13px;letter-spacing:-.02em}
+.about-popover p{font-size:11px;line-height:1.5;color:var(--muted);margin-top:5px}
+.about-popover button{
+  margin-top:11px;padding:7px 10px;border-radius:10px;
+  background:var(--bg);color:var(--text);border:1px solid var(--border);
+  font-size:11px;font-weight:800;
+}
+</style>
+</head>
+<body>
+
+
+<!-- FIREBASE AUTH / ADMIN LOCK -->
+<div class="auth-overlay" id="authOverlay" aria-hidden="true">
+  <div class="auth-panel" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="auth-head">
+      <div>
+        <h2 id="authTitle">Admin Login</h2>
+        <p>Sign in with the admin account for Story of a Shutterbug.</p>
+      </div>
+      <button class="auth-close" id="authClose" aria-label="Close login">×</button>
+    </div>
+
+    <form id="authForm">
+      <div class="auth-field">
+        <label for="authEmail">Email</label>
+        <input id="authEmail" type="email" autocomplete="username" required />
+      </div>
+      <div class="auth-field">
+        <label for="authPassword">Password</label>
+        <input id="authPassword" type="password" autocomplete="current-password" required />
+      </div>
+      <div class="auth-actions">
+        <button type="button" class="auth-secondary" id="authCancel">Cancel</button>
+        <button type="submit" class="auth-submit" id="authSubmit">Sign in</button>
+      </div>
+      <div class="auth-status" id="authStatus"></div>
+    </form>
+  </div>
+</div>
+
+<div class="top-controls" aria-label="Site controls">
+  <button class="admin-launch" id="adminLaunch" type="button" aria-label="Open admin" title="Admin">
+    <svg id="adminStateIcon" viewBox="0 0 24 24" fill="none" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+      <path id="adminStateArc" d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+    </svg>
+    <span id="adminLaunchLabel">Admin</span>
+  </button>
+
+  <button class="icon-btn" id="infoLaunch" type="button" aria-label="About this site" title="About">
+    <span>i</span>
+  </button>
+
+  <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle theme" title="Toggle theme">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>
+    </svg>
+  </button>
+</div>
+
+
+<div class="about-popover" id="aboutPopover" aria-hidden="true">
+  <h3>Story of a Shutterbug</h3>
+  <p>A personal photography archive by Sudip Subedi — one click, one story.</p>
+  <button id="aboutClose" type="button">Close</button>
+</div>
+
+<aside class="follow-rail" id="followRail">
+  <div class="label">FOLLOW</div>
+  <a class="social-btn" href="https://www.instagram.com/sudip.__/" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>
+    </svg>
+  </a>
+  <a class="social-btn" href="https://www.youtube.com/@DHalleys" target="_blank" rel="noopener" aria-label="YouTube">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="6" width="18" height="12" rx="4"/><path d="M10 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/>
+    </svg>
+  </a>
+</aside>
+
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow">IT'S A</div>
+    <h1>Story of a Shutterbug</h1>
+    <div class="author">— Sudip Subedi</div>
+    <div class="tagline"><span>•</span> one click, one story <span>•</span></div>
+  </section>
+
+  <section class="filters-wrap">
+    <div class="filter-row" id="categoryFilters"></div>
+  </section>
+
+  <div class="count-bar" id="countBar"></div>
+
+  <section class="gallery-shell">
+    <div class="masonry" id="gallery"></div>
+  </section>
+</main>
+
+
+<!-- ADMIN UPLOAD (authentication will be added next) -->
+<div class="admin-overlay" id="adminOverlay" aria-hidden="true">
+  <div class="admin-panel" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="admin-head">
+      <div>
+        <h2 id="adminTitle">Story of a Shutterbug — Upload</h2>
+        <p>Choose one photo or video, give it a title, select its category, and optionally add a short description.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="admin-secondary admin-lock-button" id="adminLockBtn" type="button" title="Lock admin">
+          Lock
+        </button>
+        <button class="admin-close" id="adminClose" aria-label="Close admin upload">×</button>
+      </div>
+    </div>
+
+    <form id="adminUploadForm">
+      <div class="admin-field">
+        <label for="mediaFile">Photo / Video</label>
+        <input id="mediaFile" type="file" accept="image/*,video/*,.jpg,.jpeg,.png,.webp,.gif,.bmp,.svg,.tif,.tiff,.heic,.heif,.avif,.raw,.dng,.cr2,.cr3,.nef,.arw,.orf,.rw2,.raf,.srw,.pef,.3fr,.iiq,.rwl,.kdc,.dcr,.mos,.mrw,.nrw,.x3f,.erf,.mef,.mp4,.mov,.webm,.m4v,.avi,.mkv,.mpeg,.mpg,.3gp,.mts,.m2ts,.ts,.ogv,.wmv,.flv" required />
+      </div>
+
+      <div class="admin-field">
+        <label for="mediaTitle">Title <span aria-hidden="true">*</span></label>
+        <input id="mediaTitle" type="text" maxlength="120" placeholder="e.g. Golden Hour in the Hills" required />
+      </div>
+
+      <div class="admin-grid">
+        <div class="admin-field">
+          <label for="mediaCategory">Category</label>
+          <select id="mediaCategory" required>
+            <option value="Nature">Nature</option>
+            <option value="Portraits">Portraits</option>
+            <option value="Travel">Travel</option>
+            <option value="Events">Events</option>
+            <option value="Wildlife">Wildlife</option>
+            <option value="Street">Street</option>
+            <option value="Other" selected>Other</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="mediaDescription">Short Description</label>
+          <input id="mediaDescription" type="text" maxlength="240" placeholder="e.g. Golden light over the hills" />
+        </div>
+      </div>
+
+      <div class="admin-actions">
+        <button type="button" class="admin-secondary" id="adminCancel">Cancel</button>
+        <button type="submit" class="admin-submit" id="adminSubmit">Upload to Cloudinary</button>
+      </div>
+
+      <div class="admin-progress" id="adminProgress"><span id="adminProgressBar"></span></div>
+      <div class="admin-status" id="adminStatus"></div>
+
+      <div class="admin-note">
+        <strong>Current stage:</strong> Firebase Authentication is connected.
+        Only a Firebase-authenticated user can open this uploader. The next stage is to persist the uploaded metadata in Firestore.
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- IMMERSIVE MEDIA VIEWER -->
+<div class="modal-overlay" id="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <button class="viewer-nav viewer-prev viewer-glass" id="prevBtn" type="button" aria-label="Previous photo" title="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+    <button class="viewer-nav viewer-next viewer-glass" id="nextBtn" type="button" aria-label="Next photo" title="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    <div class="modal-controls">
+      <button class="mini-btn" id="infoBtn" aria-label="Show information" title="Information">i</button>
+      <button class="mini-btn" id="closeBtn" aria-label="Close viewer" title="Close">×</button>
+    </div>
+    <div class="modal-info" id="modalInfo" aria-label="Photo information">
+      <div class="info-title">About this shot</div>
+      <div class="info-shot-title" id="infoTitle">Untitled</div>
+      <div class="info-description" id="infoDescription">No description added.</div>
+      <div class="info-grid">
+        <div class="info-chip"><span class="k">Category</span><span class="v" id="infoCategory">Other</span></div>
+        <div class="info-chip"><span class="k">Format</span><span class="v" id="infoFmt">—</span></div>
+        <div class="info-chip"><span class="k">Dimensions</span><span class="v" id="infoDimensions">—</span></div>
+        <div class="info-chip"><span class="k">File</span><span class="v" id="infoFile">—</span></div>
+      </div>
+      <details class="info-details">
+        <summary>Show details</summary>
+        <div class="info-details-content">
+          <div class="info-chip"><span class="k">Type</span><span class="v" id="infoType">—</span></div>
+          <div class="info-chip"><span class="k">File size</span><span class="v" id="infoBytes">—</span></div>
+          <div class="info-chip"><span class="k">Uploaded</span><span class="v" id="infoUploaded">—</span></div>
+          <div class="info-chip"><span class="k">Asset ID</span><span class="v" id="infoAssetId">—</span></div>
+        </div>
+      </details>
+
+      <div class="info-actions" aria-label="Viewer actions">
+        <a id="downloadBtn" class="info-action" href="#" download aria-label="Download photo" title="Download">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"></path>
+            <path d="m7 11 5 5 5-5"></path>
+            <path d="M5 21h14"></path>
+          </svg>
+          <span>Download</span>
+        </a>
+
+        <button id="fullscreenBtn" class="info-action" type="button" aria-label="Fullscreen" title="Fullscreen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 3H3v5"></path>
+            <path d="M16 3h5v5"></path>
+            <path d="M21 16v5h-5"></path>
+            <path d="M3 16v5h5"></path>
+          </svg>
+          <span>Fullscreen</span>
+        </button>
+
+        <button id="fitBtn" class="info-action" type="button" aria-label="Fit image to window" title="Fit to window">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+            <path d="M8 8h3M8 8v3M16 8h-3M16 8v3M8 16h3M8 16v-3M16 16h-3M16 16v-3"></path>
+          </svg>
+          <span>Fit</span>
+        </button>
+        <button id="actualSizeBtn" class="info-action" type="button" aria-label="Actual size 100 percent" title="Actual size">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="7"></circle>
+            <path d="M9 12h6M12 9v6"></path>
+          </svg>
+          <span>100%</span>
+        </button>
+
+        <button id="deleteBtn" class="info-action danger" type="button" aria-label="Delete photo" title="Delete" disabled aria-disabled="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 7h16"></path>
+            <path d="M10 11v6"></path>
+            <path d="M14 11v6"></path>
+            <path d="m9 7 .7-2h4.6L15 7"></path>
+            <path d="M6 7l1 13h10l1-13"></path>
+          </svg>
+          <span>Delete</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="modalContent"></div><div class="viewer-zoom-hint" id="viewerZoomHint" aria-hidden="true">100%</div>
+    <div class="viewer-thumbnails" id="viewerThumbnails" aria-label="Photo thumbnails"></div>
+    <div class="viewer-counter" id="viewerCounter" aria-live="polite">1 / 1</div>
+  </div>
+</div>
+<div class="delete-dialog" id="deleteDialog" aria-hidden="true">
+  <div class="delete-card" role="alertdialog" aria-modal="true" aria-labelledby="deleteTitle">
+    <h3 id="deleteTitle">Move this photo to Trash?</h3>
+    <p id="deleteMessage">This action requires the site's deletion backend. No media will be removed from Cloudinary by this viewer until that mechanism is connected.</p>
+    <div class="delete-actions"><button class="delete-cancel" id="deleteCancel" type="button">Cancel</button><button class="delete-confirm" id="deleteConfirm" type="button">Delete</button></div>
+  </div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCjpJJ9w42f68UKbrccGqEj9nre2wh9pYQ",
+  authDomain: "story-of-shutterbug.firebaseapp.com",
+  projectId: "story-of-shutterbug",
+  storageBucket: "story-of-shutterbug.firebasestorage.app",
+  messagingSenderId: "884550276222",
+  appId: "1:884550276222:web:516a67d585982f0f85b42f"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+
+const ADMIN_UID = "tKMN9HAadZXu92p3xxvRbzdjpYj2";
+const CLOUDINARY_CLOUD_NAME = "wv41qjvs";
+const CLOUDINARY_UPLOAD_PRESET = "story_of_shutterbug_upload";
+const CLOUDINARY_UPLOAD_URL =
+  `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
+const MEDIA_COLLECTION = "media";
+
+const DATA=
+[
+]
+const CATEGORIES = ["All","Nature","Portraits","Travel","Events","Wildlife","Street","Other"];
+let activeFilter = "all";
+let activeCategory = "All";
+let REMOTE_UPLOADED = [];
+let currentUser = null;
+let adminVerified = false;
+let remoteListenerStarted = false;
+
+function ext(filename){
+  return String(filename || "").split(".").pop().toLowerCase();
+}
+
+function esc(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
+}
+
+function enc(value){ return encodeURIComponent(String(value ?? "")); }
+function dec(value){
+  try { return decodeURIComponent(String(value ?? "")); }
+  catch { return String(value ?? ""); }
+}
+function safeFilename(name){
+  return String(name || "file")
+    .replace(/[\\/:*?"<>|#%&{}$!'@+=`]/g,"_")
+    .trim() || "file";
+}
+
+function isVideoFile(file){
+  // Works for both browser File objects and gallery/Firestore media objects.
+  const resourceType = String(file?.resource_type || "").toLowerCase();
+  if(resourceType === "video") return true;
+
+  const type = String(file?.type || "").toLowerCase();
+  if(type.startsWith("video/")) return true;
+
+  const format = String(file?.format || "").toLowerCase().replace(/^\./, "");
+  if(["mp4","mov","webm","m4v","avi","mkv","mpeg","mpg","3gp","mts","m2ts","ts","ogv","wmv","flv"].includes(format)) return true;
+
+  const filename = file?.name || file?.f || file?.original_filename || "";
+  return ["mp4","mov","webm","m4v","avi","mkv","mpeg","mpg","3gp","mts","m2ts","ts","ogv","wmv","flv"].includes(ext(filename));
+}
+
+function isImageFile(file){
+  // Works for both browser File objects and gallery/Firestore media objects.
+  const resourceType = String(file?.resource_type || "").toLowerCase();
+  if(resourceType === "image") return true;
+
+  const type = String(file?.type || "").toLowerCase();
+  if(type.startsWith("image/")) return true;
+
+  const format = String(file?.format || "").toLowerCase().replace(/^\./, "");
+  if(["jpg","jpeg","png","webp","gif","bmp","svg","tif","tiff","heic","heif","avif","raw","dng","cr2","cr3","nef","arw","orf","rw2","raf","srw","pef","3fr","iiq","rwl","kdc","dcr","mos","mrw","nrw","x3f","erf","mef"].includes(format)) return true;
+
+  const filename = file?.name || file?.f || file?.original_filename || "";
+  return ["jpg","jpeg","png","webp","gif","bmp","svg","tif","tiff","heic","heif","avif","raw","dng","cr2","cr3","nef","arw","orf","rw2","raf","srw","pef","3fr","iiq","rwl","kdc","dcr","mos","mrw","nrw","x3f","erf","mef"].includes(ext(filename));
+}
+
+function isAdminUser(user){
+  return Boolean(user && user.uid === ADMIN_UID);
+}
+
+function normalizeFirestoreItem(snapshot){
+  const data = snapshot.data() || {};
+  const filename = data.filename || data.original_filename || "Untitled";
+  const title = data.title || filename.replace(/\.[^.]+$/, "") || "Untitled";
+  const isVid = data.resource_type === "video";
+  const width = Number(data.width) || 640;
+  const height = Number(data.height) || 360;
+  return {
+    id: snapshot.id,
+    f: filename,
+    title,
+    v: isVid ? 1 : 0,
+    h: Number(data.heightPx) || Math.max(240, Math.min(520, Math.round((height / Math.max(width,1)) * 320))),
+    secure_url: String(data.secure_url || "").trim() || null,
+    url: String(data.secure_url || data.url || "").trim() || null,
+    public_id: data.public_id || "",
+    resource_type: data.resource_type || null,
+    format: String(data.format || ext(filename)).toLowerCase(),
+    category: data.category || "Other",
+    description: data.description || "",
+    width,
+    height,
+    bytes: Number(data.bytes) || 0,
+    uploadedAt: data.uploadedAt || null,
+    uploadedBy: data.uploadedBy || "",
+    source: "cloudinary"
+  };
+}
+
+function allItems(){
+  const staticItems = Array.isArray(DATA) ? DATA.map(item => ({
+    ...item,
+    title: item.title || String(item.f || "Untitled").replace(/\.[^.]+$/, "") || "Untitled",
+    category: item.category || "Other",
+    description: item.description || "",
+    secure_url: item.secure_url || item.url || null,
+    url: item.url || item.secure_url || null,
+    resource_type: item.resource_type || null
+  })) : [];
+  return [...REMOTE_UPLOADED, ...staticItems];
+}
+
+function matches(item){
+  if(activeCategory !== "All" && (item.category || "Other") !== activeCategory) return false;
+  return true;
+}
+
+const body = document.body;
+const gallery = document.getElementById("gallery");
+const countBar = document.getElementById("countBar");
+const modal = document.getElementById("modal");
+const modalContent = document.getElementById("modalContent");
+const modalInfo = document.getElementById("modalInfo");
+const infoBtn = document.getElementById("infoBtn");
+const closeBtn = document.getElementById("closeBtn");
+const infoTitle = document.getElementById("infoTitle");
+const infoFile = document.getElementById("infoFile");
+const infoType = document.getElementById("infoType");
+const infoFmt = document.getElementById("infoFmt");
+const infoCategory = document.getElementById("infoCategory");
+const infoDescription = document.getElementById("infoDescription");
+const followRail = document.getElementById("followRail");
+
+const adminLaunch = document.getElementById("adminLaunch");
+const adminOverlay = document.getElementById("adminOverlay");
+const adminClose = document.getElementById("adminClose");
+const adminCancel = document.getElementById("adminCancel");
+const adminForm = document.getElementById("adminUploadForm");
+const mediaFile = document.getElementById("mediaFile");
+const mediaTitle = document.getElementById("mediaTitle");
+const mediaCategory = document.getElementById("mediaCategory");
+const mediaDescription = document.getElementById("mediaDescription");
+const adminSubmit = document.getElementById("adminSubmit");
+const adminStatus = document.getElementById("adminStatus");
+const adminProgress = document.getElementById("adminProgress");
+const adminProgressBar = document.getElementById("adminProgressBar");
+
+const authOverlay = document.getElementById("authOverlay");
+const authClose = document.getElementById("authClose");
+const authCancel = document.getElementById("authCancel");
+const authForm = document.getElementById("authForm");
+const authEmail = document.getElementById("authEmail");
+const authPassword = document.getElementById("authPassword");
+const authSubmit = document.getElementById("authSubmit");
+const authStatus = document.getElementById("authStatus");
+const adminLaunchLabel = document.getElementById("adminLaunchLabel");
+const adminStateIcon = document.getElementById("adminStateIcon");
+const adminStateArc = document.getElementById("adminStateArc");
+const adminLockBtn = document.getElementById("adminLockBtn");
+const infoLaunch = document.getElementById("infoLaunch");
+const aboutPopover = document.getElementById("aboutPopover");
+const aboutClose = document.getElementById("aboutClose");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const infoDimensions = document.getElementById("infoDimensions");
+const infoBytes = document.getElementById("infoBytes");
+const infoUploaded = document.getElementById("infoUploaded");
+const infoAssetId = document.getElementById("infoAssetId");
+const viewerCounter = document.getElementById("viewerCounter");
+const downloadBtn = document.getElementById("downloadBtn");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+const deleteDialog = document.getElementById("deleteDialog");
+const deleteCancel = document.getElementById("deleteCancel");
+const deleteConfirm = document.getElementById("deleteConfirm");
+const fitBtn = document.getElementById("fitBtn");
+const actualSizeBtn = document.getElementById("actualSizeBtn");
+const viewerThumbnails = document.getElementById("viewerThumbnails");
+let viewerItems = [];
+let viewerIndex = -1;
+let viewerTouchStartX = 0;
+let viewerTouchStartY = 0;
+let viewerOpened = false;
+let viewerZoom = 1;
+let viewerFitScale = 1;
+let viewerPanX = 0;
+let viewerPanY = 0;
+let viewerImage = null;
+let viewerStage = null;
+let viewerDrag = false;
+let viewerDragStartX = 0;
+let viewerDragStartY = 0;
+let viewerStartPanX = 0;
+let viewerStartPanY = 0;
+let viewerHintTimer = null;
+let viewerProximityTimer = null;
+let viewerPointerNearControls = false;
+let viewerTouchPoints = new Map();
+let viewerLastPinchDistance = 0;
+let viewerLastTouchCenter = null;
+let viewerTrackpadSwipeX = 0;
+let viewerTrackpadSwipeTimer = null;
+let viewerGestureLastNavigation = 0;
+let viewerGestureNavigating = false;
+
+function renderFilters(){
+  const cf = document.getElementById("categoryFilters");
+  if(!cf) return;
+
+  cf.innerHTML = CATEGORIES.map(category =>
+    `<button class="pill${category === activeCategory ? " active" : ""}" data-cat="${esc(category)}" type="button">${esc(category)}</button>`
+  ).join("");
+}
+
+document.getElementById("categoryFilters")?.addEventListener("click", event => {
+  const btn = event.target.closest(".pill");
+  if(!btn) return;
+  activeCategory = btn.dataset.cat || "All";
+  renderFilters();
+  renderGallery();
+});
+
+
+function cloudinaryPosterUrl(publicId){
+  if(!publicId) return "";
+  const encoded = String(publicId).split("/").map(encodeURIComponent).join("/");
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/video/upload/so_0,w_900,c_limit/${encoded}.jpg`;
+}
+
+function cloudinaryVideoFallbackUrl(item){
+  if(!item?.public_id) return "";
+  const encoded = String(item.public_id).split("/").map(encodeURIComponent).join("/");
+  /*
+    Cloudinary can transcode video delivery to MP4. Keep the original
+    asset intact; this URL is only a browser-compatible delivery form.
+  */
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/video/upload/f_mp4,q_auto/${encoded}.mp4`;
+}
+
+function cloudinaryDownloadUrl(item){
+  const original=getMediaUrl(item);
+  if(!original) return "";
+
+  /*
+    Cloudinary's fl_attachment delivery transformation asks the CDN to
+    return the asset as a downloadable attachment. This avoids relying on
+    the browser's cross-origin <a download> behavior.
+  */
+  try{
+    const u=new URL(original);
+    const pathParts=u.pathname.split("/");
+    const uploadIndex=pathParts.indexOf("upload");
+    const publicId=String(item?.public_id||"").trim();
+    const resourceType=item?.resource_type==="video" ? "video" : "image";
+
+    if(uploadIndex>=0 && publicId){
+      const format=String(item?.format||"").trim().toLowerCase();
+      const alreadyHasExtension=/\.[A-Za-z0-9]{2,5}$/.test(publicId);
+      const assetPath=alreadyHasExtension || !format ? publicId : `${publicId}.${format}`;
+      const encodedId=assetPath.split("/").map(encodeURIComponent).join("/");
+      const filename=safeFilename(item?.f || `story-of-a-shutterbug.${format||resourceType}`);
+
+      pathParts.splice(uploadIndex+1,0,`fl_attachment:${encodeURIComponent(filename)}`);
+      /* Replace the delivery path after /upload/ with the public ID path. */
+      pathParts.splice(uploadIndex+2,pathParts.length-(uploadIndex+2));
+      pathParts.push(...encodedId.split("/"));
+      u.pathname=pathParts.join("/");
+      return u.toString();
+    }
+  }catch(error){
+    console.error("Could not construct Cloudinary download URL:",error,item);
+  }
+
+  return original;
+}
+
+function getBrowserVideoUrl(item){
+  const original = getMediaUrl(item);
+  const format = String(item?.format || ext(item?.f || "")).toLowerCase();
+
+  /*
+    MOV/other non-browser-friendly containers get an MP4 delivery URL.
+    MP4/WebM are attempted directly first.
+  */
+  if(["mov","m4v","avi","mkv","mts","m2ts","wmv","flv"].includes(format)){
+    return cloudinaryVideoFallbackUrl(item) || original;
+  }
+
+  return original;
+}
+
+function mediaKind(item){
+  if(!item) return "unknown";
+  if(String(item.resource_type || "").toLowerCase() === "video") return "video";
+  if(String(item.resource_type || "").toLowerCase() === "image") return "image";
+  if(isVideoFile(item)) return "video";
+  if(isImageFile(item)) return "image";
+  return "unknown";
+}
+
+function shortDescription(text,maxWords=7){
+  const words=String(text||"").trim().split(/\s+/).filter(Boolean);
+  if(!words.length) return "";
+  return words.length>maxWords ? `${words.slice(0,maxWords).join(" ")}…` : words.join(" ");
+}
+
+function getMediaUrl(item){
+  return String(
+    item?.secure_url ||
+    item?.url ||
+    item?.cloudinary_url ||
+    ""
+  ).trim();
+}
+
+function getBrowserImageUrl(item){
+  const original=getMediaUrl(item);
+  if(!original || item?.resource_type!=="image") return original;
+  const format=String(item?.format||ext(item?.f||"")).toLowerCase().replace(/^\./,"");
+  const needsTranscode=["heic","heif","tif","tiff","raw","dng","cr2","cr3","nef","arw","orf","rw2","raf","srw","pef","3fr","iiq","rwl","kdc","dcr","mos","mrw","nrw","x3f","erf","mef"].includes(format);
+  if(!needsTranscode) return original;
+  try{
+    const u=new URL(original); const parts=u.pathname.split("/"); const uploadIndex=parts.indexOf("upload");
+    if(uploadIndex<0) return original;
+    parts.splice(uploadIndex+1,0,"f_jpg,q_auto"); u.pathname=parts.join("/"); return u.toString();
+  }catch{return original;}
+}
+
+const imagePreloadCache=new Map();
+const IMAGE_PRELOAD_RADIUS=5;
+function preloadImageItem(item){
+  if(!item || isVideoFile(item)) return;
+  const url=getBrowserImageUrl(item);
+  if(!url || imagePreloadCache.has(url)) return;
+  const img=new Image(); img.decoding="async"; img.src=url; imagePreloadCache.set(url,img);
+}
+function preloadAdjacentImages(index=viewerIndex){
+  for(let d=1;d<=IMAGE_PRELOAD_RADIUS;d++){preloadImageItem(viewerItems[index-d]);preloadImageItem(viewerItems[index+d]);}
+}
+
+function cardHtml(item){
+  const path=isVideoFile(item) ? getMediaUrl(item) : getBrowserImageUrl(item);
+  const extension=ext(item.f);
+  const title=item.title || String(item.f || "Untitled").replace(/\.[^.]+$/,"" ) || "Untitled";
+  const category=item.category || "Other";
+  const description=item.description || "";
+  const descriptionShort=shortDescription(description,7);
+  const height=Number(item.h)||360;
+  const attrs=`data-file="${enc(item.f)}" data-title="${enc(title)}" data-viewer-key="${enc(String(item.id || item.public_id || item.url || item.f || ""))}" data-vid="${item.v?1:0}" data-path="${enc(path)}" data-media-url="${enc(path)}" data-category="${enc(category)}" data-description="${enc(description)}"`;
+  const descHtml=descriptionShort ? `<div class="card-description">${esc(descriptionShort)}</div>` : "";
+
+  if(item.v){
+    const poster=item.public_id ? cloudinaryPosterUrl(item.public_id) : "";
+    const media=poster ? `<img class="thumb" src="${esc(poster)}" alt="${esc(title)}" loading="lazy" style="height:${height}px;width:100%;object-fit:cover">` : `<div class="vid-thumb" style="height:${height}px"><div class="play-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">${esc(extension.toUpperCase())}</div></div>`;
+    return `<article class="card" tabindex="0" ${attrs}>
+      <div class="thumb-wrap">${media}</div>
+      <div class="card-body"><div class="badge">${esc(category)}</div><div class="title">${esc(title)}</div>${descHtml}<div class="meta">${esc(extension.toUpperCase())} · Click to play</div></div>
+    </article>`;
+  }
+
+  return `<article class="card" tabindex="0" ${attrs}>
+    <div class="thumb-wrap"><img class="thumb" src="${esc(path)}" alt="${esc(title)}" loading="lazy" style="height:${height}px;width:100%;object-fit:cover"></div>
+    <div class="card-body"><div class="badge">${esc(category)}</div><div class="title">${esc(title)}</div>${descHtml}<div class="meta">${esc(extension.toUpperCase())}</div></div>
+  </article>`;
+}
+
+function renderGallery(){
+  const items = allItems().filter(matches);
+  countBar.textContent = `${items.length} item${items.length !== 1 ? "s" : ""}`;
+  gallery.innerHTML = items.map(cardHtml).join("");
+  bindCards();
+}
+
+function viewerKey(item){ return String(item?.id || item?.public_id || item?.url || item?.f || ""); }
+function formatBytes(bytes){ const n=Number(bytes); if(!n || !Number.isFinite(n)) return "—"; const units=["B","KB","MB","GB"]; let v=n,i=0; while(v>=1024&&i<units.length-1){v/=1024;i++;} return `${v<10&&i>0?v.toFixed(1):Math.round(v)} ${units[i]}`; }
+function formatUploadedAt(value){ if(!value) return "—"; try{ if(typeof value?.toDate === "function") value=value.toDate(); const d=value instanceof Date?value:new Date(value); if(Number.isNaN(d.getTime())) return "—"; return new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(d); }catch{return "—";} }
+function currentViewerItem(){ return viewerItems[viewerIndex] || null; }
+function getViewerThumbnailUrl(item){
+  return String((isVideoFile(item)?getMediaUrl(item):getBrowserImageUrl(item)) || "").trim();}
+
+function renderViewerThumbnails(){
+  if(!viewerThumbnails) return;
+  viewerThumbnails.innerHTML="";
+
+  viewerItems.forEach((item,index)=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className=`viewer-thumb${index===viewerIndex?" active":""}`;
+    button.setAttribute("aria-label",`Open ${item?.title || item?.f || `item ${index+1}`}`);
+
+    const url=getViewerThumbnailUrl(item);
+    if(isVideoFile(item)){
+      const holder=document.createElement("span");
+      holder.className="thumb-video";
+      holder.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="m10 8 5 4-5 4z" fill="currentColor" stroke="none"></path></svg>';
+      button.appendChild(holder);
+    }else if(url){
+      const img=document.createElement("img");
+      img.src=url;
+      img.alt="";
+      img.loading="lazy";
+      img.decoding="async";
+      button.appendChild(img);
+    }
+
+    button.addEventListener("click",()=>{
+      if(index!==viewerIndex) renderViewerItem(index,true);
+    });
+
+    viewerThumbnails.appendChild(button);
+  });
+
+  const active=viewerThumbnails.querySelector(".viewer-thumb.active");
+  if(active) active.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+}
+
+function resetImageZoom(){
+  viewerZoom=1;
+  viewerFitScale=1;
+  viewerPanX=0;
+  viewerPanY=0;
+  viewerImage=null;
+  viewerStage=null;
+}
+
+function getImageFitScale(img){
+  if(!img || !img.naturalWidth || !img.naturalHeight || !viewerStage) return 1;
+  const rect=viewerStage.getBoundingClientRect();
+  const availableWidth=Math.max(120,rect.width-64);
+  const availableHeight=Math.max(120,rect.height-64);
+  return Math.min(1,availableWidth/img.naturalWidth,availableHeight/img.naturalHeight);
+}
+
+function clampPan(){
+  if(!viewerImage || !viewerStage) return;
+  const scale=viewerFitScale*viewerZoom;
+  if(scale<=viewerFitScale+0.001){
+    viewerPanX=0;
+    viewerPanY=0;
+    return;
+  }
+  const rect=viewerStage.getBoundingClientRect();
+  const scaledWidth=viewerImage.naturalWidth*scale;
+  const scaledHeight=viewerImage.naturalHeight*scale;
+  const maxX=Math.max(0,(scaledWidth-rect.width)/2+rect.width*0.15);
+  const maxY=Math.max(0,(scaledHeight-rect.height)/2+rect.height*0.15);
+  viewerPanX=Math.max(-maxX,Math.min(maxX,viewerPanX));
+  viewerPanY=Math.max(-maxY,Math.min(maxY,viewerPanY));
+}
+
+function updateZoomButtons(){
+  const hasImage=Boolean(viewerImage);
+  if(fitBtn){
+    fitBtn.disabled=!hasImage;
+    fitBtn.classList.toggle("active",hasImage && viewerZoom===1 && Math.abs(viewerPanX)<0.5 && Math.abs(viewerPanY)<0.5);
+  }
+  if(actualSizeBtn){
+    actualSizeBtn.disabled=!hasImage;
+    const isActual=hasImage && Math.abs(viewerFitScale*viewerZoom-1)<0.02 && Math.abs(viewerPanX)<0.5 && Math.abs(viewerPanY)<0.5;
+    actualSizeBtn.classList.toggle("active",isActual);
+  }
+}
+
+function applyImageTransform(){
+  if(!viewerImage) return;
+  const scale=viewerFitScale*viewerZoom;
+  viewerImage.style.transform=`translate3d(${viewerPanX}px,${viewerPanY}px,0) scale(${scale})`;
+  updateZoomButtons();
+}
+
+function showZoomHint(){
+  const hint=document.getElementById("viewerZoomHint");
+  if(!hint) return;
+  hint.textContent=`${Math.round(viewerFitScale*viewerZoom*100)}%`;
+  hint.classList.add("show");
+  clearTimeout(viewerHintTimer);
+  viewerHintTimer=setTimeout(()=>hint.classList.remove("show"),850);
+}
+
+function fitCurrentImage(){
+  if(!viewerImage) return;
+  viewerFitScale=getImageFitScale(viewerImage);
+  viewerZoom=1;
+  viewerPanX=0;
+  viewerPanY=0;
+  applyImageTransform();
+  showZoomHint();
+}
+
+function actualSizeCurrentImage(){
+  if(!viewerImage) return;
+  viewerFitScale=1;
+  viewerZoom=1;
+  viewerPanX=0;
+  viewerPanY=0;
+  applyImageTransform();
+  showZoomHint();
+}
+
+function zoomCurrentImage(factor,clientX=null,clientY=null){
+  if(!viewerImage || !viewerStage) return;
+
+  const oldScale=viewerFitScale*viewerZoom;
+  const nextZoom=Math.max(1,Math.min(8,viewerZoom*factor));
+  if(Math.abs(nextZoom-viewerZoom)<0.0001) return;
+
+  if(clientX!==null && clientY!==null){
+    const rect=viewerStage.getBoundingClientRect();
+    const x=clientX-(rect.left+rect.width/2);
+    const y=clientY-(rect.top+rect.height/2);
+    const ratio=(viewerFitScale*nextZoom)/(oldScale || 1);
+    viewerPanX=x-(x-viewerPanX)*ratio;
+    viewerPanY=y-(y-viewerPanY)*ratio;
+  }
+
+  viewerZoom=nextZoom;
+  clampPan();
+  applyImageTransform();
+  showZoomHint();
+}
+
+function setViewerBackground(url){ if(url) modal.style.setProperty("--viewer-bg",`url("${String(url).replace(/"/g,"%22")}")`); else modal.style.removeProperty("--viewer-bg"); }
+function updateViewerControls(){
+  const total=viewerItems.length;
+  prevBtn.disabled=viewerIndex<=0;
+  nextBtn.disabled=viewerIndex<0||viewerIndex>=total-1;
+  viewerCounter.textContent=total?`${viewerIndex+1} / ${total}`:"0 / 0";
+  renderViewerThumbnails();
+}
+function updateInfoPanel(item){
+  if(!item) return;
+
+  const file=String(item.f||"Untitled");
+  const title=String(item.title||file.replace(/\.[^.]+$/,"" )||"Untitled");
+  const extension=String(item.format||ext(file)).toUpperCase();
+  const width=Number(item.width)||0;
+  const height=Number(item.height)||0;
+  const mediaUrl=getMediaUrl(item);
+
+  infoTitle.textContent=title;
+  infoDescription.textContent=item.description||"No description added yet.";
+  infoCategory.textContent=item.category||"Other";
+  infoFmt.textContent=extension||"—";
+  infoDimensions.textContent=width&&height?`${width} × ${height}`:"—";
+  infoFile.textContent=file;
+  infoType.textContent=mediaKind(item)==="video"?"Video":mediaKind(item)==="image"?"Photo":"Media";
+  infoBytes.textContent=formatBytes(item.bytes);
+  infoUploaded.textContent=formatUploadedAt(item.uploadedAt);
+  infoAssetId.textContent=item.public_id||item.id||"Uploaded media";
+
+  const downloadUrl=cloudinaryDownloadUrl(item);
+  downloadBtn.href=downloadUrl||mediaUrl||"#";
+  downloadBtn.setAttribute("download",safeFilename(file));
+  downloadBtn.setAttribute("target","_blank");
+  downloadBtn.rel="noopener";
+  downloadBtn.style.pointerEvents=downloadUrl||mediaUrl?"auto":"none";
+  downloadBtn.style.opacity=downloadUrl||mediaUrl?"1":".45";
+
+  setViewerBackground(mediaUrl);
+
+  // Frontend visibility check only. Firestore Security Rules remain the
+  // real authorization boundary for deletion. We intentionally allow any
+  // loaded Firestore media item to show the Delete control to the signed-in
+  // administrator, without depending on the separate adminVerified flag.
+  const signedInUser = auth.currentUser || currentUser;
+  const canDelete=Boolean(
+    item?.id &&
+    item?.source === "cloudinary" &&
+    signedInUser?.uid === ADMIN_UID &&
+    adminVerified &&
+    !isAdminLocked()
+  );
+
+  deleteBtn.disabled=!canDelete;
+  deleteBtn.setAttribute("aria-disabled",String(!canDelete));
+}
+function renderViewerItem(index,animate=true){
+  if(!viewerItems.length) return;
+
+  viewerIndex=Math.max(0,Math.min(index,viewerItems.length-1));
+  const item=currentViewerItem();
+  if(!item) return;
+
+  try{
+    updateInfoPanel(item);
+    updateViewerControls();
+    preloadAdjacentImages(viewerIndex);
+
+    const isVid=mediaKind(item)==="video";
+    const title=String(item.title||item.f||"Untitled");
+    const path=String((isVid ? getMediaUrl(item) : getBrowserImageUrl(item)) || "").trim();
+
+    console.log("VIEWER OPEN",{
+      viewerIndex,viewerItem:item,id:item.id,filename:item.f,title:item.title,
+      url:item.url,secure_url:item.secure_url,public_id:item.public_id,
+      resource_type:item.resource_type,format:item.format
+    });
+    console.log("FINAL VIEWER URL:",path);
+
+    modalContent.innerHTML="";
+    resetImageZoom();
+
+    const wrapper=document.createElement("div");
+    wrapper.className=isVid?"modal-vid-wrap":"modal-stage-wrap";
+    wrapper.style.opacity=animate?"0":"1";
+    wrapper.style.transform=animate?"scale(.985)":"none";
+    wrapper.style.transition="opacity .18s ease,transform .18s ease";
+
+    if(!path){
+      const error=document.createElement("div");
+      error.style.cssText="color:#fff;text-align:center;padding:30px;font-size:13px;max-width:520px;line-height:1.5";
+      error.textContent="Photo unavailable: this media item has no usable Cloudinary URL.";
+      wrapper.appendChild(error);
+    }else if(isVid){
+      const video=document.createElement("video");
+      video.controls=true;
+      video.playsInline=true;
+      video.preload="metadata";
+      video.setAttribute("aria-label",title);
+      video.setAttribute("controlsList","nodownload");
+      const originalVideoUrl=path;
+      const browserVideoUrl=getBrowserVideoUrl(item);
+      video.src=browserVideoUrl || originalVideoUrl;
+
+      video.addEventListener("loadedmetadata",()=>{
+        console.log("VIDEO LOADED",{
+          originalUrl:originalVideoUrl,
+          browserUrl:browserVideoUrl,
+          src:video.currentSrc||video.src,
+          videoWidth:video.videoWidth,
+          videoHeight:video.videoHeight,
+          duration:video.duration
+        });
+      });
+
+      let fallbackTried=false;
+      video.addEventListener("error",event=>{
+        console.error("VIDEO LOAD FAILED",{
+          originalUrl:originalVideoUrl,
+          browserUrl:browserVideoUrl,
+          src:video.currentSrc||video.src,
+          item,
+          event
+        });
+
+        // If the original Cloudinary asset failed, retry once using Cloudinary MP4 delivery.
+        const fallback=cloudinaryVideoFallbackUrl(item);
+        if(!fallbackTried && fallback && fallback !== video.currentSrc && fallback !== video.src){
+          fallbackTried=true;
+          console.warn("Retrying video with Cloudinary MP4 fallback:",fallback);
+          video.src=fallback;
+          video.load();
+          return;
+        }
+
+        const note=document.createElement("div");
+        note.style.cssText="position:absolute;left:50%;bottom:86px;transform:translateX(-50%);z-index:10;color:#fff;background:rgba(20,20,20,.48);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(16px);padding:10px 14px;border-radius:12px;font-size:12px;pointer-events:none;";
+        note.textContent="This video format could not be played by this browser.";
+        wrapper.appendChild(note);
+      });
+
+      wrapper.appendChild(video);
+    }else{
+      const stage=document.createElement("div");
+      stage.className="viewer-stage-image";
+      stage.tabIndex=0;
+      stage.setAttribute("aria-label",`${title}. Mouse wheel to zoom and drag to pan when zoomed.`);
+
+      const img=document.createElement("img");
+      img.src=path;
+      img.alt=title;
+      img.draggable=false;
+      img.decoding="async";
+      img.loading="eager";
+
+      img.addEventListener("load",()=>{
+        viewerStage=stage;
+        viewerImage=img;
+        fitCurrentImage();
+        stage.classList.add("zoomable");
+        console.log("IMAGE LOADED",{src:img.currentSrc||img.src,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,fitScale:viewerFitScale});
+      },{once:true});
+
+      img.addEventListener("error",event=>{
+        console.error("IMAGE LOAD FAILED",{src:img.currentSrc||img.src,currentSrc:img.currentSrc,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,item,event});
+        const error=document.createElement("div");
+        error.style.cssText="color:#fff;text-align:center;padding:30px;font-size:13px;max-width:520px;line-height:1.5";
+        error.innerHTML="<strong>Photo unavailable</strong><br>The Cloudinary image could not be loaded. See the browser console for the exact URL.";
+        stage.replaceChildren(error);
+      });
+
+      stage.addEventListener("wheel",event=>{
+        if(!viewerImage) return;
+        event.preventDefault();
+        zoomCurrentImage(event.deltaY<0?1.12:1/1.12,event.clientX,event.clientY);
+      },{passive:false});
+
+      stage.addEventListener("dblclick",event=>{
+        if(!viewerImage) return;
+        if(viewerFitScale*viewerZoom<1.15) actualSizeCurrentImage();
+        else fitCurrentImage();
+        event.preventDefault();
+      });
+
+      stage.addEventListener("pointerdown",event=>{
+        if(!viewerImage || viewerZoom<=1) return;
+        viewerDrag=true;
+        stage.classList.add("dragging");
+        viewerDragStartX=event.clientX;
+        viewerDragStartY=event.clientY;
+        viewerStartPanX=viewerPanX;
+        viewerStartPanY=viewerPanY;
+        stage.setPointerCapture?.(event.pointerId);
+      });
+
+      stage.addEventListener("pointermove",event=>{
+        if(!viewerDrag) return;
+        viewerPanX=viewerStartPanX+(event.clientX-viewerDragStartX);
+        viewerPanY=viewerStartPanY+(event.clientY-viewerDragStartY);
+        clampPan();
+        applyImageTransform();
+      });
+
+      const stopDrag=event=>{
+        if(!viewerDrag) return;
+        viewerDrag=false;
+        stage.classList.remove("dragging");
+        try{stage.releasePointerCapture?.(event.pointerId)}catch{}
+      };
+      stage.addEventListener("pointerup",stopDrag);
+      stage.addEventListener("pointercancel",stopDrag);
+
+      stage.addEventListener("keydown",event=>{
+        if(event.key==="+"||event.key==="="){event.preventDefault();zoomCurrentImage(1.15);}
+        else if(event.key==="-"||event.key==="_"){event.preventDefault();zoomCurrentImage(1/1.15);}
+        else if(event.key==="0"){event.preventDefault();fitCurrentImage();}
+        else if(event.key==="1"){event.preventDefault();actualSizeCurrentImage();}
+      });
+
+      stage.appendChild(img);
+      wrapper.appendChild(stage);
+    }
+
+    modalContent.appendChild(wrapper);
+
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      if(!wrapper.isConnected) return;
+      wrapper.style.opacity="1";
+      wrapper.style.transform="none";
+    }));
+
+  }catch(error){
+    console.error("VIEWER RENDER ERROR",error,item);
+    modalContent.innerHTML="";
+    const errorBox=document.createElement("div");
+    errorBox.style.cssText="color:#fff;text-align:center;padding:32px;max-width:520px;line-height:1.6;font-size:13px";
+    errorBox.textContent="The photo viewer encountered an error. See the browser console for details.";
+    modalContent.appendChild(errorBox);
+  }
+}
+
+function openModal(card){
+  try{
+    const items=allItems().filter(matches);
+    if(!items.length) return;
+
+    const key=dec(card?.dataset?.viewerKey||"");
+    let index=items.findIndex(item=>viewerKey(item)===key);
+    if(index<0){
+      const clickedUrl=dec(card?.dataset?.mediaUrl||card?.dataset?.path||"");
+      index=items.findIndex(item=>getMediaUrl(item)===clickedUrl);
+    }
+    if(index<0) index=0;
+
+    viewerItems=items;
+    viewerIndex=index;
+    viewerOpened=true;
+
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow="hidden";
+    modalInfo.classList.remove("show");
+    infoBtn.classList.remove("active");
+
+    renderViewerItem(index,false);
+  }catch(error){
+    console.error("VIEWER OPEN ERROR",error,card);
+  }
+}
+function closeModal(){
+  const video=modalContent.querySelector("video");
+  if(video) try{video.pause();}catch{}
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden","true");
+  modalInfo.classList.remove("show");
+  infoBtn.classList.remove("active");
+  setViewerBackground("");
+  deleteDialog.classList.remove("open");
+  deleteDialog.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+  viewerOpened=false;
+  viewerItems=[];
+  viewerIndex=-1;
+  viewerImage=null;
+  viewerStage=null;
+  viewerPanX=0;
+  viewerPanY=0;
+  viewerZoom=1;
+  viewerFitScale=1;
+  if(viewerThumbnails) viewerThumbnails.innerHTML="";
+  modalContent.innerHTML="";
+}
+function moveViewer(delta){ if(!viewerOpened||!viewerItems.length) return; const target=viewerIndex+delta; if(target<0||target>=viewerItems.length) return; renderViewerItem(target,true); }
+function bindCards(){
+  if(gallery.dataset.clickBound==="1") return;
+  gallery.dataset.clickBound="1";
+
+  gallery.addEventListener("click",event=>{
+    const card=event.target.closest(".card");
+    if(!card || !gallery.contains(card)) return;
+    openModal(card);
+  });
+
+  gallery.addEventListener("keydown",event=>{
+    const card=event.target.closest(".card");
+    if(!card || !gallery.contains(card)) return;
+    if(event.key==="Enter" || event.key===" "){
+      event.preventDefault();
+      openModal(card);
+    }
+  });
+}
+prevBtn.addEventListener("click",()=>moveViewer(-1)); nextBtn.addEventListener("click",()=>moveViewer(1));
+fullscreenBtn.addEventListener("click",async()=>{try{if(!document.fullscreenElement) await modal.requestFullscreen?.(); else await document.exitFullscreen?.();}catch{}});
+fitBtn?.addEventListener("click",()=>{
+  fitCurrentImage();
+});
+
+actualSizeBtn?.addEventListener("click",()=>{
+  actualSizeCurrentImage();
+});
+
+function setViewerProximity(active){
+  if(!modal.classList.contains("open")) return;
+  if(active){
+    modal.classList.add("proximity-active");
+    clearTimeout(viewerProximityTimer);
+    viewerProximityTimer=setTimeout(()=>{
+      if(!viewerPointerNearControls) modal.classList.remove("proximity-active");
+    },1400);
+  }else if(!viewerPointerNearControls){
+    clearTimeout(viewerProximityTimer);
+    viewerProximityTimer=setTimeout(()=>{
+      if(!viewerPointerNearControls) modal.classList.remove("proximity-active");
+    },450);
+  }
+}
+
+function isInsideElement(event, element, padding = 0){
+  if(!event || !element) return false;
+  const rect = element.getBoundingClientRect();
+  return (
+    event.clientX >= rect.left - padding &&
+    event.clientX <= rect.right + padding &&
+    event.clientY >= rect.top - padding &&
+    event.clientY <= rect.bottom + padding
+  );
+}
+
+function isGestureBlockedTarget(target){
+  return Boolean(target?.closest?.("button,a,.viewer-thumbnails,.modal-info,input,select,textarea"));
+}
+
+function gesturePointCenter(){
+  const points=[...viewerTouchPoints.values()];
+  if(!points.length) return null;
+  const sum=points.reduce((acc,p)=>({x:acc.x+p.x,y:acc.y+p.y}),{x:0,y:0});
+  return {x:sum.x/points.length,y:sum.y/points.length};
+}
+
+function gesturePinchDistance(){
+  const points=[...viewerTouchPoints.values()];
+  if(points.length!==2) return 0;
+  return Math.hypot(points[1].x-points[0].x,points[1].y-points[0].y);
+}
+
+function cancelGestureState(){
+  viewerTouchPoints.clear();
+  viewerLastPinchDistance=0;
+  viewerLastTouchCenter=null;
+  viewerTrackpadSwipeX=0;
+  viewerTouchStartX=0;
+  viewerTouchStartY=0;
+}
+
+modal.addEventListener("pointermove",event=>{
+  if(!modal.classList.contains("open")) return;
+
+  const nearViewerControls =
+    isInsideElement(event,viewerThumbnails,70) ||
+    isInsideElement(event,viewerCounter,50) ||
+    isInsideElement(event,prevBtn,58) ||
+    isInsideElement(event,nextBtn,58) ||
+    isInsideElement(event,infoBtn,52) ||
+    isInsideElement(event,closeBtn,52) ||
+    Math.abs(event.clientX-window.innerWidth/2)<Math.max(420,window.innerWidth*.30);
+
+  viewerPointerNearControls=nearViewerControls;
+  setViewerProximity(nearViewerControls);
+
+  if(!viewerTouchPoints.has(event.pointerId)) return;
+
+  viewerTouchPoints.set(event.pointerId,{
+    x:event.clientX,
+    y:event.clientY,
+    type:event.pointerType
+  });
+
+  /* Two-pointer gesture: choose either pinch/zoom or horizontal navigation. */
+  if(viewerTouchPoints.size===2 && event.pointerType!=="mouse"){
+    const center=gesturePointCenter();
+    const distance=gesturePinchDistance();
+
+    if(!viewerLastTouchCenter){
+      viewerLastTouchCenter=center;
+      viewerLastPinchDistance=distance;
+      return;
+    }
+
+    const centerDx=center.x-viewerLastTouchCenter.x;
+    const centerDy=center.y-viewerLastTouchCenter.y;
+    const distanceDelta=Math.abs(distance-viewerLastPinchDistance);
+    const horizontalMotion=Math.abs(centerDx);
+    const verticalMotion=Math.abs(centerDy);
+
+    /* If distance changes materially, this gesture is a pinch and wins. */
+    if(viewerImage && viewerLastPinchDistance>0 && distanceDelta>3){
+      const factor=distance/viewerLastPinchDistance;
+      if(Math.abs(factor-1)>0.006){
+        zoomCurrentImage(factor,center.x,center.y);
+        viewerLastPinchDistance=distance;
+      }
+      viewerLastTouchCenter=center;
+      event.preventDefault();
+      return;
+    }
+
+    /* Fly-style fast two-finger navigation. Do not clear the active pointers
+       after a navigation; this allows rapid consecutive swipes. */
+    if(horizontalMotion>4 && horizontalMotion>verticalMotion*1.15){
+      viewerLastTouchCenter=center;
+      viewerTrackpadSwipeX+=centerDx;
+      const now=performance.now();
+      const threshold=32;
+      if(Math.abs(viewerTrackpadSwipeX)>=threshold && now-viewerGestureLastNavigation>120){
+        const direction=viewerTrackpadSwipeX<0?1:-1;
+        viewerGestureLastNavigation=now;
+        viewerGestureNavigating=true;
+        moveViewer(direction);
+        viewerTrackpadSwipeX=0;
+        viewerLastTouchCenter=gesturePointCenter();
+        viewerLastPinchDistance=gesturePinchDistance();
+        preloadAdjacentImages(viewerIndex);
+        setTimeout(()=>{viewerGestureNavigating=false;},90);
+      }
+      event.preventDefault();
+    }
+
+    return;
+  }
+
+  /* One-pointer touch gesture: horizontal swipe only when not zooming. */
+  if(viewerTouchPoints.size===1 && event.pointerType!=="mouse"){
+    const point=viewerTouchPoints.get(event.pointerId);
+    const dx=point.x-viewerTouchStartX;
+    const dy=point.y-viewerTouchStartY;
+
+    const onVideo=Boolean(event.target?.closest?.("video"));
+    if(viewerZoom<=1.001 && !onVideo && Math.abs(dx)>10 && Math.abs(dx)>Math.abs(dy)*1.15){
+      event.preventDefault();
+    }
+  }
+},{passive:false});
+
+modal.addEventListener("pointerleave",()=>{
+  viewerPointerNearControls=false;
+  setViewerProximity(false);
+});
+
+/*
+  Mouse/trackpad wheel: vertical movement zooms; horizontal trackpad movement
+  navigates. Normal vertical page scrolling never changes photos.
+*/
+modal.addEventListener("wheel",event=>{
+  if(!modal.classList.contains("open")) return;
+  if(isGestureBlockedTarget(event.target)) return;
+
+  if(Math.abs(event.deltaX)>Math.abs(event.deltaY)*1.25 && Math.abs(event.deltaX)>18){
+    viewerTrackpadSwipeX+=event.deltaX;
+
+    clearTimeout(viewerTrackpadSwipeTimer);
+    viewerTrackpadSwipeTimer=setTimeout(()=>{viewerTrackpadSwipeX=0;},220);
+
+    if(Math.abs(viewerTrackpadSwipeX)>100){
+      moveViewer(viewerTrackpadSwipeX<0?1:-1);
+      viewerTrackpadSwipeX=0;
+    }
+
+    event.preventDefault();
+    return;
+  }
+
+  if(viewerImage){
+    event.preventDefault();
+    zoomCurrentImage(event.deltaY<0?1.12:1/1.12,event.clientX,event.clientY);
+  }
+},{passive:false});
+
+/*
+  Pointer-based multi-touch state. Every active pointer has its own record;
+  there is no shared single touch-start coordinate for multi-touch.
+*/
+modal.addEventListener("pointerdown",event=>{
+  if(!modal.classList.contains("open")) return;
+  if(isGestureBlockedTarget(event.target)) return;
+
+  viewerTouchPoints.set(event.pointerId,{
+    x:event.clientX,
+    y:event.clientY,
+    startX:event.clientX,
+    startY:event.clientY,
+    type:event.pointerType
+  });
+
+  if(viewerTouchPoints.size===1){
+    viewerTouchStartX=event.clientX;
+    viewerTouchStartY=event.clientY;
+    viewerTrackpadSwipeX=0;
+  }
+
+  if(viewerTouchPoints.size===2){
+    viewerLastPinchDistance=gesturePinchDistance();
+    viewerLastTouchCenter=gesturePointCenter();
+    viewerTrackpadSwipeX=0;
+  }
+
+  if(event.pointerType!=="mouse") event.preventDefault();
+},{passive:false});
+
+modal.addEventListener("pointerup",event=>{
+  const point=viewerTouchPoints.get(event.pointerId);
+  if(!point) return;
+
+  const wasMultiTouch=viewerTouchPoints.size>1;
+  const dx=event.clientX-point.startX;
+  const dy=event.clientY-point.startY;
+
+  viewerTouchPoints.delete(event.pointerId);
+
+  if(viewerTouchPoints.size===0){
+    if(!wasMultiTouch && point.type!=="mouse" && viewerZoom<=1.001 &&
+       Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.2){
+      moveViewer(dx<0?1:-1);
+    }
+
+    viewerLastPinchDistance=0;
+    viewerLastTouchCenter=null;
+    viewerTrackpadSwipeX=0;
+  }else if(viewerTouchPoints.size<2){
+    viewerLastPinchDistance=0;
+    viewerLastTouchCenter=null;
+    viewerTrackpadSwipeX=0;
+  }
+});
+
+modal.addEventListener("pointercancel",event=>{
+  viewerTouchPoints.delete(event.pointerId);
+  if(viewerTouchPoints.size<2){
+    viewerLastPinchDistance=0;
+    viewerLastTouchCenter=null;
+    viewerTrackpadSwipeX=0;
+  }
+});
+
+/* Keep touch-action disabled on the viewer surface; buttons/panels are blocked above. */
+modal.style.touchAction="none";
+
+
+// ─── THEME ───────────────────────────────────────────────────────────────────
+document.getElementById("themeBtn")?.addEventListener("click", () => {
+  const next = body.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  body.setAttribute("data-theme", next);
+  try { localStorage.setItem("sos_theme", next); } catch {}
+});
+try {
+  const savedTheme = localStorage.getItem("sos_theme");
+  if(savedTheme) body.setAttribute("data-theme", savedTheme);
+} catch {}
+
+// ─── ADMIN LOCK STATE ────────────────────────────────────────────────────────────
+const ADMIN_LOCK_KEY = "sos_admin_locked";
+
+function isAdminLocked(){
+  try { return localStorage.getItem(ADMIN_LOCK_KEY) === "1"; }
+  catch { return false; }
+}
+
+function setAdminLocked(locked){
+  try {
+    if(locked) localStorage.setItem(ADMIN_LOCK_KEY,"1");
+    else localStorage.removeItem(ADMIN_LOCK_KEY);
+  } catch {}
+
+  adminVerified = Boolean(currentUser && isAdminUser(currentUser) && !locked);
+  updateAdminControl();
+
+  if(locked){
+    closeAdmin();
+    closeDeleteDialog();
+  }
+  updateInfoPanel(currentViewerItem());
+}
+
+function updateAdminControl(){
+  const locked = isAdminLocked() || !adminVerified || !isAdminUser(currentUser);
+  adminLaunchLabel.textContent = "Admin";
+  adminLaunch.classList.toggle("is-locked", locked);
+  adminLaunch.title = locked ? "Unlock admin" : "Open admin";
+  adminLaunch.setAttribute("aria-label", locked ? "Unlock admin" : "Open admin");
+
+  if(locked){
+    adminStateIcon.innerHTML = `
+      <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+      <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+    `;
+  }else{
+    adminStateIcon.innerHTML = `
+      <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+      <path d="M8 10V7a4 4 0 0 1 8 0"></path>
+    `;
+  }
+
+  if(adminLockBtn){
+    adminLockBtn.style.display = adminVerified && isAdminUser(currentUser) ? "inline-flex" : "none";
+  }
+}
+
+function closeDeleteDialog(){
+  deleteDialog.classList.remove("open");
+  deleteDialog.setAttribute("aria-hidden","true");
+}
+
+// ─── AUTH ─────────────────────────────────────────────────────────────────────
+let authMode = "login"; // login | unlock
+
+function openAuth(message="", mode="login"){
+  authMode = mode;
+  document.getElementById("authTitle").textContent =
+    mode === "unlock" ? "Unlock Admin" : "Admin Login";
+  authOverlay.querySelector(".auth-head p").textContent =
+    mode === "unlock"
+      ? "Enter your Gmail and password to unlock admin controls."
+      : "Enter the administrator Gmail and password.";
+  authSubmit.textContent = mode === "unlock" ? "Unlock" : "Sign in";
+  authOverlay.classList.add("open");
+  authOverlay.setAttribute("aria-hidden","false");
+  authStatus.textContent = message;
+  authPassword.value = "";
+  setTimeout(() => authEmail.focus(), 50);
+}
+
+function closeAuth(){
+  authOverlay.classList.remove("open");
+  authOverlay.setAttribute("aria-hidden","true");
+  authStatus.textContent = "";
+  authForm.reset();
+  authMode = "login";
+}
+
+function openAdmin(){
+  if(currentUser && isAdminUser(currentUser) && adminVerified && !isAdminLocked()){
+    adminOverlay.classList.add("open");
+    adminOverlay.setAttribute("aria-hidden","false");
+    return;
+  }
+
+  if(currentUser && isAdminUser(currentUser) && isAdminLocked()){
+    openAuth("", "unlock");
+    return;
+  }
+
+  openAuth("", "login");
+}
+
+function closeAdmin(){
+  adminOverlay.classList.remove("open");
+  adminOverlay.setAttribute("aria-hidden","true");
+  adminStatus.textContent = "";
+  adminProgress.style.display = "none";
+  adminProgressBar.style.width = "0%";
+  adminSubmit.disabled = false;
+}
+
+adminLaunch.addEventListener("click", openAdmin);
+adminLockBtn.addEventListener("click", () => {
+  setAdminLocked(true);
+});
+
+adminClose.addEventListener("click", closeAdmin);
+adminCancel.addEventListener("click", closeAdmin);
+authClose.addEventListener("click", closeAuth);
+authCancel.addEventListener("click", closeAuth);
+authOverlay.addEventListener("click", event => { if(event.target === authOverlay) closeAuth(); });
+adminOverlay.addEventListener("click", event => { if(event.target === adminOverlay) closeAdmin(); });
+
+authForm.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if(!email || !password){
+    authStatus.textContent = "Enter both email and password.";
+    return;
+  }
+
+  authSubmit.disabled = true;
+  authStatus.textContent = authMode === "unlock" ? "Unlocking…" : "Signing in…";
+
+  try{
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const user = credential.user;
+
+    if(!isAdminUser(user)){
+      await signOut(auth);
+      throw new Error("This Firebase account is not the authorized site administrator.");
+    }
+
+    currentUser = user;
+    adminVerified = true;
+    setAdminLocked(false);
+
+    closeAuth();
+    updateAdminControl();
+    openAdmin();
+  }catch(error){
+    console.error("Firebase sign-in error:", error);
+    const code = error?.code || "";
+    authStatus.textContent =
+      code.includes("invalid-credential") ? "Incorrect email or password." :
+      code.includes("too-many-requests") ? "Too many attempts. Try again later." :
+      code.includes("user-disabled") ? "This Firebase account has been disabled." :
+      error?.message || "Could not sign in.";
+  }finally{
+    authSubmit.disabled = false;
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  currentUser = user || null;
+
+  if(user && isAdminUser(user)){
+    adminVerified = !isAdminLocked();
+    updateAdminControl();
+
+    if(!adminVerified && adminOverlay.classList.contains("open")){
+      closeAdmin();
+    }
+  }else if(user){
+    adminVerified = false;
+    updateAdminControl();
+    if(adminOverlay.classList.contains("open")) closeAdmin();
+    signOut(auth).catch(err => console.error("Unauthorized sign-out failed:", err));
+  }else{
+    adminVerified = false;
+    updateAdminControl();
+    if(adminOverlay.classList.contains("open")) closeAdmin();
+  }
+
+  updateInfoPanel(currentViewerItem());
+});
+
+// About popover — deliberately contains no account/email information.
+infoLaunch.addEventListener("click", event => {
+  event.stopPropagation();
+  const open = !aboutPopover.classList.contains("open");
+  aboutPopover.classList.toggle("open", open);
+  aboutPopover.setAttribute("aria-hidden", String(!open));
+});
+
+aboutClose.addEventListener("click", () => {
+  aboutPopover.classList.remove("open");
+  aboutPopover.setAttribute("aria-hidden","true");
+});
+
+document.addEventListener("click", event => {
+  if(!aboutPopover.contains(event.target) && event.target !== infoLaunch){
+    aboutPopover.classList.remove("open");
+    aboutPopover.setAttribute("aria-hidden","true");
+  }
+});
+
+updateAdminControl();
+
+// ─── IMAGE COMPRESSION ───────────────────────────────────────────────────────
+async function compressImage(file){
+  if(file.size <= MAX_IMAGE_BYTES) return file;
+
+  adminStatus.textContent = "Compressing image…";
+
+  let bitmap;
+  try{
+    bitmap = await createImageBitmap(file);
+  }catch{
+    throw new Error(
+      "This image is over 10 MB and this browser cannot decode it for automatic compression. " +
+      "For RAW/HEIC formats, convert it to JPG/PNG/WebP or upload a file already under 10 MB."
+    );
+  }
+
+  try{
+    let width = bitmap.width;
+    let height = bitmap.height;
+    const scale = Math.min(1, 6000 / Math.max(width, height));
+    width = Math.max(1, Math.round(width * scale));
+    height = Math.max(1, Math.round(height * scale));
+
+    let quality = 0.90;
+    let output = null;
+
+    for(let attempt = 0; attempt < 12; attempt++){
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d", {alpha:false});
+      if(!ctx) throw new Error("Could not create an image canvas.");
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(bitmap, 0, 0, width, height);
+
+      output = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
+      if(!output) throw new Error("Image compression failed.");
+      if(output.size <= MAX_IMAGE_BYTES) break;
+
+      if(quality > 0.50){
+        quality -= 0.08;
+      }else{
+        width = Math.max(720, Math.round(width * 0.82));
+        height = Math.max(720, Math.round(height * 0.82));
+        quality = 0.82;
+      }
+    }
+
+    if(!output || output.size > MAX_IMAGE_BYTES){
+      throw new Error("The image could not be compressed below 10 MB without excessive quality loss.");
+    }
+
+    const base = safeFilename(file.name).replace(/\.[^.]+$/, "");
+    return new File([output], `${base}.jpg`, {type:"image/jpeg", lastModified:Date.now()});
+  }finally{
+    bitmap.close?.();
+  }
+}
+
+// ─── VIDEO COMPRESSION ───────────────────────────────────────────────────────
+async function compressVideo(file){
+  if(file.size <= MAX_VIDEO_BYTES) return file;
+  adminStatus.textContent = "Preparing video for compression…";
+
+  if(!window.MediaRecorder) throw new Error("This browser does not support automatic video compression.");
+
+  const sourceURL = URL.createObjectURL(file);
+  const video = document.createElement("video");
+  video.preload = "metadata";
+  video.muted = true;
+  video.playsInline = true;
+  video.src = sourceURL;
+
+  try{
+    await new Promise((resolve, reject) => {
+      video.onloadedmetadata = resolve;
+      video.onerror = () => reject(new Error("The browser cannot decode this video for compression."));
+    });
+
+    if(!video.duration || !Number.isFinite(video.duration)){
+      throw new Error("The video duration could not be determined.");
+    }
+
+    if(typeof video.captureStream !== "function"){
+      throw new Error("This browser cannot perform browser-side video compression. Use Chrome/Edge on a local web server or upload a video under 100 MB.");
+    }
+
+    const sourceWidth = video.videoWidth || 1280;
+    const sourceHeight = video.videoHeight || 720;
+    const candidates = [
+      {maxDim:1920, bitrate:2200000},
+      {maxDim:1600, bitrate:1700000},
+      {maxDim:1280, bitrate:1200000},
+      {maxDim:960, bitrate:800000},
+      {maxDim:720, bitrate:550000}
+    ];
+
+    let mimeType = "";
+    for(const candidateMime of ["video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"]){
+      if(MediaRecorder.isTypeSupported(candidateMime)){
+        mimeType = candidateMime;
+        break;
+      }
+    }
+    if(!mimeType) throw new Error("This browser cannot create a compressed WebM video.");
+
+    for(const candidate of candidates){
+      const scale = Math.min(1, candidate.maxDim / Math.max(sourceWidth, sourceHeight));
+      const width = Math.max(2, Math.round(sourceWidth * scale / 2) * 2);
+      const height = Math.max(2, Math.round(sourceHeight * scale / 2) * 2);
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if(!ctx) continue;
+
+      const canvasStream = canvas.captureStream(25);
+      const sourceStream = video.captureStream();
+      sourceStream.getAudioTracks().forEach(track => canvasStream.addTrack(track));
+
+      const chunks = [];
+      const recorder = new MediaRecorder(canvasStream,{mimeType,videoBitsPerSecond:candidate.bitrate});
+      let frameId = 0;
+
+      const draw = () => {
+        if(!video.paused && !video.ended){
+          ctx.drawImage(video,0,0,width,height);
+          frameId = requestAnimationFrame(draw);
+        }
+      };
+
+      const result = await new Promise(async (resolve,reject) => {
+        recorder.ondataavailable = event => { if(event.data?.size) chunks.push(event.data); };
+        recorder.onerror = event => reject(event.error || new Error("Video compression failed."));
+        recorder.onstop = () => {
+          cancelAnimationFrame(frameId);
+          canvasStream.getTracks().forEach(track => track.stop());
+          sourceStream.getTracks().forEach(track => track.stop());
+          resolve(new Blob(chunks,{type:"video/webm"}));
+        };
+
+        video.pause();
+        video.currentTime = 0;
+        recorder.start(1000);
+        try{
+          await video.play();
+          draw();
+        }catch(error){
+          if(recorder.state !== "inactive") recorder.stop();
+          reject(new Error("The browser could not start video playback for compression."));
+          return;
+        }
+
+        video.onended = () => {
+          if(recorder.state !== "inactive") recorder.stop();
+        };
+      });
+
+      if(result.size <= MAX_VIDEO_BYTES){
+        const base = safeFilename(file.name).replace(/\.[^.]+$/, "");
+        return new File([result],`${base}.webm`,{type:"video/webm",lastModified:Date.now()});
+      }
+    }
+
+    throw new Error("The video could not be compressed below 100 MB while retaining reasonable quality.");
+  }finally{
+    URL.revokeObjectURL(sourceURL);
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+  }
+}
+
+async function prepareMedia(file){
+  if(isVideoFile(file)) return compressVideo(file);
+  if(isImageFile(file)) return compressImage(file);
+  throw new Error("Unsupported file type. Please select an image or video.");
+}
+
+function updateProgress(percent,message){
+  const pct = Math.max(0,Math.min(100,Math.round(percent)));
+  adminProgress.style.display = "block";
+  adminProgressBar.style.width = `${pct}%`;
+  adminStatus.textContent = message || `Uploading… ${pct}%`;
+}
+
+function uploadToCloudinary(file){
+  return new Promise((resolve,reject) => {
+    const form = new FormData();
+    form.append("file",file);
+    form.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST",CLOUDINARY_UPLOAD_URL,true);
+    xhr.timeout = 0;
+
+    xhr.upload.onprogress = event => {
+      if(event.lengthComputable){
+        const uploadPercent = (event.loaded / event.total) * 100;
+        updateProgress(5 + uploadPercent * 0.88,`Uploading to Cloudinary… ${Math.round(uploadPercent)}%`);
+      }
+    };
+
+    xhr.onload = () => {
+      let data = {};
+      try{ data = JSON.parse(xhr.responseText || "{}"); }catch{}
+      if(xhr.status >= 200 && xhr.status < 300){
+        resolve(data);
+      }else{
+        reject(new Error(data?.error?.message || `Cloudinary returned HTTP ${xhr.status}.`));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error("Network error while uploading to Cloudinary."));
+    xhr.onabort = () => reject(new Error("Upload was cancelled."));
+    xhr.send(form);
+  });
+}
+
+adminForm.addEventListener("submit",async event => {
+  event.preventDefault();
+
+  if(!currentUser || !adminVerified || !isAdminUser(currentUser) || isAdminLocked()){
+    closeAdmin();
+    openAuth("Administrator verification is required before uploading.");
+    return;
+  }
+
+  const originalFile = mediaFile.files?.[0];
+  if(!originalFile){
+    adminStatus.textContent = "Choose a photo or video first.";
+    return;
+  }
+
+  const title = mediaTitle.value.trim();
+  if(!title){
+    adminStatus.textContent = "Title is required.";
+    mediaTitle.focus();
+    return;
+  }
+
+  const category = mediaCategory.value;
+  if(!category){
+    adminStatus.textContent = "Category is required.";
+    return;
+  }
+
+  adminSubmit.disabled = true;
+  updateProgress(1,"Preparing file…");
+
+  try{
+    const preparedFile = await prepareMedia(originalFile);
+    const video = isVideoFile(preparedFile);
+    const limit = video ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+
+    if(preparedFile.size > limit){
+      throw new Error(`${video ? "Video" : "Image"} is still larger than the ${video ? "100 MB" : "10 MB"} limit after compression.`);
+    }
+
+    updateProgress(4,"Uploading to Cloudinary…");
+    const result = await uploadToCloudinary(preparedFile);
+
+    console.log("CLOUDINARY RESPONSE",result);
+    if(!result?.secure_url){
+      throw new Error("Cloudinary did not return a usable media URL.");
+    }
+
+    const resourceType = result.resource_type || (video ? "video" : "image");
+    const width = Number(result.width) || 640;
+    const height = Number(result.height) || 360;
+    const filename = result.original_filename
+      ? `${result.original_filename}${result.format ? "." + result.format : ""}`
+      : safeFilename(preparedFile.name);
+
+    updateProgress(94,"Saving gallery information…");
+
+    await addDoc(collection(db,MEDIA_COLLECTION),{
+      title,
+      filename,
+      original_filename: originalFile.name,
+      public_id: result.public_id || "",
+      secure_url: result.secure_url,
+      resource_type: resourceType,
+      format: String(result.format || ext(preparedFile.name)).toLowerCase(),
+      width,
+      height,
+      bytes: Number(result.bytes) || preparedFile.size,
+      category,
+      description: mediaDescription.value.trim(),
+      uploadedBy: currentUser.uid,
+      uploadedByEmail: currentUser.email || "",
+      uploadedAt: serverTimestamp()
+    });
+
+    updateProgress(100,"Upload complete. The shared gallery is updating…");
+    adminForm.reset();
+    mediaCategory.value = "Other";
+    mediaTitle.value = "";
+
+    setTimeout(() => {
+      adminProgress.style.display = "none";
+      if(adminOverlay.classList.contains("open")){
+        adminStatus.textContent = "Uploaded successfully to Cloudinary and added to the shared gallery.";
+      }
+    },900);
+
+  }catch(error){
+    console.error("Media upload failed:",error);
+    adminProgressBar.style.width = "0%";
+    adminStatus.textContent = `Upload failed: ${error?.message || "Unknown error"}`;
+  }finally{
+    adminSubmit.disabled = false;
+  }
+});
+
+function startRemoteGallery(){
+  if(remoteListenerStarted) return;
+  remoteListenerStarted = true;
+
+  const mediaQuery = query(collection(db,MEDIA_COLLECTION),orderBy("uploadedAt","desc"));
+
+  onSnapshot(mediaQuery,snapshot => {
+    REMOTE_UPLOADED = snapshot.docs.map(normalizeFirestoreItem).filter(item=>Boolean(item.secure_url));
+    renderFilters();
+    renderGallery();
+  },error => {
+    console.error("Firestore gallery listener failed:",error);
+    REMOTE_UPLOADED = [];
+    renderFilters();
+    renderGallery();
+  });
+}
+
+infoBtn.addEventListener("click",()=>{const show=!modalInfo.classList.contains("show");modalInfo.classList.toggle("show",show);infoBtn.classList.toggle("active",show);});
+closeBtn.addEventListener("click",closeModal);
+modal.addEventListener("click",event=>{if(event.target===modal) closeModal();});
+deleteBtn.addEventListener("click",()=>{
+  if(deleteBtn.disabled) return;
+  const item=currentViewerItem();
+  if(!item?.id) return;
+
+  document.getElementById("deleteMessage").textContent=
+    `Remove “${item.title||item.f||"this item"}” from the website? This will delete its Firestore gallery record, so it disappears from the shared gallery. The original Cloudinary file will remain safely stored in Cloudinary.`;
+  deleteDialog.classList.add("open");
+  deleteDialog.setAttribute("aria-hidden","false");
+});
+
+deleteCancel.addEventListener("click",()=>{
+  deleteDialog.classList.remove("open");
+  deleteDialog.setAttribute("aria-hidden","true");
+});
+
+deleteConfirm.addEventListener("click",async()=>{
+  const item=currentViewerItem();
+
+  // Never delete directly from Cloudinary in the frontend. For this
+  // scenario we only remove the Firestore gallery record. Firestore Rules
+  // independently enforce the same admin UID on the server.
+  const signedInUser = auth.currentUser || currentUser;
+  if(!item?.id || item.source!=="cloudinary" || signedInUser?.uid !== ADMIN_UID || !adminVerified || isAdminLocked()){
+    const reason = !signedInUser
+      ? "You are not signed in as the administrator."
+      : signedInUser.uid !== ADMIN_UID
+        ? "The signed-in Firebase account is not the authorized administrator."
+        : !item?.id
+          ? "The selected media item has no Firestore document ID."
+          : item.source !== "cloudinary"
+            ? "The selected item is not a Firestore media item."
+            : "Delete is not authorized.";
+    console.error("DELETE BLOCKED",{reason,item,currentUserUid:signedInUser?.uid,expectedAdminUid:ADMIN_UID});
+    document.getElementById("deleteMessage").textContent = `Delete blocked: ${reason}`;
+    return;
+  }
+
+  const mediaId=String(item.id);
+  deleteConfirm.disabled=true;
+  deleteConfirm.textContent="Deleting…";
+
+  try{
+    console.log("Deleting Firestore media document:",`media/${mediaId}`,item);
+    await deleteDoc(doc(db,MEDIA_COLLECTION,mediaId));
+
+    /*
+      Optimistic local removal. Firestore onSnapshot remains the source
+      of truth and will reconcile REMOTE_UPLOADED immediately afterwards.
+    */
+    const deletedIndex=viewerIndex;
+
+    REMOTE_UPLOADED=REMOTE_UPLOADED.filter(media=>media.id!==mediaId);
+    viewerItems=viewerItems.filter(media=>media.id!==mediaId);
+
+    deleteDialog.classList.remove("open");
+    deleteDialog.setAttribute("aria-hidden","true");
+
+    renderFilters();
+    renderGallery();
+
+    if(!viewerItems.length){
+      closeModal();
+    }else{
+      viewerIndex=Math.min(
+        deletedIndex,
+        viewerItems.length-1
+      );
+      renderViewerItem(viewerIndex,false);
+    }
+
+    adminStatus.textContent="";
+    console.log("Gallery record removed; Cloudinary asset intentionally kept:",mediaId,item.public_id);
+  }catch(error){
+    /* Keep the complete Firebase error visible in DevTools for diagnosis. */
+    console.error("FIRESTORE DELETE FAILED",{
+      error,
+      code:error?.code,
+      message:error?.message,
+      document:`media/${item.id}`,
+      item
+    });
+
+    const reason = error?.code === "permission-denied"
+      ? "Firestore denied this deletion. Check the media delete rule for your administrator UID."
+      : (error?.message || "Unknown Firestore error.");
+
+    document.getElementById("deleteMessage").textContent=
+      `Could not remove this item. ${reason}`;
+  }finally{
+    deleteConfirm.disabled=false;
+    deleteConfirm.textContent="Delete";
+  }
+});
+window.addEventListener("keydown",event=>{if(authOverlay.classList.contains("open")){if(event.key==="Escape")closeAuth();return;}if(adminOverlay.classList.contains("open")){if(event.key==="Escape")closeAdmin();return;}if(!modal.classList.contains("open"))return;if(event.key==="Escape")closeModal();else if(event.key==="ArrowLeft")moveViewer(-1);else if(event.key==="ArrowRight")moveViewer(1);else if(event.key.toLowerCase()==="i")infoBtn.click();else if(event.key.toLowerCase()==="f")fullscreenBtn.click();else if(event.key==="Delete"&&!deleteBtn.disabled)deleteBtn.click();else if(event.key==="0")fitCurrentImage();else if(event.key==="1")actualSizeCurrentImage();else if(event.key==="+"||event.key==="=")zoomCurrentImage(1.15);else if(event.key==="-"||event.key==="_")zoomCurrentImage(1/1.15);});
+window.addEventListener("scroll",() => {
+  followRail?.classList.toggle("hide",window.scrollY > 170);
+},{passive:true});
+
+renderFilters();
+renderGallery();
+startRemoteGallery();
+</script>
+</body>
+</html>
