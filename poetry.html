@@ -29,6 +29,7 @@ body.dark{
 
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+
 body{
   font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   background:linear-gradient(180deg,#f7f2ea,var(--bg));
@@ -38,6 +39,7 @@ body{
 }
 
 button,input,textarea,select{font:inherit}
+button{-webkit-tap-highlight-color:transparent}
 
 .topbar{
   display:flex;
@@ -47,10 +49,10 @@ button,input,textarea,select{font:inherit}
   position:sticky;
   top:0;
   z-index:20;
-  backdrop-filter: blur(10px);
+  backdrop-filter:blur(10px);
 }
 
-.toggle, .admin-toggle, .action-btn, .modal-btn, .nav-btn, .card-btn{
+.toggle,.admin-toggle,.action-btn,.modal-btn,.nav-btn,.card-btn{
   cursor:pointer;
   border:1px solid var(--border);
   border-radius:999px;
@@ -59,7 +61,7 @@ button,input,textarea,select{font:inherit}
   color:var(--ink);
 }
 
-.toggle, .admin-toggle{
+.toggle,.admin-toggle{
   padding:7px 12px;
   font-size:12px;
   font-weight:500;
@@ -68,16 +70,18 @@ button,input,textarea,select{font:inherit}
   border-color:transparent;
   color:var(--muted);
 }
-.toggle:hover, .admin-toggle:hover{
+
+.toggle:hover,.admin-toggle:hover{
   color:var(--ink);
   background:rgba(0,0,0,0.04);
 }
+
 body.dark .toggle:hover,
 body.dark .admin-toggle:hover{
   background:rgba(255,255,255,0.06);
 }
 
-.action-btn, .modal-btn, .nav-btn{
+.action-btn,.modal-btn,.nav-btn{
   padding:10px 14px;
   font-weight:700;
 }
@@ -93,12 +97,13 @@ body.dark .admin-toggle{
   margin:auto;
   padding:20px;
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:20px;
   width:100%;
 }
 
 .panel{
+  min-width:0;
   background:var(--panel);
   border-radius:24px;
   padding:20px;
@@ -109,7 +114,7 @@ body.dark .admin-toggle{
 
 .image-card{
   width:100%;
-  height:260px;
+  height:clamp(220px,26vw,300px);
   border-radius:28px;
   overflow:hidden;
   margin-bottom:16px;
@@ -122,7 +127,7 @@ body.dark .admin-toggle{
   transition:0.5s;
 }
 
-.image-card:hover img{ transform:scale(1.05); }
+.image-card:hover img{transform:scale(1.05);}
 
 .name{font-size:28px;font-weight:800;}
 .bio{color:var(--muted);margin-top:6px;line-height:1.5;}
@@ -133,6 +138,7 @@ body.dark .admin-toggle{
   margin-top:20px;
   flex-wrap:wrap;
 }
+
 .stat .num{font-size:22px;font-weight:800;}
 .stat .lbl{font-size:12px;color:var(--muted);}
 
@@ -151,9 +157,12 @@ body.dark .admin-toggle{
   flex-direction:column;
   gap:10px;
   padding-right:2px;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
 }
 
 .poem-card{
+  min-width:0;
   padding:14px 16px;
   border-radius:20px;
   background:rgba(255,255,255,0.82);
@@ -166,35 +175,57 @@ body.dark .admin-toggle{
   gap:12px;
 }
 
-body.dark .poem-card{ background:#2a2a2a; }
+body.dark .poem-card{background:#2a2a2a;}
 
-.poem-card:hover{ transform:translateY(-2px); background:rgba(255,255,255,0.94); }
-body.dark .poem-card:hover{ background:#303030; }
+.poem-card:hover{transform:translateY(-2px);background:rgba(255,255,255,0.94);}
+body.dark .poem-card:hover{background:#303030;}
 
-.poem-title{font-weight:700;font-size:14px;}
-.poem-meta{font-size:11px;color:var(--muted);}
+.poem-card > div{
+  min-width:0;
+}
+
+.poem-title{
+  font-weight:700;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+
+.poem-meta{
+  font-size:11px;
+  color:var(--muted);
+  overflow-wrap:anywhere;
+}
 
 .reader{
   position:fixed;
   inset:0;
+  width:100%;
+  height:100dvh;
   display:none;
   justify-content:center;
   align-items:center;
   background:rgba(0,0,0,0.28);
   padding:20px;
   z-index:100;
+  overflow:hidden;
 }
+
 .reader.open{display:flex;}
 
 .reader-box{
+  min-width:0;
   background:var(--paper);
   padding:26px;
   border-radius:24px;
   max-width:700px;
-  width:min(700px, 100%);
+  width:min(700px,100%);
+  max-height:calc(100dvh - 40px);
   box-shadow:0 24px 70px rgba(0,0,0,0.28);
   border:1px solid var(--border);
   position:relative;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
 .reader-top{
@@ -203,25 +234,42 @@ body.dark .poem-card:hover{ background:#303030; }
   justify-content:space-between;
   gap:14px;
   margin-bottom:14px;
+  flex:0 0 auto;
+  min-width:0;
+}
+
+.reader-top > div:first-child{
+  min-width:0;
 }
 
 .reader-title{
   font-size:26px;
   font-weight:800;
   line-height:1.1;
+  overflow-wrap:anywhere;
 }
+
 .reader-subtitle{
   margin-top:6px;
   color:var(--muted);
   font-size:13px;
+  overflow-wrap:anywhere;
 }
 
 .reader-content{
+  min-height:0;
+  flex:1 1 auto;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  -webkit-overflow-scrolling:touch;
   font-family:Georgia,serif;
   font-size:18px;
   line-height:1.7;
   white-space:pre-line;
-  padding-top:4px;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  padding:4px 8px 4px 0;
 }
 
 .reader-actions{
@@ -229,6 +277,7 @@ body.dark .poem-card:hover{ background:#303030; }
   align-items:center;
   gap:10px;
   flex-wrap:wrap;
+  flex:0 0 auto;
 }
 
 .close{
@@ -252,12 +301,15 @@ body.dark .poem-card:hover{ background:#303030; }
   margin-top:18px;
   justify-content:space-between;
   flex-wrap:wrap;
+  flex:0 0 auto;
 }
+
 .nav-group{display:flex;gap:10px;flex-wrap:wrap;}
 
 .admin-panel{
   display:none;
-  margin:0 20px 20px;
+  width:calc(100% - 40px);
+  margin:0 auto 20px;
   max-width:1400px;
   padding:18px 20px;
   border-radius:24px;
@@ -265,14 +317,18 @@ body.dark .poem-card:hover{ background:#303030; }
   border:1px solid var(--border);
   box-shadow:var(--shadow);
 }
+
 .admin-panel.open{display:block;}
+
 .admin-grid{
   display:grid;
   grid-template-columns:1.1fr .9fr;
   gap:12px;
 }
+
 .field{
   width:100%;
+  min-width:0;
   padding:11px 14px;
   border-radius:14px;
   border:1px solid var(--border);
@@ -280,7 +336,9 @@ body.dark .poem-card:hover{ background:#303030; }
   color:var(--ink);
   outline:none;
 }
+
 textarea.field{min-height:120px;resize:vertical}
+
 .admin-actions{
   display:flex;
   gap:10px;
@@ -288,6 +346,7 @@ textarea.field{min-height:120px;resize:vertical}
   justify-content:flex-end;
   margin-top:12px;
 }
+
 .helper{
   color:var(--muted);
   font-size:13px;
@@ -303,16 +362,22 @@ textarea.field{min-height:120px;resize:vertical}
   padding:16px;
   background:rgba(0,0,0,.44);
   z-index:200;
+  overflow:auto;
 }
+
 .modal.open{display:grid;}
+
 .modal-card{
-  width:min(460px, 100%);
+  width:min(460px,100%);
+  max-height:calc(100dvh - 32px);
+  overflow-y:auto;
   background:var(--paper);
   border-radius:22px;
   border:1px solid var(--border);
   box-shadow:0 30px 90px rgba(0,0,0,.28);
   padding:18px;
 }
+
 .modal-title{font-size:22px;font-weight:800;margin-bottom:8px;}
 .modal-text{color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:14px;}
 .modal-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px;}
@@ -323,18 +388,110 @@ textarea.field{min-height:120px;resize:vertical}
   margin-top:8px;
 }
 
+/* Tablet: stack the two main cards so neither column becomes cramped. */
 @media(max-width:1024px){
-  .shell{grid-template-columns:1fr;}
-  .poem-list{max-height:none;}
+  .shell{
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .poem-list{
+    max-height:55vh;
+  }
 }
+
+/* Mobile: use the full available width and make the reader fit inside the safe viewport. */
 @media(max-width:600px){
-  .shell{padding:12px;}
-  .panel{padding:16px;}
+  .topbar{
+    padding:10px 12px;
+    gap:6px;
+  }
+
+  .shell{
+    padding:12px;
+    gap:12px;
+  }
+
+  .panel{
+    padding:16px;
+    border-radius:20px;
+  }
+
+  .image-card{
+    height:clamp(190px,52vw,240px);
+    border-radius:22px;
+  }
+
   .name{font-size:22px;}
-  .reader-box{padding:18px;}
+  .poem-list{max-height:50vh;}
+
+  .reader{
+    padding:8px;
+    align-items:center;
+  }
+
+  .reader-box{
+    width:100%;
+    max-height:calc(100dvh - 16px);
+    padding:18px;
+    border-radius:20px;
+  }
+
+  .reader-top{
+    gap:8px;
+  }
+
   .reader-title{font-size:22px;}
-  .reader-content{font-size:16px;}
-  .admin-grid{grid-template-columns:1fr;}
+
+  .reader-actions{
+    gap:6px;
+  }
+
+  .reader-content{
+    font-size:16px;
+    line-height:1.65;
+    padding-right:6px;
+  }
+
+  .nav-row{
+    margin-top:14px;
+  }
+
+  .nav-group,
+  .nav-group button{
+    flex:1 1 auto;
+  }
+
+  .admin-panel{
+    width:calc(100% - 24px);
+    margin-bottom:12px;
+    padding:16px;
+    border-radius:20px;
+  }
+
+  .admin-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Very narrow phones: prevent the reader header buttons from forcing horizontal overflow. */
+@media(max-width:380px){
+  .reader{
+    padding:6px;
+  }
+
+  .reader-box{
+    max-height:calc(100dvh - 12px);
+    padding:14px;
+    border-radius:18px;
+  }
+
+  .reader-title{font-size:20px;}
+  .reader-content{font-size:15px;}
+  .reader-actions .nav-btn,
+  #infoCurrentBtn,
+  .close{
+    padding:6px;
+  }
 }
 </style>
 
