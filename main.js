@@ -3,14 +3,27 @@ const navMenu = document.getElementById('nav-menu'),
     navClose = document.getElementById('nav-close')
 
 if (navToggle) {
-    navToggle.addEventListener('click', () => {
+    const toggleMenu = () => {
         navMenu.classList.add('show-menu')
+        navToggle.setAttribute('aria-expanded', 'true')
+    }
+
+    navToggle.addEventListener('click', toggleMenu)
+    navToggle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            toggleMenu()
+        }
     })
 }
 
 if (navClose) {
     navClose.addEventListener('click', () => {
         navMenu.classList.remove('show-menu')
+        if (navToggle) {
+            navToggle.setAttribute('aria-expanded', 'false')
+            navToggle.focus()
+        }
     })
 }
 
@@ -19,6 +32,7 @@ const navLink = document.querySelectorAll('.nav__link')
 function linkAction() {
     const navMenu = document.getElementById('nav-menu')
     navMenu.classList.remove('show-menu')
+    if (navToggle) navToggle.setAttribute('aria-expanded', 'false')
 }
 
 navLink.forEach(n => n.addEventListener('click', linkAction))
@@ -192,6 +206,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container.contains(event.relatedTarget)) startAuto()
     })
     container && container.addEventListener('touchstart', stopAuto, { passive: true })
+    container && container.addEventListener('touchend', () => {
+        if (!reduceMotion) restartAuto()
+    }, { passive: true })
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopAuto()
+        else if (!reduceMotion) startAuto()
+    })
 
     buildPagination()
     render()
@@ -253,8 +274,12 @@ const darkTheme = 'dark-theme'
 if (themeButton) {
     const applyTheme = (isDark) => {
         document.body.classList.toggle(darkTheme, isDark)
-        themeButton.classList.toggle('uil-sun', isDark)
-        themeButton.classList.toggle('uil-moon', !isDark)
+        if (themeIcon) {
+            themeIcon.classList.toggle('uil-sun', isDark)
+            themeIcon.classList.toggle('uil-moon', !isDark)
+        }
+        themeButton.setAttribute('aria-pressed', String(isDark))
+        themeButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
         localStorage.setItem('selected-theme', isDark ? 'dark' : 'light')
         localStorage.setItem('selected-icon', isDark ? 'uil-sun' : 'uil-moon')
     }
