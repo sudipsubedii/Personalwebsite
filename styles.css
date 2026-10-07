@@ -202,6 +202,10 @@ body.dark-theme .change-theme {
     color: var(--title-color);
     margin-right: var(--mb-1);
     cursor: pointer;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    font: inherit;
 }
 
 .change-theme:hover {
@@ -387,9 +391,16 @@ img {
     position: absolute;
     right: 1.3rem;
     bottom: .5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--first-color);
+    border: 0;
+    background: transparent;
+    padding: 0;
 }
 
 .nav__close:hover {
@@ -403,7 +414,11 @@ img {
 }
 
 /* Active link */
+.active-link {
+    color: var(--first-color);
+}
 
+/* Backward-compatible typo selector. */
 .active-linl {
     color: var(--first-color);
 }
@@ -3107,5 +3122,75 @@ body.dark-theme .education-logo {
 
         width: 4rem;
         height: 4rem;
+    }
+}
+
+
+/* ==================== ACCESSIBILITY & INTERACTION FIXES ==================== */
+
+.skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2000;
+    padding: 0.7rem 1rem;
+    border-radius: 0.6rem;
+    background: var(--title-color);
+    color: var(--body-color);
+    transform: translateY(-180%);
+    transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.nav__toggle {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font: inherit;
+}
+
+.nav__toggle:focus-visible,
+.nav__close:focus-visible,
+.change-theme:focus-visible,
+.nav__logo:focus-visible,
+.nav__link:focus-visible,
+.button:focus-visible,
+.project-links a:focus-visible,
+.portfolio__nav:focus-visible,
+.portfolio__dot:focus-visible,
+.footer__link:focus-visible,
+.footer__social:focus-visible,
+.contact__social:focus-visible,
+.scrollup:focus-visible {
+    outline: 3px solid var(--first-color);
+    outline-offset: 3px;
+}
+
+.contact__input:focus-visible,
+.contact__textarea:focus-visible {
+    outline: 3px solid var(--first-color);
+    outline-offset: 2px;
+}
+
+.qual-tab-btn[role="tab"]:focus-visible {
+    outline: 3px solid var(--first-color);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
