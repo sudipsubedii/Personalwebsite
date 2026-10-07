@@ -1672,7 +1672,8 @@ body.dark-theme .contact__input, body.dark-theme .contact__textarea {
     width: 100%;
 }
 
-.about__hero-copy h1 {
+.about__hero-copy h1,
+.about__hero-copy h2 {
     margin-bottom: 0.8rem;
     font-size: clamp(1.8rem, 3vw, 2.3rem);
     letter-spacing: -0.04em;
