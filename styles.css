@@ -3473,3 +3473,439 @@ html[data-theme="dark"] body {
     display: none !important;
     visibility: hidden !important;
 }
+
+/* ==========================================================
+   FINAL RESPONSIVE LAYER
+   Keeps the existing green visual design; fixes sizing only.
+   ========================================================== */
+
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.container {
+    width: min(100% - 2rem, 1240px);
+    margin-inline: auto;
+}
+
+img, svg, video, canvas {
+    max-width: 100%;
+}
+
+img {
+    height: auto;
+}
+
+.about__hero,
+.about__details-panel,
+.contact__box,
+.project-card,
+.qual-timeline-card,
+.portfolio__content,
+.skills__content {
+    min-width: 0;
+}
+
+.project-card,
+.qual-timeline-card,
+.portfolio__content,
+.contact__card {
+    overflow: hidden;
+}
+
+.project-card p,
+.qual-timeline-card p,
+.portfolio__description,
+.contact__card-text,
+.skills__name,
+.skills__description {
+    overflow-wrap: anywhere;
+}
+
+.about__portrait {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    height: auto;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.education-logo,
+.education-logo img {
+    aspect-ratio: 1 / 1;
+}
+
+.project-card .project-poster {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+}
+
+.project-card .project-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio__img {
+    width: 100%;
+    height: auto !important;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+}
+
+.portfolio__content {
+    width: min(100%, 320px);
+    max-width: 320px;
+}
+
+.contact__input,
+.contact__textarea {
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px;
+}
+
+.contact__inputs,
+.contact__container,
+.footer__container,
+.skills__container {
+    min-width: 0;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+    max-width: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+    .container {
+        width: min(calc(100% - 4rem), 1240px);
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .about__hero {
+        gap: 2.5rem;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1199px) {
+    .container {
+        width: min(calc(100% - 3rem), 1080px);
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+
+    .project-card {
+        padding: 1.25rem;
+    }
+
+    .project-card h3 {
+        font-size: 1.25rem;
+        min-height: 0;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .container {
+        width: min(calc(100% - 2.5rem), 900px);
+    }
+
+    .nav {
+        width: 100%;
+        max-width: 900px;
+    }
+
+    .nav__list {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: .3rem;
+    }
+
+    .nav__link {
+        font-size: .72rem;
+        padding-inline: .15rem;
+        text-align: center;
+    }
+
+    .home__content {
+        grid-template-columns: 52px minmax(0, 1fr);
+        gap: 1rem;
+    }
+
+    .home__data {
+        grid-column: 1 / -1;
+        min-width: 0;
+    }
+
+    .home__blob {
+        width: clamp(180px, 28vw, 240px);
+    }
+
+    .about__hero {
+        grid-template-columns: minmax(0, 1fr) minmax(230px, .65fr);
+        gap: 1.25rem;
+        padding: 1.5rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .contact__container {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        gap: 1.25rem;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .container {
+        width: calc(100% - 2rem);
+        max-width: none;
+    }
+
+    .home__content {
+        grid-template-columns: 1fr;
+        padding-top: 2rem;
+        gap: 1.5rem;
+    }
+
+    .home__img {
+        justify-self: center;
+    }
+
+    .home__blob {
+        width: min(62vw, 230px);
+    }
+
+    .home__data {
+        grid-column: 1;
+        min-width: 0;
+        text-align: center;
+    }
+
+    .home__social {
+        width: min(100%, 220px);
+        margin-inline: auto;
+        justify-content: center;
+        grid-template-columns: repeat(4, 44px);
+    }
+
+    .about__hero {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        padding: 1.25rem;
+    }
+
+    .about__hero-image {
+        order: -1;
+    }
+
+    .about__portrait {
+        width: min(100%, 360px);
+        margin-inline: auto;
+    }
+
+    .about__detail-grid,
+    .skills__container,
+    .contact__container {
+        grid-template-columns: 1fr;
+    }
+
+    .skills__list {
+        grid-template-columns: 1fr;
+        padding-left: 1rem;
+        padding-right: 0;
+    }
+
+    .skills__titles {
+        min-width: 0;
+        gap: .5rem;
+        flex-wrap: wrap;
+    }
+
+    .qual-tabs {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+        gap: .5rem;
+    }
+
+    .qual-tab-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .qual-timeline {
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+    }
+
+    .qual-timeline-card {
+        width: 100%;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    .project-card {
+        width: 100%;
+        padding: 1.1rem;
+    }
+
+    .project-card h3,
+    .project-card p {
+        min-height: 0;
+    }
+
+    .project-links {
+        width: 100%;
+    }
+
+    .project-links a {
+        flex: 1 1 140px;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .portfolio__container {
+        width: 100%;
+        padding-left: 2.25rem;
+        padding-right: 2.25rem;
+    }
+
+    .portfolio__slides {
+        min-height: 440px;
+    }
+
+    .portfolio__content,
+    .portfolio__content.portfolio__card {
+        width: min(100%, 300px);
+        max-width: 300px;
+    }
+
+    .portfolio__content.portfolio__card.card--left {
+        transform: translateX(calc(-50% - 76px)) scale(.78) rotateY(7deg);
+    }
+
+    .portfolio__content.portfolio__card.card--right {
+        transform: translateX(calc(-50% + 76px)) scale(.78) rotateY(-7deg);
+    }
+
+    .portfolio__nav {
+        width: 44px;
+        height: 44px;
+    }
+
+    .portfolio__nav-prev {
+        left: .25rem;
+    }
+
+    .portfolio__nav-next {
+        right: .25rem;
+    }
+
+    .contact__inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .contact__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .contact__btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .footer__container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .container {
+        width: calc(100% - 1.5rem);
+    }
+
+    .home__blob {
+        width: min(66vw, 215px);
+    }
+
+    .home__social {
+        grid-template-columns: repeat(2, 44px);
+        width: 100px;
+    }
+
+    .about__hero {
+        padding: 1rem;
+    }
+
+    .education-card-content {
+        padding-right: 0;
+    }
+
+    .education-logo {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-left: auto;
+        margin-bottom: .75rem;
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .portfolio__container {
+        padding-left: 1.75rem;
+        padding-right: 1.75rem;
+    }
+
+    .portfolio__content,
+    .portfolio__content.portfolio__card {
+        width: min(100%, 285px);
+        max-width: 285px;
+    }
+}
+
+@media screen and (max-width: 359px) {
+    .container {
+        width: calc(100% - 1rem);
+    }
+
+    .portfolio__container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .portfolio__nav {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+@supports not (height: 100svh) {
+    .home {
+        min-height: 100vh;
+    }
+}
