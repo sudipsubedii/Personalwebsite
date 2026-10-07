@@ -238,6 +238,7 @@ function scrollActive() {
 }
 
 window.addEventListener('scroll', scrollActive)
+scrollActive()
 
 function scrollHeader() {
     const nav = document.getElementById('header')
@@ -269,6 +270,7 @@ function scrollUp() {
 window.addEventListener('scroll', scrollUp)
 
 const themeButton = document.getElementById('theme-button')
+const themeIcon = themeButton ? themeButton.querySelector('i') : null
 const darkTheme = 'dark-theme'
 
 if (themeButton) {
