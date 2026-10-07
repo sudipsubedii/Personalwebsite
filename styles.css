@@ -3276,3 +3276,155 @@ body.dark-theme .education-logo {
 body.dark-theme .education-logo img {
     background: var(--dark-surface-elevated);
 }
+
+
+/* ==================== FINAL DARK THEME OVERRIDES ==================== */
+/* Applied to html as well as body so every page layer follows the selected theme. */
+
+html.dark-theme,
+html.dark-theme body {
+    background-color: var(--dark-page-bg);
+    color: var(--text-color);
+    color-scheme: dark;
+}
+
+html.dark-theme .header,
+html.dark-theme .nav__menu {
+    background-color: var(--dark-header-bg);
+    border-color: var(--dark-border);
+}
+
+html.dark-theme .main,
+html.dark-theme .home,
+html.dark-theme .about.section,
+html.dark-theme .skills,
+html.dark-theme .qualification,
+html.dark-theme #projects,
+html.dark-theme .contact,
+html.dark-theme .portfolio,
+html.dark-theme .footer {
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+html.dark-theme .about__hero,
+html.dark-theme .about__details-panel,
+html.dark-theme .about__detail-card,
+html.dark-theme .skills__content,
+html.dark-theme .qual-tab-btn,
+html.dark-theme .qual-timeline-card,
+html.dark-theme .project-card,
+html.dark-theme .portfolio__content,
+html.dark-theme .contact__box,
+html.dark-theme .contact__card,
+html.dark-theme .contact__input,
+html.dark-theme .contact__textarea,
+html.dark-theme .education-card {
+    background-color: var(--dark-surface-bg);
+    border-color: var(--dark-border);
+    color: var(--title-color);
+}
+
+html.dark-theme .about__detail-card,
+html.dark-theme .about__skill-grid span,
+html.dark-theme .about__quick-stats span {
+    box-shadow: 0 12px 30px var(--dark-shadow);
+}
+
+html.dark-theme .qual-tab-btn:hover {
+    background-color: var(--dark-surface-elevated);
+}
+
+html.dark-theme .qual-tab-btn.qual-tab-active {
+    background-color: var(--first-color);
+    border-color: var(--first-color);
+    color: #fff;
+}
+
+html.dark-theme .qual-timeline::before {
+    background-color: rgba(166, 213, 138, .24);
+}
+
+html.dark-theme .qual-timeline-marker {
+    border-color: var(--dark-surface-bg);
+}
+
+html.dark-theme .qual-timeline-card h3,
+html.dark-theme .qual-timeline-card p,
+html.dark-theme .qual-timeline-card .qual-org,
+html.dark-theme .project-card h3,
+html.dark-theme .project-card p,
+html.dark-theme .project-card ul,
+html.dark-theme .portfolio__title,
+html.dark-theme .portfolio__description,
+html.dark-theme .contact__card-title,
+html.dark-theme .contact__card-text,
+html.dark-theme .about__detail-card h3,
+html.dark-theme .about__detail-card li,
+html.dark-theme .skills__title,
+html.dark-theme .skills__name {
+    color: var(--title-color);
+}
+
+html.dark-theme .qual-timeline-card p,
+html.dark-theme .qual-timeline-card .qual-org,
+html.dark-theme .project-card p,
+html.dark-theme .project-card ul,
+html.dark-theme .portfolio__description,
+html.dark-theme .contact__card-text,
+html.dark-theme .about__detail-card li {
+    color: var(--text-color);
+}
+
+html.dark-theme .qual-tags span,
+html.dark-theme .tech-stack span {
+    background-color: rgba(123, 182, 60, .12);
+    border-color: rgba(123, 182, 60, .22);
+    color: hsl(var(--hue-color), 62%, 82%);
+}
+
+html.dark-theme .about__portrait {
+    box-shadow: 0 20px 40px var(--dark-shadow);
+}
+
+html.dark-theme .project-card:hover,
+html.dark-theme .contact__card:hover {
+    background-color: var(--dark-surface-elevated);
+}
+
+html.dark-theme .project-card.featured {
+    border-color: var(--first-color);
+}
+
+html.dark-theme .project-card.featured .project-poster {
+    background-color: var(--dark-surface-elevated);
+}
+
+html.dark-theme .contact__social,
+html.dark-theme .footer__social {
+    color: var(--title-color);
+}
+
+html.dark-theme .contact__social {
+    border-color: var(--dark-border);
+}
+
+html.dark-theme .portfolio__nav,
+html.dark-theme .portfolio__nav-prev,
+html.dark-theme .portfolio__nav-next {
+    background-color: var(--dark-surface-elevated);
+    border-color: var(--dark-border);
+}
+
+html.dark-theme .portfolio__dot {
+    background-color: rgba(255, 255, 255, .20);
+}
+
+html.dark-theme .portfolio__dot.active {
+    background-color: var(--first-color);
+}
+
+html.dark-theme .footer__bg {
+    background-color: var(--dark-header-bg);
+    border-top-color: var(--dark-border);
+}
