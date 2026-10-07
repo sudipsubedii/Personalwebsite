@@ -27,12 +27,17 @@ const skillsContent = document.getElementsByClassName('skills__content'),
     skillsHeader = document.querySelectorAll('.skills__header')
 
 function toggleSkills() {
-    let itemClass = this.parentNode.className
-    for (i = 0; i < skillsContent.length; i++) {
-        skillsContent[i].className = 'skills__content skills__close'
-    }
-    if (itemClass === 'skills__content skills__close') {
-        this.parentNode.className = 'skills__content skills__open'
+    const item = this.parentElement
+    const wasClosed = item.classList.contains('skills__close')
+
+    Array.from(skillsContent).forEach(content => {
+        content.classList.remove('skills__open')
+        content.classList.add('skills__close')
+    })
+
+    if (wasClosed) {
+        item.classList.remove('skills__close')
+        item.classList.add('skills__open')
     }
 }
 
@@ -42,20 +47,55 @@ skillsHeader.forEach((eL) => {
 
 /* Qualification section tab switching */
 document.addEventListener("DOMContentLoaded", () => {
-  const tabButtons = document.querySelectorAll(".qual-tab-btn");
-  const tabContents = document.querySelectorAll(".qual-content");
+  const tabButtons = Array.from(document.querySelectorAll(".qual-tab-btn"));
+  const tabContents = Array.from(document.querySelectorAll(".qual-content"));
 
-  tabButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      const target = button.dataset.tab;
+  const activateTab = (button, moveFocus = false) => {
+    const target = button.dataset.tab;
+    const targetPanel = document.getElementById(target);
+    if (!targetPanel) return;
 
-      tabButtons.forEach(btn => btn.classList.remove("qual-tab-active"));
-      tabContents.forEach(content => content.classList.remove("qual-content-active"));
+    tabButtons.forEach(btn => {
+      const isActive = btn === button;
+      btn.classList.toggle("qual-tab-active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+      btn.setAttribute("tabindex", isActive ? "0" : "-1");
+    });
 
-      button.classList.add("qual-tab-active");
-      document.getElementById(target).classList.add("qual-content-active");
+    tabContents.forEach(content => {
+      const isActive = content === targetPanel;
+      content.classList.toggle("qual-content-active", isActive);
+      content.hidden = !isActive;
+    });
+
+    if (moveFocus) button.focus();
+  };
+
+  tabButtons.forEach((button, index) => {
+    button.addEventListener("click", () => activateTab(button));
+
+    button.addEventListener("keydown", event => {
+      let nextIndex = index;
+
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        nextIndex = (index + 1) % tabButtons.length;
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+      } else if (event.key === "Home") {
+        nextIndex = 0;
+      } else if (event.key === "End") {
+        nextIndex = tabButtons.length - 1;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      activateTab(tabButtons[nextIndex], true);
     });
   });
+
+  const initiallyActive = tabButtons.find(btn => btn.classList.contains("qual-tab-active")) || tabButtons[0];
+  if (initiallyActive) activateTab(initiallyActive);
 });
 
 /* Custom portfolio carousel: 3 cards, 3-second autoplay, 700ms transition */
@@ -71,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let current = 0
     const total = slides.length
     let intervalId = null
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     function render() {
         slides.forEach((slide, index) => {
@@ -146,10 +187,15 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     container && container.addEventListener('mouseenter', stopAuto)
     container && container.addEventListener('mouseleave', startAuto)
+    container && container.addEventListener('focusin', stopAuto)
+    container && container.addEventListener('focusout', event => {
+        if (!container.contains(event.relatedTarget)) startAuto()
+    })
+    container && container.addEventListener('touchstart', stopAuto, { passive: true })
 
     buildPagination()
     render()
-    startAuto()
+    if (!reduceMotion) startAuto()
 })()
 
 const sections = document.querySelectorAll('section[id]')
@@ -194,6 +240,7 @@ window.addEventListener('scroll', scrollHeader)
 
 function scrollUp() {
     const scrollUp = document.getElementById('scroll-up')
+    if (!scrollUp) return
     if (this.scrollY >= 560) scrollUp.classList.add('show-scroll')
     else scrollUp.classList.remove('show-scroll')
 }
