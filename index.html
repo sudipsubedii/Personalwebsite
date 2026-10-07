@@ -6,9 +6,21 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" rel="stylesheet"/>
 <link href="assets/css/swiper-bundle.min.css" rel="stylesheet"/>
-<link href="styles.css" rel="stylesheet"/>
+<link href="styles.css?v=20261007" rel="stylesheet"/>
 
 <link href="img/S.jpg" rel="icon"/>
+<script>
+(() => {
+  try {
+    const saved = localStorage.getItem('selected-theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      document.documentElement.classList.add('dark-theme');
+      document.documentElement.dataset.theme = 'dark';
+    }
+  } catch (e) {}
+})();
+</script>
 <meta name="description" content="Sudip Subedi — Registered Civil Engineer and broader civil engineering researcher working across transportation, hydrology, geotechnical and environmental engineering.">
 <meta name="theme-color" content="#7bb63c">
 <meta property="og:title" content="Sudip Subedi | Registered Civil Engineer &amp; Researcher">
@@ -1200,7 +1212,7 @@
 <i class="uil uil-arrow-up scrollup__icon"></i>
 </a>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script src="main.js"></script>
+<script src="main.js?v=20261007"></script>
 
 
 
