@@ -3,7 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life of an Earthian</title>
+  <meta name="description" content="Life of an Earthian — a personal archive by Sudip Subedi." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#f6f3ee" />
+  <meta property="og:title" content="Life of an Earthian — a personal archive by Sudip Subedi" />
+  <meta property="og:description" content="A quiet personal archive of moments, places, songs, food, and the memories that shaped a life." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://example.com/img/og-personal-archive.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Life of an Earthian — a personal archive by Sudip Subedi" />
+  <meta name="twitter:description" content="A quiet personal archive of moments, places, songs, food, and the memories that shaped a life." />
+  <meta name="twitter:image" content="https://example.com/img/og-personal-archive.jpg" />
+  <link rel="canonical" href="https://example.com/autobiography.html" />
+  <link rel="icon" href="img/favicon.png" type="image/png" />
+  <title>Life of an Earthian — a personal archive by Sudip Subedi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -112,18 +125,60 @@
     }
     .movie-genre-filter::-webkit-scrollbar { display:none; }
     .movie-genre-btn {
-      flex:0 0 auto; border:1px solid rgba(24,24,27,.12); background:rgba(255,255,255,.72);
-      color:#52525b; border-radius:999px; padding:.55rem .82rem; font-size:.72rem; font-weight:600;
+      flex:0 0 auto; border:1px solid rgba(24,24,27,.14); background:rgba(255,255,255,.78);
+      color:#52525b; border-radius:999px; padding:.58rem .92rem; font-size:.72rem; font-weight:600;
       line-height:1; white-space:nowrap; transition:background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
     }
-    .movie-genre-btn:hover { transform:translateY(-1px); border-color:rgba(24,24,27,.2); color:#18181b; }
-    .movie-genre-btn.is-active { background:#18181b; color:#fff; border-color:#18181b; box-shadow:0 6px 14px rgba(15,23,42,.08); }
+    .movie-genre-btn:hover { transform:translateY(-1px); border-color:rgba(24,24,27,.28); color:#18181b; }
+    .movie-genre-btn.is-active { background:#18181b; color:#fff; border-color:#18181b; box-shadow:0 5px 12px rgba(15,23,42,.12); }
     .dark .movie-genre-btn { background:rgba(24,24,27,.72); border-color:rgba(255,255,255,.1); color:#a1a1aa; }
     .dark .movie-genre-btn:hover { border-color:rgba(255,255,255,.18); color:#f4f4f5; }
     .dark .movie-genre-btn.is-active { background:#f4f4f5; color:#18181b; border-color:#f4f4f5; }
+    .movie-catalog-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.1rem .8rem; }
+    .movie-catalog-card { min-width:0; }
+    .movie-poster-frame { position:relative; overflow:hidden; aspect-ratio:2/3; border:1px solid rgba(24,24,27,.1); border-radius:1rem; background:#e7e5e4; box-shadow:0 8px 18px rgba(15,23,42,.08); isolation:isolate; }
+    .dark .movie-poster-frame { border-color:rgba(255,255,255,.1); background:#252630; box-shadow:0 10px 22px rgba(0,0,0,.22); }
+    .movie-poster-image { display:block; width:100%; height:100%; object-fit:cover; transition:transform .35s ease, filter .35s ease; }
+    .movie-poster-fallback { display:flex; width:100%; height:100%; align-items:flex-end; padding:1rem; background:linear-gradient(155deg,#d6d3d1 0%,#a8a29e 48%,#57534e 100%); color:#fff; }
+    .dark .movie-poster-fallback { background:linear-gradient(155deg,#52525b 0%,#27272a 55%,#09090b 100%); }
+    .movie-poster-fallback-title { font-size:1.05rem; font-weight:700; line-height:1.2; text-shadow:0 2px 12px rgba(0,0,0,.35); overflow-wrap:anywhere; }
+    .movie-poster-actions { position:absolute; inset:auto 0 0; display:flex; flex-wrap:wrap; gap:.4rem; padding:2.4rem .65rem .65rem; background:linear-gradient(transparent,rgba(0,0,0,.82)); opacity:0; transform:translateY(5px); transition:opacity .22s ease,transform .22s ease; }
+    .movie-catalog-card:hover .movie-poster-image { transform:scale(1.035); }
+    .movie-catalog-card:hover .movie-poster-actions, .movie-catalog-card:focus-within .movie-poster-actions { opacity:1; transform:translateY(0); }
+    .movie-poster-action { display:inline-flex; align-items:center; justify-content:center; min-height:2rem; border:1px solid rgba(255,255,255,.34); border-radius:999px; padding:.42rem .68rem; background:rgba(24,24,27,.72); color:#fff; font-size:.68rem; font-weight:650; line-height:1; text-decoration:none; cursor:pointer; }
+    .movie-poster-action:hover { background:#fff; color:#18181b; }
+    .movie-poster-action:disabled { opacity:.6; cursor:not-allowed; }
+    .movie-poster-action-remove { border-color:rgba(252,165,165,.55); color:#fee2e2; }
+    .movie-poster-action-remove:hover { background:#fee2e2; color:#7f1d1d; }
+    .movie-card-copy { padding:.7rem .15rem 0; }
+    .movie-card-title { overflow:hidden; color:#18181b; font-size:.9rem; font-weight:650; line-height:1.35; text-overflow:ellipsis; }
+    .dark .movie-card-title { color:#f4f4f5; }
+    .movie-card-genre { margin-top:.32rem; color:#71717a; font-size:.68rem; line-height:1.35; }
+    .dark .movie-card-genre { color:#a1a1aa; }
+    .movie-card-story { display:-webkit-box; overflow:hidden; margin-top:.38rem; color:#71717a; font-size:.67rem; line-height:1.45; line-clamp:2; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+    .dark .movie-card-story { color:#a1a1aa; }
+    .movie-poster-preview { display:flex; min-height:150px; max-width:110px; aspect-ratio:2/3; align-items:center; justify-content:center; overflow:hidden; border:1px solid rgba(24,24,27,.12); border-radius:.75rem; background:#e7e5e4; }
+    .dark .movie-poster-preview { border-color:rgba(255,255,255,.1); background:#252630; }
+    .movie-poster-preview-image { width:100%; height:100%; object-fit:cover; }
+    .movie-poster-preview-empty { padding:.65rem; color:#71717a; font-size:.7rem; line-height:1.4; text-align:center; }
+    .dark .movie-poster-preview-empty { color:#a1a1aa; }
+    .movie-poster-status { min-height:1rem; color:#71717a; font-size:.72rem; }
+    .dark .movie-poster-status { color:#a1a1aa; }
+    .movie-edit-form { grid-column:1/-1; }
+    .movie-catalog-empty { grid-column:1/-1; padding:2rem 1rem; border:1px dashed rgba(24,24,27,.2); border-radius:1rem; color:#71717a; text-align:center; }
+    .dark .movie-catalog-empty { border-color:rgba(255,255,255,.16); color:#a1a1aa; }
+    @media (min-width: 640px) { .movie-catalog-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.35rem 1rem; } }
+    @media (min-width: 768px) { .movie-catalog-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:1.5rem 1.1rem; } }
+    @media (min-width: 1024px) { .movie-catalog-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:1.7rem 1.25rem; } }
+    @media (min-width: 1280px) { .movie-catalog-grid { grid-template-columns:repeat(6,minmax(0,1fr)); } }
+    @media (hover:none) { .movie-poster-actions { opacity:1; transform:none; } }
     @media (max-width: 767px) {
       .movie-genre-filter { gap:.45rem; }
       .movie-genre-btn { padding:.52rem .72rem; font-size:.68rem; }
+      .movie-poster-actions { gap:.3rem; padding:.6rem .4rem .45rem; }
+      .movie-poster-action { min-height:1.8rem; padding:.38rem .52rem; font-size:.62rem; }
+      .movie-card-copy { padding-top:.55rem; }
+      .movie-card-title { font-size:.82rem; }
     }
 
     .spotify-library-shell {
@@ -243,7 +298,7 @@
       border:0;
       background:#181818;
     }
-    .spotify-playlist-empty { padding:1.5rem; font-size:.82rem; line-height:1.6; color:rgba(255,255,255,.7); }
+    .spotify-playlist-empty { padding:1.5rem; font-size:.82rem; line-height:1.6; color:rgb(82 82 91); }
     @media (max-width: 900px) {
       .spotify-library-shell { grid-template-columns:1fr; }
       .spotify-library-sidebar { border-right:0; border-bottom:1px solid rgba(24,24,27,.08); }
@@ -273,12 +328,10 @@
     .archive-entry-preview { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:1rem; width:100%; padding:1rem 1.1rem; }
     .archive-entry-main-button { border:0; background:transparent; color:inherit; padding:0; text-align:left; cursor:pointer; min-width:0; }
     .archive-entry-actions { display:flex; align-items:center; justify-content:flex-end; gap:.5rem; flex-wrap:wrap; }
-    .archive-entry-label, .compact-entry-label { display:inline-block; margin-bottom:.45rem; font-size:.64rem; letter-spacing:.28em; text-transform:uppercase; color:rgb(113 113 122); }
-    .dark .archive-entry-label, .dark .compact-entry-label { color:rgb(161 161 170); }
-    .archive-entry-title, .compact-entry-title { font-size:clamp(1rem,1.4vw,1.15rem); line-height:1.35; font-weight:600; letter-spacing:-.03em; color:#18181b; word-break:break-word; }
-    .dark .archive-entry-title, .dark .compact-entry-title { color:#f4f4f5; }
-    .archive-entry-meta, .compact-entry-meta { margin-top:.35rem; font-size:.8rem; color:rgb(82 82 91); line-height:1.55; }
-    .dark .archive-entry-meta, .dark .compact-entry-meta { color:rgb(161 161 170); }
+    .archive-entry-label { display:inline-block; margin-bottom:.45rem; font-size:.64rem; letter-spacing:.28em; text-transform:uppercase; color:rgb(113 113 122); }
+    .dark .archive-entry-label { color:rgb(161 161 170); }
+    .archive-entry-title { font-size:clamp(1rem,1.4vw,1.15rem); line-height:1.35; font-weight:600; letter-spacing:-.03em; color:#18181b; word-break:break-word; }
+    .dark .archive-entry-title { color:#f4f4f5; }
     .archive-preview-copy { margin-top:.55rem; font-size:.82rem; line-height:1.6; color:rgb(82 82 91); }
     .dark .archive-preview-copy { color:rgb(161 161 170); }
     .archive-expanded-panel { display:none; border-top:1px solid rgba(24,24,27,.1); padding:1.1rem; }
@@ -302,15 +355,15 @@
     .dark .archive-thumb-btn.is-active img { outline-color:rgba(255,255,255,.8); }
     .archive-detail-actions { display:flex; justify-content:flex-end; gap:.5rem; flex-wrap:wrap; margin-top:1rem; }
 
-    .compact-action-btn, .compact-secondary-btn, .movie-delete-btn, .song-delete-btn, .album-edit-btn, .album-add-photos-btn, .album-delete-btn, .timeline-edit-btn, .timeline-delete-btn {
+    .compact-secondary-btn, .album-add-photos-btn, .album-delete-btn, .timeline-edit-btn, .timeline-delete-btn {
       display:inline-flex; align-items:center; justify-content:center; border-radius:999px; border:1px solid rgba(24,24,27,.12);
       background:rgba(255,255,255,.9); color:#18181b; padding:.55rem .85rem; font-size:.74rem; font-weight:600; line-height:1;
       transition:transform .2s ease, border-color .2s ease, background .2s ease;
     }
-    .compact-action-btn:hover, .compact-secondary-btn:hover, .movie-delete-btn:hover, .song-delete-btn:hover, .album-edit-btn:hover, .album-add-photos-btn:hover, .album-delete-btn:hover, .timeline-edit-btn:hover, .timeline-delete-btn:hover { transform:translateY(-1px); }
-    .dark .compact-action-btn, .dark .compact-secondary-btn, .dark .movie-delete-btn, .dark .song-delete-btn, .dark .album-edit-btn, .dark .album-add-photos-btn, .dark .album-delete-btn, .dark .timeline-edit-btn, .dark .timeline-delete-btn { background:rgba(24,24,27,.8); border-color:rgba(255,255,255,.08); color:#f4f4f5; }
-    .movie-delete-btn, .song-delete-btn, .album-delete-btn, .timeline-delete-btn { border-color:rgba(239,68,68,.2); color:#b91c1c; background:rgba(254,242,242,.8); }
-    .dark .movie-delete-btn, .dark .song-delete-btn, .dark .album-delete-btn, .dark .timeline-delete-btn { border-color:rgba(248,113,113,.25); color:#fca5a5; background:rgba(127,29,29,.2); }
+    .compact-secondary-btn:hover, .album-add-photos-btn:hover, .album-delete-btn:hover, .timeline-edit-btn:hover, .timeline-delete-btn:hover { transform:translateY(-1px); }
+    .dark .compact-secondary-btn, .dark .album-add-photos-btn, .dark .album-delete-btn, .dark .timeline-edit-btn, .dark .timeline-delete-btn { background:rgba(24,24,27,.8); border-color:rgba(255,255,255,.08); color:#f4f4f5; }
+    .album-delete-btn, .timeline-delete-btn { border-color:rgba(239,68,68,.2); color:#b91c1c; background:rgba(254,242,242,.8); }
+    .dark .album-delete-btn, .dark .timeline-delete-btn { border-color:rgba(248,113,113,.25); color:#fca5a5; background:rgba(127,29,29,.2); }
 
     .album-editor { margin-top:1rem; border:1px solid rgba(24,24,27,.12); border-radius:1.5rem; background:rgba(255,255,255,.75); padding:1rem; }
     .dark .album-editor { background:rgba(30,31,37,.7); border-color:rgba(255,255,255,.08); }
@@ -322,6 +375,22 @@
     .selected-photo img { width:100%; height:100%; object-fit:cover; }
     .selected-photo-remove { position:absolute; top:4px; right:4px; width:24px; height:24px; border-radius:999px; border:0; background:rgba(0,0,0,.7); color:#fff; font-size:12px; }
     .existing-photo-list { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .photo-upload-panel { margin-top:1rem; border:1px solid rgba(24,24,27,.12); border-radius:1rem; background:rgba(250,250,249,.82); padding:.9rem; }
+    .dark .photo-upload-panel { border-color:rgba(255,255,255,.1); background:rgba(24,24,27,.55); }
+    .photo-upload-progress-track { height:.65rem; overflow:hidden; border-radius:999px; background:rgba(113,113,122,.18); }
+    .photo-upload-progress-fill { height:100%; width:0; border-radius:inherit; background:#16a34a; transition:width .16s linear; }
+    .photo-upload-file-progress-track { height:.35rem; overflow:hidden; border-radius:999px; background:rgba(113,113,122,.18); }
+    .photo-upload-file-progress-fill { height:100%; width:0; border-radius:inherit; background:#0ea5e9; transition:width .16s linear; }
+    .photo-upload-detail { min-height:1.1rem; color:#52525b; font-size:.75rem; }
+    .dark .photo-upload-detail { color:#d4d4d8; }
+    .photo-upload-panel.is-saving .photo-upload-progress-fill { background:#0ea5e9; }
+    .photo-upload-panel.is-saved .photo-upload-progress-fill { background:#16a34a; }
+    .photo-upload-panel.is-unavailable { border-color:rgba(220,38,38,.32); background:rgba(254,242,242,.8); }
+    .dark .photo-upload-panel.is-unavailable { border-color:rgba(248,113,113,.32); background:rgba(127,29,29,.18); }
+    .photo-upload-panel.is-unavailable .photo-upload-heading, .photo-upload-panel.is-unavailable .photo-upload-file-name { color:#b91c1c; font-weight:600; }
+    .dark .photo-upload-panel.is-unavailable .photo-upload-heading, .dark .photo-upload-panel.is-unavailable .photo-upload-file-name { color:#fca5a5; }
+    .photo-upload-panel.is-checking .photo-upload-progress-track, .photo-upload-panel.is-checking .photo-upload-file-progress-track, .photo-upload-panel.is-checking .photo-upload-metrics,
+    .photo-upload-panel.is-unavailable .photo-upload-progress-track, .photo-upload-panel.is-unavailable .photo-upload-file-progress-track, .photo-upload-panel.is-unavailable .photo-upload-metrics { display:none; }
 
     .timeline-shell { position:relative; margin-top:1.4rem; width:100%; }
     .timeline-shell::before { content:''; position:absolute; left:100px; top:.4rem; bottom:.4rem; width:1px; background:rgba(24,24,27,.12); pointer-events:none; }
@@ -387,11 +456,12 @@
   </style>
 </head>
 <body class="bg-[#faf9f5] text-zinc-900 transition-colors duration-500 dark:bg-[#18191e] dark:text-zinc-300">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[110] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-zinc-900">Skip to archive</a>
   <div id="welcome" class="fixed inset-0 z-[60] flex items-center justify-center bg-white/95 backdrop-blur-md dark:bg-[#18191e]/95">
-    <div class="text-center text-2xl sm:text-3xl font-light tracking-wide">Hey .. how's going</div>
+    <div class="text-center text-2xl sm:text-3xl font-light tracking-wide">Hey, how's it going?</div>
   </div>
 
-  <main class="mx-auto min-h-screen max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+  <main id="main-content" class="mx-auto min-h-screen max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
     <header class="pt-1">
       <div class="flex items-start justify-end">
         <div class="flex items-center gap-2">
@@ -402,11 +472,11 @@
             <input id="searchInput" type="text" placeholder="Search folders, descriptions, entries..." class="w-full rounded-full border border-zinc-200 bg-white py-3 pl-11 pr-4 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800/60" />
             <div id="searchResults" class="absolute left-0 right-0 top-[calc(100%+10px)] z-30 hidden max-h-[320px] overflow-auto rounded-3xl border border-zinc-200 bg-[#fcfcfa] p-2 shadow-2xl dark:border-zinc-700 dark:bg-zinc-950 no-scrollbar"></div>
           </div>
-          <button id="adminToggle" class="header-button" aria-label="Admin toggle">
+          <button id="adminToggle" type="button" class="header-button" aria-label="Admin" aria-pressed="false">
             <span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8.5A4 4 0 0 1 12 4.5A4 4 0 0 1 16 8.5V11"></path></svg></span>
             <span class="header-label">Admin</span>
           </button>
-          <button id="infoBtn" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100" aria-label="About">i</button>
+          <button id="infoBtn" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100" aria-label="About this archive">i</button>
           <button id="themeToggle" class="header-button h-11 w-11 p-0" aria-label="Toggle dark mode">
             <span id="themeIcon" class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 0 1 11.2 3a9 9 0 1 0 9.8 9.8Z"></path></svg></span>
           </button>
@@ -436,7 +506,7 @@
           <h2 id="folderShort" class="mt-2 text-2xl sm:text-3xl font-semibold tracking-[-0.03em] text-zinc-950 dark:text-zinc-50">the moments that shaped me</h2>
         </div>
       </div>
-      <p id="folderIntro" class="max-w-3xl text-sm leading-7 text-zinc-600 dark:text-zinc-300">A quiet archive of the first lessons, the unexpected turns, and the moments that taught me how to keep going.</p>
+      <p id="folderIntro" class="max-w-3xl text-sm leading-7 text-zinc-600 dark:text-zinc-300">A quiet personal archive of moments, places, songs, food, and the memories that shaped a life.</p>
       <div id="entries" class="relative mt-7 space-y-4"></div>
     </section>
   </main>
@@ -448,25 +518,24 @@
           <div class="text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">about</div>
           <h3 class="mt-2 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Sudip Subedi</h3>
         </div>
-        <button id="closeInfo" class="rounded-full border border-zinc-200 px-3 py-1 text-sm text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900">Close</button>
+        <button id="closeInfo" class="rounded-full border border-zinc-200 px-3 py-1 text-sm text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900">Close profile</button>
       </div>
       <div class="mt-5 grid gap-5 md:grid-cols-[180px_minmax(0,1fr)] md:items-start">
-        <div class="overflow-hidden rounded-[1.75rem] border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/70">
+        <div id="profileAvatarWrap" class="overflow-hidden rounded-[1.75rem] border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/70">
           <div class="flex aspect-[4/5] items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-300 text-zinc-500 dark:from-zinc-800 dark:to-zinc-700 dark:text-zinc-300">
             <div class="text-center">
-              <div class="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-white text-2xl font-semibold text-zinc-700 shadow-sm dark:bg-zinc-950 dark:text-zinc-100">SS</div>
-              <div class="text-xs uppercase tracking-[0.3em]">photo</div>
-              <div class="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">replace with a real image</div>
+              <img id="profileImage" class="mx-auto h-20 w-20 rounded-full object-cover shadow-sm hidden" alt="Sudip Subedi portrait" width="80" height="80" loading="lazy" decoding="async" />
+              <div id="profileFallback" class="mx-auto mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-white text-2xl font-semibold text-zinc-700 shadow-sm dark:bg-zinc-950 dark:text-zinc-100" aria-label="Sudip Subedi initials">SS</div>
             </div>
           </div>
         </div>
         <div class="space-y-4">
-          <div class="rounded-3xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
+          <div id="profilePhoneRow" class="hidden rounded-3xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/70">
             <div class="text-[11px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">phone</div>
-            <div class="mt-2 text-lg font-medium text-zinc-950 dark:text-zinc-50">+977 98 0000 0000</div>
+            <div id="profilePhoneValue" class="mt-2 text-lg font-medium text-zinc-950 dark:text-zinc-50"></div>
           </div>
-          <p class="text-sm leading-7 text-zinc-600 dark:text-zinc-300">This website was created as a living autobiography: a minimal, calm, and personal digital space where life can be read like a timeline. It is meant to hold memories, movies, songs, food, places, people, and skills in one place, so the story feels easy to browse, share, and expand over time. The layout stays simple on purpose, because the focus is the life story itself rather than decoration.</p>
-          <p class="text-sm leading-7 text-zinc-600 dark:text-zinc-300">It is built to feel human and slowly unfolding, like turning pages in a private archive. Each folder keeps the tone soft and reflective, while still remaining practical, responsive, and easy to use on phones, tablets, and desktop screens.</p>
+          <p class="text-sm leading-7 text-zinc-600 dark:text-zinc-300">This archive keeps the story quiet and readable: a personal record of the places, people, and turning points that shaped my days. It is meant to feel calm, open, and easy to revisit in small pieces.</p>
+          <p class="text-sm leading-7 text-zinc-600 dark:text-zinc-300">The focus stays on memory rather than decoration, so the full picture unfolds slowly and honestly. It is built to feel human, minimal, and easy to use on a phone.</p>
         </div>
       </div>
     </div>
@@ -474,15 +543,15 @@
 
   <div id="adminModal" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/35 px-4 backdrop-blur-sm">
     <div class="w-full max-w-md rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-700 dark:bg-zinc-950">
-      <div class="text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">admin</div>
-      <h3 class="mt-2 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Unlock editor</h3>
-      <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Sign in with the Firebase admin account to unlock the editor.</p>
+      <div class="text-xs uppercase tracking-[0.34em] text-zinc-500 dark:text-zinc-400">editor</div>
+      <h3 class="mt-2 text-2xl font-semibold text-zinc-950 dark:text-zinc-50">Editor sign-in</h3>
+      <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Use the admin account to unlock the editor.</p>
       <input id="adminEmailInput" type="email" autocomplete="username" placeholder="Admin email" class="mt-5 w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800/60" />
       <input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="Password" class="mt-3 w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-4 focus:ring-zinc-200/60 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:border-zinc-500 dark:focus:ring-zinc-800/60" />
       <div id="adminAuthMsg" class="mt-3 min-h-4 text-xs text-red-600 dark:text-red-400" aria-live="polite"></div>
       <div class="mt-5 flex justify-end gap-2">
-        <button id="cancelAdminBtn" class="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">Cancel</button>
-        <button id="unlockAdminBtn" class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900">Unlock</button>
+        <button id="cancelAdminBtn" class="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">Cancel sign-in</button>
+        <button id="unlockAdminBtn" class="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900">Sign in</button>
       </div>
     </div>
   </div>
@@ -503,9 +572,9 @@
       collection,
       getDocs,
       addDoc,
-      setDoc,
       deleteDoc,
       doc,
+      setDoc,
       writeBatch
     } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
@@ -519,9 +588,18 @@
       appId: "1:1004852794852:web:3737a471ab11839cbda3f1"
     };
 
+    // Replace this with the real Firebase Auth UID for the administrator.
+    // Copy this exact UID into isAdmin() in firestore.rules.
+    const ADMIN_UID = 'oei7vdoNKzXNt0Y40Sg4ZB8Nkft1';
+    const MOVIE_POSTER_WORKER_URL = 'https://life-earthian-tmdb.sudipsubedi1024.workers.dev/movie';
     const firebaseApp = initializeApp(firebaseConfig);
     const auth = getAuth(firebaseApp);
     const db = getFirestore(firebaseApp);
+    const profileConfig = {
+      initials: 'SS',
+      imageUrl: '',
+      phone: ''
+    };
 
     const SONGS_STORAGE_KEY = 'life-earthian-songs';
     const MOVIES_STORAGE_KEY = 'life-earthian-movies';
@@ -562,8 +640,11 @@
 
     const order = ['experiences','stories','memories','movies','songs','food','places','peoples','skills','timeline'];
     const currentPageKey = 'life-earthian-current-page';
-    let activeSection = localStorage.getItem(currentPageKey) || 'experiences';
-    let currentPage = activeSection;
+    const routeSectionFromHash = () => {
+      const raw = (window.location.hash || '').replace(/^#\/?/, '').split('/')[0].trim();
+      return Object.prototype.hasOwnProperty.call(sections, raw) ? raw : (localStorage.getItem(currentPageKey) || 'experiences');
+    };
+    let activeSection = routeSectionFromHash();
     let dark = localStorage.getItem('life-of-1-earthians-theme') === 'dark' || (!localStorage.getItem('life-of-1-earthians-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
     let carouselIndex = Math.max(0, order.indexOf(activeSection) - 2);
     let autoRotateTimer = null;
@@ -592,6 +673,65 @@
 
     let adminUser = null;
     let adminOpen = false;
+    const appState = {
+      activeSection: activeSection,
+      admin: {
+        user: null,
+        isAdmin: false,
+        modalOpen: false,
+      }
+    };
+
+    function getCurrentAdminState() {
+      const user = auth?.currentUser || null;
+      return {
+        user,
+        uid: user?.uid || null,
+        email: user?.email || null,
+        isSignedIn: Boolean(user),
+        isAdmin: Boolean(user && user.uid === ADMIN_UID)
+      };
+    }
+
+    function getAdminWriteErrorReason() {
+      const state = getCurrentAdminState();
+      if (!state.isSignedIn) {
+        return 'Admin authentication required.';
+      }
+      if (!state.isAdmin) {
+        return 'Admin authorization failed for this Firebase user.';
+      }
+      return null;
+    }
+
+    function isCurrentUserAdmin() {
+      return getCurrentAdminState().isAdmin;
+    }
+
+    function requireAdmin() {
+      const reason = getAdminWriteErrorReason();
+      if (reason) {
+        showToast(reason);
+        console.error(reason, getCurrentAdminState());
+        return false;
+      }
+      return true;
+    }
+
+    async function requireAuthenticatedAdmin(stage) {
+      if (!requireAdmin()) {
+        throw new Error(`${stage}: configured administrator authentication required.`);
+      }
+      const user = auth.currentUser;
+      try {
+        await user.getIdToken();
+      } catch (error) {
+        throw wrapFirebaseWriteError(`${stage} authentication`, error);
+      }
+      if (auth.currentUser?.uid !== ADMIN_UID) {
+        throw new Error(`${stage}: authenticated user no longer matches the configured administrator UID.`);
+      }
+    }
 
     function esc(value) {
       return String(value ?? '').replace(/[&<>'"]/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
@@ -600,7 +740,12 @@
     function normalizePhoto(photo) {
       if (!photo) return null;
       if (typeof photo === 'string') return { src: photo, alt: '' };
-      return { src: photo.src || '', alt: photo.alt || '', mediaId: photo.mediaId || undefined };
+      return {
+        ...photo,
+        src: photo.src || photo.previewUrl || '',
+        alt: photo.alt || '',
+        mediaId: photo.mediaId || undefined
+      };
     }
 
     function parseLegacyTimelineDate(value, index) {
@@ -619,7 +764,8 @@
       if (Array.isArray(entry)) {
         if (sectionId === 'movies') {
           const genre = entry[4] || entry.genre || '';
-          return { id:`movie-${sectionId}-${index}`, time:entry[0] || 'favorite watch', title:entry[1] || 'Untitled movie', story:entry[2] || '', link:entry[3] || '', genre:typeof genre === 'string' ? genre.trim() : '', photos:[] };
+          const photos = Array.isArray(entry.photos) ? entry.photos.map(normalizePhoto).filter(Boolean) : [];
+          return { id:`movie-${sectionId}-${index}`, time:entry[0] || 'favorite watch', title:entry[1] || 'Untitled movie', story:entry[2] || '', link:entry[3] || '', imdbLink:entry.imdbLink || '', posterUrl:entry.posterUrl || photos[0]?.src || '', genre:typeof genre === 'string' ? genre.trim() : '', photos };
         }
         if (sectionId === 'songs') {
           return { id:`song-${sectionId}-${index}`, time:entry[0] || 'playlist', title:entry[1] || 'Untitled playlist', story:entry[2] || '', link:entry[3] || '', photos:[] };
@@ -639,10 +785,102 @@
         story: entry.story || entry.text || '',
         link: entry.link || '',
         genre: entry.genre || '',
+        ...(sectionId === 'movies' ? {
+          imdbLink: entry.imdbLink || '',
+          posterUrl: entry.posterUrl || entry.photos?.[0]?.src || ''
+        } : {}),
         year: Number.isFinite(Number(entry.year)) ? Number(entry.year) : (fallbackDate ? fallbackDate.year : undefined),
         month: Number.isFinite(Number(entry.month)) ? Math.min(12, Math.max(1, Number(entry.month))) : (fallbackDate ? fallbackDate.month : undefined),
         photos: Array.isArray(entry.photos) ? entry.photos.map(normalizePhoto).filter(Boolean) : []
       };
+    }
+
+    function getMoviePosterUrl(entry) {
+      return String(entry?.posterUrl || entry?.photos?.[0]?.src || '');
+    }
+
+    function moviePhotosWithPoster(entry, posterUrl, title) {
+      const existingPhotos = Array.isArray(entry?.photos) ? entry.photos : [];
+      if (!posterUrl) return existingPhotos;
+      const remainingPhotos = existingPhotos.filter((photo, index) => index > 0 && photo?.src !== posterUrl);
+      return [{ src: posterUrl, alt: `${title} poster` }, ...remainingPhotos];
+    }
+
+    function renderMoviePosterPreview(form, posterUrl, title) {
+      const preview = form.querySelector('.movie-poster-preview');
+      if (!preview) return;
+      preview.innerHTML = posterUrl
+        ? `<img class="movie-poster-preview-image" src="${esc(posterUrl)}" alt="${esc(title || 'Movie')} poster preview" />`
+        : '<div class="movie-poster-preview-empty">Poster preview</div>';
+      const image = preview.querySelector('img');
+      image?.addEventListener('error', () => {
+        preview.innerHTML = '<div class="movie-poster-preview-empty">Poster unavailable. You can still save the movie.</div>';
+        form.querySelector('[name="posterUrl"]').value = '';
+      }, { once: true });
+    }
+
+    async function requestMoviePoster(imdbLink) {
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(imdbLink);
+      } catch {
+        throw new Error('Enter a valid IMDb movie URL first.');
+      }
+      if (!['imdb.com', 'www.imdb.com'].includes(parsedUrl.hostname.toLowerCase()) || !/^\/title\/tt\d+\/?$/.test(parsedUrl.pathname)) {
+        throw new Error('Enter a valid IMDb movie URL first.');
+      }
+
+      const workerUrl = new URL(MOVIE_POSTER_WORKER_URL);
+      workerUrl.searchParams.set('url', imdbLink);
+      const response = await fetch(workerUrl);
+      if (!response.ok) throw new Error(`Worker request failed (${response.status}).`);
+      const result = await response.json();
+      if (!result?.found || !result.posterUrl || !isValidUrl(result.posterUrl)) return null;
+      return { posterUrl: result.posterUrl, title: String(result.title || '') };
+    }
+
+    function bindMoviePosterLookup(form, initialPosterUrl = '', initialIMDbLink = '') {
+      const imdbInput = form.querySelector('[name="imdbLink"]');
+      const titleInput = form.querySelector('[name="title"]');
+      const posterInput = form.querySelector('[name="posterUrl"]');
+      const lookupSourceInput = form.querySelector('[name="posterLookupIMDbLink"]');
+      const fetchButton = form.querySelector('.movie-fetch-poster');
+      const status = form.querySelector('.movie-poster-status');
+      posterInput.value = initialPosterUrl;
+      lookupSourceInput.value = initialIMDbLink;
+      renderMoviePosterPreview(form, initialPosterUrl, titleInput.value);
+
+      imdbInput.addEventListener('input', () => {
+        if (String(imdbInput.value || '').trim() !== lookupSourceInput.value) {
+          posterInput.value = '';
+          renderMoviePosterPreview(form, '', titleInput.value);
+          status.textContent = '';
+        }
+      });
+      titleInput.addEventListener('input', () => renderMoviePosterPreview(form, posterInput.value, titleInput.value));
+
+      fetchButton.addEventListener('click', async () => {
+        const imdbLink = String(imdbInput.value || '').trim();
+        fetchButton.disabled = true;
+        status.textContent = 'Fetching poster…';
+        try {
+          const result = await requestMoviePoster(imdbLink);
+          if (!result) {
+            status.textContent = 'Poster not found. You can still save the movie without one.';
+            return;
+          }
+          posterInput.value = result.posterUrl;
+          if (!titleInput.value.trim() && result.title) titleInput.value = result.title;
+          lookupSourceInput.value = imdbLink;
+          renderMoviePosterPreview(form, result.posterUrl, titleInput.value || result.title);
+          status.textContent = 'Poster ready to save.';
+        } catch (error) {
+          console.error('Movie poster lookup failed:', error);
+          status.textContent = 'Poster lookup failed. You can still save the movie manually.';
+        } finally {
+          fetchButton.disabled = false;
+        }
+      });
     }
 
     // -------------------------------------------------------------------------
@@ -665,10 +903,22 @@
 
     async function uploadPhotoToFirestore(photo, sectionId, entryId, photoIndex) {
       if (!photo?.src) return null;
-      // Existing remote/media reference: keep it.
-      if (photo.mediaId) return { mediaId: photo.mediaId, alt: photo.alt || '' };
-      // External URL: keep it without creating a media document.
-      if (/^https?:\/\//i.test(photo.src)) return { src: photo.src, alt: photo.alt || '' };
+
+      if (photo.mediaId) {
+        return { mediaId: photo.mediaId, alt: photo.alt || '' };
+      }
+
+      if (/^https?:\/\//i.test(photo.src) || String(photo.src || '').startsWith('gs://')) {
+        return {
+          src: photo.src,
+          alt: photo.alt || '',
+          storagePath: photo.storagePath || '',
+          downloadURL: photo.downloadURL || photo.src,
+          contentType: photo.contentType || 'image/jpeg',
+          size: Number(photo.size) || 0,
+          createdAt: photo.createdAt || Date.now()
+        };
+      }
 
       const payload = {
         type: 'image',
@@ -679,20 +929,76 @@
         src: String(photo.src),
         updatedAt: Date.now()
       };
+
       if (estimateUtf8Bytes(payload) > FIRESTORE_DOC_SAFE_LIMIT) {
         throw new Error(`Image "${photo.alt || 'selected image'}" is still too large after compression. Choose a smaller image.`);
       }
-      const mediaRef = await addDoc(collection(db, MEDIA_COLLECTION), payload);
-      return { mediaId: mediaRef.id, alt: payload.alt };
+
+      try {
+        const mediaRef = await addDoc(collection(db, MEDIA_COLLECTION), payload);
+        return { mediaId: mediaRef.id, alt: payload.alt };
+      } catch (error) {
+        throw wrapFirebaseWriteError('Firestore media image write', error);
+      }
     }
 
-    async function prepareEntryForFirestore(sectionId, entry, index) {
+    async function prepareEntryForFirestore(sectionId, entry, index, uploadOptions = {}) {
       const normalized = normalizeEntry(sectionId, entry, index);
       const savedPhotos = [];
+      const newPhotos = normalized.photos.filter((photo) =>
+        photo &&
+        !photo.mediaId &&
+        !/^https?:\/\//i.test(photo.src || '') &&
+        !String(photo.src || '').startsWith('gs://')
+      );
+      const totalPhotos = newPhotos.length;
+
+      uploadOptions.onProgress?.({
+        phase: totalPhotos ? 'processing' : 'saving',
+        totalPhotos,
+        photoNumber: 0,
+        overallPercent: totalPhotos ? 0 : 100,
+        photoPercent: totalPhotos ? 0 : 100,
+        fileName: ''
+      });
+
+      let completedPhotos = 0;
+
       for (let photoIndex = 0; photoIndex < normalized.photos.length; photoIndex += 1) {
-        const saved = await uploadPhotoToFirestore(normalized.photos[photoIndex], sectionId, normalized.id, photoIndex);
+        const photo = normalized.photos[photoIndex];
+        if (!photo?.src) continue;
+
+        const isNewPhoto =
+          !photo.mediaId &&
+          !/^https?:\/\//i.test(photo.src || '') &&
+          !String(photo.src || '').startsWith('gs://');
+
+        if (isNewPhoto) {
+          uploadOptions.onProgress?.({
+            phase: 'uploading',
+            totalPhotos,
+            photoNumber: completedPhotos + 1,
+            overallPercent: totalPhotos ? Math.round((completedPhotos / totalPhotos) * 100) : 100,
+            photoPercent: 10,
+            fileName: photo.alt || `photo-${photoIndex + 1}`
+          });
+        }
+
+        const saved = await uploadPhotoToFirestore(photo, sectionId, normalized.id, photoIndex);
         if (saved) savedPhotos.push(saved);
-      }
+
+        if (isNewPhoto) {
+          completedPhotos += 1;
+          uploadOptions.onProgress?.({
+            phase: 'uploading',
+            totalPhotos,
+            photoNumber: completedPhotos,
+            overallPercent: totalPhotos ? Math.round((completedPhotos / totalPhotos) * 100) : 100,
+            photoPercent: 100,
+            fileName: photo.alt || `photo-${photoIndex + 1}`
+          });
+        }      }
+
       return {
         entryId: normalized.id,
         sectionId,
@@ -701,6 +1007,10 @@
         story: normalized.story || '',
         link: normalized.link || '',
         genre: normalized.genre || '',
+        ...(sectionId === 'movies' ? {
+          imdbLink: normalized.imdbLink || '',
+          posterUrl: normalized.posterUrl || normalized.photos?.[0]?.src || ''
+        } : {}),
         year: Number.isFinite(Number(normalized.year)) ? Number(normalized.year) : null,
         month: Number.isFinite(Number(normalized.month)) ? Number(normalized.month) : null,
         photos: savedPhotos,
@@ -715,9 +1025,19 @@
         if (typeof photo === 'string') return { src: photo, alt: '' };
         if (photo.mediaId) {
           const media = mediaMap.get(photo.mediaId);
-          return media ? { src: media.src, alt: photo.alt || media.alt || '', mediaId: photo.mediaId } : null;
+          const src = media?.downloadURL || media?.src || photo.downloadURL || photo.src || '';
+          return src ? {
+            src,
+            alt: photo.alt || media?.alt || '',
+            mediaId: photo.mediaId,
+            storagePath: media?.storagePath || photo.storagePath || '',
+            downloadURL: src,
+            contentType: media?.contentType || photo.contentType || 'image/jpeg',
+            size: Number(media?.size || photo.size || 0),
+            createdAt: media?.createdAt || photo.createdAt || Date.now()
+          } : null;
         }
-        if (photo.src) return { src: photo.src, alt: photo.alt || '' };
+        if (photo.src) return { src: photo.src, alt: photo.alt || '', mediaId: photo.mediaId || undefined, storagePath: photo.storagePath || '', downloadURL: photo.downloadURL || photo.src, contentType: photo.contentType || 'image/jpeg', size: Number(photo.size || 0), createdAt: photo.createdAt || Date.now() };
         return null;
       }).filter(Boolean);
 
@@ -728,6 +1048,10 @@
         story: docData.story || '',
         link: docData.link || '',
         genre: docData.genre || '',
+        ...(docData.sectionId === 'movies' ? {
+          imdbLink: docData.imdbLink || '',
+          posterUrl: docData.posterUrl || rawPhotos[0]?.src || ''
+        } : {}),
         year: docData.year ?? undefined,
         month: docData.month ?? undefined,
         photos
@@ -744,7 +1068,7 @@
       const mediaMap = new Map();
       mediaSnapshot.forEach((snap) => {
         const data = snap.data();
-        if (data?.src) mediaMap.set(snap.id, data);
+        if (data?.downloadURL || data?.src) mediaMap.set(snap.id, data);
       });
 
       const grouped = {};
@@ -774,8 +1098,10 @@
     }
 
     async function replaceSectionInFirestore(sectionId, entries) {
-      if (!adminUser) {
-        showToast('Admin login required to save changes');
+      const adminError = getAdminWriteErrorReason();
+      if (adminError) {
+        console.error('Admin authorization failed during write attempt:', adminError);
+        showToast(adminError);
         return false;
       }
       try {
@@ -806,15 +1132,24 @@
           updatedAt: Date.now()
         });
 
-        await batch.commit();
+        await requireAuthenticatedAdmin(`Firestore ${sectionId} entries/section_meta write`);
+        try {
+          await batch.commit();
+        } catch (error) {
+          throw wrapFirebaseWriteError(`Firestore entries/section_meta write for ${sectionId}`, error);
+        }
         sections[sectionId].entries = normalizedEntries;
         return true;
       } catch (error) {
         console.error(`Firestore save failed for ${sectionId}:`, error);
-        const message = error?.code === 'permission-denied'
-          ? 'Firestore denied the save. Check your Firestore Rules and make sure you are logged in.'
-          : error?.message || 'Could not save to Firestore.';
-        showToast(message);
+        const message = error?.stage
+          ? error.message
+          : error?.code === 'permission-denied'
+          ? 'Firestore write denied. Check Firestore Rules and the administrator identity.'
+          : error?.code && error?.message
+            ? `${error.code}: ${error.message}`
+            : error?.message || 'Could not save to Firestore.';
+        showToast(message, error?.stage ? 10000 : 5000);
         return false;
       }
     }
@@ -877,6 +1212,19 @@
       try { indexedDB.deleteDatabase('life-earthian-archive-db'); } catch {}
     }
 
+    function validateEntriesForFirestore(sectionId, entries) {
+      if (!Array.isArray(entries)) return `${sectionId} entries are not valid.`;
+      for (let index = 0; index < entries.length; index += 1) {
+        const entry = entries[index];
+        if (!entry || typeof entry !== 'object') return `${sectionId} entry ${index} is invalid.`;
+        const normalized = normalizeEntry(sectionId, entry, index);
+        if (normalized.title && normalized.title.length > 200) return `Title in ${sectionId} is too long.`;
+        if (normalized.story && normalized.story.length > 12000) return `Story in ${sectionId} is too long.`;
+        if (normalized.photos && normalized.photos.length > 10) return `Too many photos in ${sectionId}.`;
+      }
+      return null;
+    }
+
     async function seedOrMigrateFirestore() {
       const [remoteEntries, remoteMeta] = await Promise.all([
         getDocs(collection(db, FIRESTORE_COLLECTION)),
@@ -908,17 +1256,100 @@
       showToast('Archive moved to Firestore');
     }
 
-    async function ensurePersistedCustomContent() {
+    async function setPersistedSectionEntries(sectionId, entries) {
+      return replaceSectionInFirestore(sectionId, entries);
+    }
+
+    async function persistArchiveEntry(sectionId, entry, index, onProgress = () => {}) {
+      await requireAuthenticatedAdmin(`Firestore ${sectionId} entry write`);
+      let payload;
       try {
-        await seedOrMigrateFirestore();
+        payload = await prepareEntryForFirestore(sectionId, entry, index, { onProgress });
       } catch (error) {
-        console.error('Firestore load failed:', error);
-        showToast('Could not load cloud archive. Check Firebase rules and connection.');
+        if (error?.stage) throw error;
+        throw wrapFirebaseWriteError('Photo preparation', error);
+      }
+      if (estimateUtf8Bytes(payload) > FIRESTORE_DOC_SAFE_LIMIT) {
+        throw new Error(`Entry "${payload.title || 'Untitled'}" is too large for Firestore.`);
+      }
+
+      onProgress({
+        phase: 'saving',
+        totalPhotos: entry.photos?.filter((photo) => photo?.file).length || 0,
+        overallPercent: entry.photos?.some((photo) => photo?.file) ? 100 : 0
+      });
+      try {
+        await requireAuthenticatedAdmin(`Firestore ${FIRESTORE_COLLECTION} write`);
+        await setDoc(doc(db, FIRESTORE_COLLECTION, firestoreDocId(sectionId, payload.entryId)), payload);
+      } catch (error) {
+        throw wrapFirebaseWriteError(`Firestore ${FIRESTORE_COLLECTION} write`, error);
+      }
+
+      try {
+        await requireAuthenticatedAdmin('Firestore section_meta write');
+        await setDoc(doc(db, 'section_meta', sectionId), {
+          sectionId,
+          hasEntries: true,
+          updatedAt: Date.now()
+        }, { merge: true });
+      } catch (error) {
+        throw wrapFirebaseWriteError('Firestore section_meta write', error);
+      }
+      onProgress({ phase: 'saved', totalPhotos: entry.photos?.filter((photo) => photo?.mediaId === undefined && photo?.src && !/^https?:\/\//i.test(photo.src || '') && !String(photo.src || '').startsWith('gs://')).length || 0 });
+
+      const normalizedForReturn = normalizeEntry(sectionId, entry, index);
+      const returnedPhotos = payload.photos.map((photo, photoIndex) => {
+        if (photo?.mediaId) {
+          const original = normalizedForReturn.photos?.[photoIndex];
+          return {
+            src: original?.src || '',
+            alt: photo.alt || original?.alt || '',
+            mediaId: photo.mediaId
+          };
+        }
+        return normalizePhoto(photo);
+      });
+
+      return {
+        ...normalizedForReturn,
+        photos: returnedPhotos.filter(Boolean)
+      };
+    }
+
+    async function deleteArchiveEntryFromFirestore(sectionId, entryId) {
+      await requireAuthenticatedAdmin(`Firestore ${FIRESTORE_COLLECTION} delete`);
+      const entryRef = doc(db, FIRESTORE_COLLECTION, firestoreDocId(sectionId, entryId));
+      try {
+        await deleteDoc(entryRef);
+      } catch (error) {
+        throw wrapFirebaseWriteError(`Firestore ${FIRESTORE_COLLECTION} delete`, error);
+      }
+
+      try {
+        const snapshot = await getDocs(collection(db, FIRESTORE_COLLECTION));
+        const hasEntries = snapshot.docs.some((entryDoc) => entryDoc.data()?.sectionId === sectionId);
+        await requireAuthenticatedAdmin('Firestore section_meta update');
+        await setDoc(doc(db, 'section_meta', sectionId), {
+          sectionId,
+          hasEntries,
+          updatedAt: Date.now()
+        }, { merge: true });
+      } catch (error) {
+        throw wrapFirebaseWriteError('Firestore section_meta update', error);
       }
     }
 
-    async function setPersistedSectionEntries(sectionId, entries) {
-      return replaceSectionInFirestore(sectionId, entries);
+    async function removeStoredPhoto(photo, sectionId, entryId) {
+      await requireAuthenticatedAdmin('Photo deletion');
+
+      if (photo?.mediaId) {
+        try {
+          await requireAuthenticatedAdmin('Firestore media delete');
+          await deleteDoc(doc(db, MEDIA_COLLECTION, photo.mediaId));
+        } catch (error) {
+          throw wrapFirebaseWriteError(`Firestore ${MEDIA_COLLECTION} delete`, error);
+        }
+      }
     }
 
     function getThemeIconSvg() {
@@ -940,22 +1371,85 @@
 
     function setAdminUI() {
       if (!adminToggle) return;
-      adminToggle.innerHTML = `<span class="header-icon" aria-hidden="true">${getLockIconSvg(adminOpen)}</span><span class="header-label">Admin</span>`;
-      adminToggle.classList.toggle('is-unlocked', adminOpen);
-      adminToggle.setAttribute('aria-label', adminOpen ? 'Admin unlocked' : 'Admin locked');
-      adminToggle.setAttribute('aria-pressed', String(adminOpen));
+      const adminState = getCurrentAdminState();
+      const isAdmin = adminState.isAdmin;
+      adminToggle.innerHTML = `<span class="header-icon" aria-hidden="true">${getLockIconSvg(isAdmin)}</span><span class="header-label">Admin</span>`;
+      adminToggle.classList.toggle('is-unlocked', isAdmin);
+      adminToggle.setAttribute('aria-label', isAdmin ? 'Admin unlocked' : 'Admin');
+      adminToggle.setAttribute('aria-pressed', String(isAdmin));
+      adminToggle.title = isAdmin ? 'Signed in as administrator' : 'Admin login';
+    }
+
+    function normalizeSectionRoute(sectionId) {
+      const target = String(sectionId || '').trim();
+      if (Object.prototype.hasOwnProperty.call(sections, target)) return target;
+      return appState.activeSection || 'experiences';
+    }
+
+    function syncSectionRoute(sectionId) {
+      const target = normalizeSectionRoute(sectionId);
+      appState.activeSection = target;
+      const desiredHash = `#/` + target;
+      if (window.location.hash !== desiredHash) {
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}${desiredHash}`);
+      }
+    }
+
+    function applyRouteFromHash() {
+      const hash = (window.location.hash || '').trim();
+      if (hash === '#/admin') {
+        openAdminModal();
+        return;
+      }
+      const parsed = hash.replace(/^#\/?/, '').split('/')[0].trim();
+      const nextSection = normalizeSectionRoute(parsed || appState.activeSection);
+      appState.activeSection = nextSection;
+      if (nextSection !== activeSection) {
+        renderSection(nextSection);
+        return;
+      }
+      if (hash && hash !== '#/' + nextSection) {
+        syncSectionRoute(nextSection);
+      }
+    }
+
+    function renderProfileCard() {
+      const image = document.getElementById('profileImage');
+      const fallback = document.getElementById('profileFallback');
+      const phoneRow = document.getElementById('profilePhoneRow');
+      const phoneValue = document.getElementById('profilePhoneValue');
+
+      const hasImage = Boolean(profileConfig.imageUrl && profileConfig.imageUrl.startsWith('http'));
+      if (image) {
+        image.src = hasImage ? profileConfig.imageUrl : '';
+        image.classList.toggle('hidden', !hasImage);
+      }
+      if (fallback) fallback.classList.toggle('hidden', hasImage);
+      if (phoneValue) phoneValue.textContent = profileConfig.phone || '';
+      if (phoneRow) phoneRow.classList.toggle('hidden', !profileConfig.phone);
     }
 
     function openAdminModal() {
+      if (unlockAdminBtn?.disabled) return;
       adminModal.classList.remove('hidden'); adminModal.classList.add('flex');
+      appState.admin.modalOpen = true;
       if (adminEmailInput && adminUser?.email) adminEmailInput.value = adminUser.email;
       if (adminPasswordInput) { adminPasswordInput.value = ''; adminPasswordInput.placeholder = 'Password'; }
       if (adminAuthMsg) adminAuthMsg.textContent = '';
+      if (window.location.hash !== '#/admin') {
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/admin`);
+      }
       setTimeout(() => (adminEmailInput || adminPasswordInput)?.focus(), 30);
     }
-    function closeAdminModal() { adminModal.classList.add('hidden'); adminModal.classList.remove('flex'); }
-    function showToast(text) { toast.textContent = text; toast.classList.remove('hidden'); clearTimeout(window.__toastTimer); window.__toastTimer = setTimeout(() => toast.classList.add('hidden'), 1500); }
-    function slugify(text) { return text.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)+/g,''); }
+    function closeAdminModal() {
+      adminModal.classList.add('hidden'); adminModal.classList.remove('flex');
+      appState.admin.modalOpen = false;
+      const sectionHash = `#/${normalizeSectionRoute(appState.activeSection || activeSection)}`;
+      if (window.location.hash === '#/admin') {
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}${sectionHash}`);
+      }
+    }
+    function showToast(text, duration = 1500) { toast.textContent = text; toast.classList.remove('hidden'); clearTimeout(window.__toastTimer); window.__toastTimer = setTimeout(() => toast.classList.add('hidden'), duration); }
     function isValidUrl(value) { try { const parsed = new URL(value); return ['http:','https:'].includes(parsed.protocol); } catch { return false; } }
     function confirmDelete(label) { return window.confirm(`Remove this ${label}?`); }
 
@@ -973,20 +1467,41 @@
     }
     async function deleteAlbumEntry(sectionId, index) {
       const currentEntries = [...sections[sectionId].entries];
+      const entry = normalizeEntry(sectionId, currentEntries[index], index);
       if (!currentEntries[index] || !confirmDelete(getArchiveLabel(sectionId))) return;
-      if (!await setPersistedSectionEntries(sectionId, currentEntries.filter((_, i) => i !== index))) return;
-      renderSection(sectionId); showToast('Entry removed');
+      try {
+        await deleteArchiveEntryFromFirestore(sectionId, entry.id);
+        sections[sectionId].entries = currentEntries.filter((_, entryIndex) => entryIndex !== index);
+        for (const photo of entry.photos || []) await removeStoredPhoto(photo, sectionId, entry.id);
+        renderSection(sectionId);
+        showToast('Entry removed');
+      } catch (error) {
+        console.error(`Delete failed for ${sectionId}:`, error);
+        renderSection(sectionId);
+        showToast(error?.message || String(error), 12000);
+      }
     }
     async function deleteTimelineEntry(index) {
       const currentEntries = [...sections.timeline.entries];
+      const entry = normalizeEntry('timeline', currentEntries[index], index);
       if (!currentEntries[index] || !confirmDelete('timeline event')) return;
-      if (!await setPersistedSectionEntries('timeline', currentEntries.filter((_, i) => i !== index))) return;
-      renderSection('timeline'); showToast('Timeline event removed');
+      try {
+        await deleteArchiveEntryFromFirestore('timeline', entry.id);
+        sections.timeline.entries = currentEntries.filter((_, entryIndex) => entryIndex !== index);
+        for (const photo of entry.photos || []) await removeStoredPhoto(photo, 'timeline', entry.id);
+        renderSection('timeline');
+        showToast('Timeline event removed');
+      } catch (error) {
+        console.error('Timeline event delete failed:', error);
+        renderSection('timeline');
+        showToast(error?.message || String(error), 12000);
+      }
     }
 
     async function readFilesAsPhotos(files) {
       const selected = Array.from(files || []);
       const results = [];
+
       for (const file of selected) {
         if (!file.type.startsWith('image/')) continue;
         try {
@@ -1004,35 +1519,111 @@
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onerror = () => reject(reader.error || new Error('Could not read image'));
+
         reader.onload = () => {
           const img = new Image();
+
           img.onload = () => {
-            const scale = Math.min(1, maxDimension / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+            const scale = Math.min(
+              1,
+              maxDimension / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height)
+            );
             const width = Math.max(1, Math.round((img.naturalWidth || img.width) * scale));
             const height = Math.max(1, Math.round((img.naturalHeight || img.height) * scale));
             const canvas = document.createElement('canvas');
             canvas.width = width;
             canvas.height = height;
+
             const ctx = canvas.getContext('2d', { alpha: false });
-            if (!ctx) { resolve(String(reader.result)); return; }
+            if (!ctx) {
+              resolve(String(reader.result));
+              return;
+            }
+
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, width, height);
             ctx.drawImage(img, 0, 0, width, height);
 
             const qualities = [quality, 0.45, 0.35, 0.28];
             let best = '';
+
             for (const q of qualities) {
               const candidate = canvas.toDataURL('image/jpeg', q);
               best = candidate;
               if (candidate.length <= 650000) break;
             }
+
             resolve(best);
           };
+
           img.onerror = () => reject(new Error('Could not decode image'));
           img.src = String(reader.result);
         };
+
         reader.readAsDataURL(file);
       });
+    }
+
+    function photoUploadPanelMarkup() {
+      return `<div class="photo-upload-panel hidden" role="status" aria-live="polite">
+        <div class="photo-upload-detail photo-upload-heading">Preparing photos...</div>
+        <div class="photo-upload-metrics mt-2 flex items-center justify-between gap-3 text-xs"><span class="photo-upload-photo-count"></span><span class="photo-upload-overall-percent font-semibold">0%</span></div>
+        <div class="photo-upload-progress-track mt-1"><div class="photo-upload-progress-fill"></div></div>
+        <div class="photo-upload-detail photo-upload-file-name mt-2"></div>
+        <div class="photo-upload-metrics mt-1 flex items-center justify-between gap-3 text-[11px]"><span>Current photo</span><span class="photo-upload-photo-percent">0%</span></div>
+        <div class="photo-upload-file-progress-track mt-1"><div class="photo-upload-file-progress-fill"></div></div>
+        <div class="photo-upload-not-uploaded mt-2 hidden text-xs font-semibold text-red-700 dark:text-red-300">Your photos have NOT been uploaded.</div>
+      </div>`;
+    }
+
+    function resetPhotoUploadPanel(form) {
+      const panel = form.querySelector('.photo-upload-panel');
+      if (!panel) return;
+      panel.classList.remove('is-unavailable', 'is-saving', 'is-saved', 'is-checking');
+      panel.classList.add('hidden');
+      panel.querySelector('.photo-upload-not-uploaded').classList.add('hidden');
+      panel.querySelector('.photo-upload-heading').textContent = 'Preparing photos...';
+      panel.querySelector('.photo-upload-file-name').textContent = '';
+      panel.querySelector('.photo-upload-overall-percent').textContent = '0%';
+      panel.querySelector('.photo-upload-progress-fill').style.width = '0%';
+      panel.querySelector('.photo-upload-photo-percent').textContent = '0%';
+      panel.querySelector('.photo-upload-file-progress-fill').style.width = '0%';
+      panel.querySelector('.photo-upload-photo-count').textContent = '';
+    }
+
+    function setPhotoFormLocked(form, locked) {
+      form.dataset.uploading = String(locked);
+      form.querySelectorAll('input, textarea, select, button').forEach((control) => {
+        control.disabled = locked;
+      });
+    }
+
+    function updatePhotoUploadPanel(form, progress) {
+      const panel = form.querySelector('.photo-upload-panel');
+      if (!panel) return;
+      panel.classList.remove('hidden');
+      panel.classList.remove('is-checking', 'is-unavailable');
+      const overallPercent = Math.max(0, Math.min(100, Math.round(progress.overallPercent || 0)));
+      panel.querySelector('.photo-upload-heading').textContent = progress.phase === 'processing'
+        ? 'Preparing photos...'
+        : progress.phase === 'saving'
+          ? 'Saving archive...'
+          : progress.phase === 'saved'
+            ? 'Saved successfully.'
+            : progress.phase === 'error'
+              ? 'Save failed.'
+              : 'Saving photos...';
+      panel.querySelector('.photo-upload-overall-percent').textContent = `${overallPercent}%`;
+      panel.querySelector('.photo-upload-progress-fill').style.width = `${overallPercent}%`;
+      panel.querySelector('.photo-upload-photo-count').textContent = progress.totalPhotos
+        ? `Photo ${Math.min(progress.photoNumber || 1, progress.totalPhotos)} of ${progress.totalPhotos}`
+        : 'No new photos';
+      panel.querySelector('.photo-upload-file-name').textContent = progress.fileName || (progress.phase === 'saving' ? 'Writing entry and section metadata' : '');
+      const photoPercent = Math.max(0, Math.min(100, Math.round(progress.photoPercent || 0)));
+      panel.querySelector('.photo-upload-photo-percent').textContent = `${photoPercent}%`;
+      panel.querySelector('.photo-upload-file-progress-fill').style.width = `${photoPercent}%`;
+      panel.classList.toggle('is-saving', progress.phase === 'saving');
+      panel.classList.toggle('is-saved', progress.phase === 'saved');
     }
 
     function renderSelectedPreview(form, selectedPhotos) {
@@ -1044,16 +1635,25 @@
       }
       container.innerHTML = selectedPhotos.map((photo, index) => `
         <div class="selected-photo">
-          <img src="${esc(photo.src)}" alt="${esc(photo.alt || 'Selected photo')}" />
+          <img src="${esc(photo.previewUrl || photo.src)}" alt="${esc(photo.alt || 'Selected photo')}" />
           <button type="button" class="selected-photo-remove" data-remove-selected="${index}" aria-label="Remove selected photo">×</button>
         </div>
       `).join('');
       container.querySelectorAll('[data-remove-selected]').forEach((button) => {
         button.addEventListener('click', () => {
-          selectedPhotos.splice(Number(button.dataset.removeSelected), 1);
+          const [removedPhoto] = selectedPhotos.splice(Number(button.dataset.removeSelected), 1);
+          if (removedPhoto?.previewUrl) URL.revokeObjectURL(removedPhoto.previewUrl);
           renderSelectedPreview(form, selectedPhotos);
         });
       });
+    }
+
+    function releaseSelectedPhotoPreviews(selectedPhotos) {
+      for (const photo of selectedPhotos || []) {
+        if (photo?.previewUrl) {
+          try { URL.revokeObjectURL(photo.previewUrl); } catch (_) {}
+        }
+      }
     }
 
     function renderAlbumAdminForm(sectionId, entryIndex = -1, entry = null) {
@@ -1075,6 +1675,7 @@
             <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Photos</label>
             <input name="photos" type="file" accept="image/*" multiple />
             <div class="selected-preview"></div>
+            ${photoUploadPanelMarkup()}
           </div>
           ${existingPhotos.length ? `<div class="space-y-2"><div class="text-[10px] uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Existing photos</div><div class="existing-photo-list">${existingPhotos.map((photo, photoIndex) => `<button type="button" class="compact-secondary-btn delete-photo-btn" data-photo-index="${photoIndex}">Remove photo ${photoIndex + 1}</button>`).join('')}</div></div>` : ''}
           <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">My story</label><textarea name="story" placeholder="Write the memory, context, feeling, and story...">${esc(itemStory)}</textarea></div>
@@ -1092,12 +1693,17 @@
           selectedPhotos.push(...converted);
           renderSelectedPreview(form, selectedPhotos);
           event.target.value = '';
-        } catch { showToast('Could not read one or more images'); }
+        } catch (error) { showToast(`Photo selection failed: ${error.message || error}`, 10000); }
       });
       renderSelectedPreview(form, selectedPhotos);
 
-      form.querySelector('.album-cancel-btn').addEventListener('click', () => renderSection(sectionId));
+      form.querySelector('.album-cancel-btn').addEventListener('click', () => {
+        if (form.dataset.uploading === 'true') return;
+        releaseSelectedPhotoPreviews(selectedPhotos);
+        renderSection(sectionId);
+      });
       form.querySelector('.album-save-btn').addEventListener('click', async () => {
+        if (form.dataset.uploading === 'true') return;
         const title = form.querySelector('input[name="title"]').value.trim();
         const time = form.querySelector('input[name="time"]').value.trim() || 'memory';
         const story = form.querySelector('textarea[name="story"]').value.trim();
@@ -1110,21 +1716,47 @@
           story,
           photos: [...(entry?.photos || []), ...selectedPhotos]
         };
-        if (editing) currentEntries[entryIndex] = nextEntry; else currentEntries.push(nextEntry);
-        if (!await setPersistedSectionEntries(sectionId, currentEntries)) return;
-        renderSection(sectionId);
-        showToast(editing ? 'Entry updated' : 'Entry added');
+        const saveIndex = editing ? entryIndex : currentEntries.length;
+        setPhotoFormLocked(form, true);
+        resetPhotoUploadPanel(form);
+        try {
+          const savedEntry = await persistArchiveEntry(sectionId, nextEntry, saveIndex, (progress) => updatePhotoUploadPanel(form, progress));
+          if (editing) currentEntries[entryIndex] = savedEntry;
+          else currentEntries.push(savedEntry);
+          sections[sectionId].entries = currentEntries;
+          releaseSelectedPhotoPreviews(selectedPhotos);
+          updatePhotoUploadPanel(form, { phase: 'saved', totalPhotos: selectedPhotos.length, overallPercent: 100 });
+          form.dataset.uploading = 'false';
+          showToast('Saved successfully.');
+          setTimeout(() => renderSection(sectionId), 500);
+        } catch (error) {
+          console.error(`Save failed for ${sectionId}:`, error);
+          updatePhotoUploadPanel(form, { phase: 'error', totalPhotos: selectedPhotos.length });
+          showToast(error?.message || String(error), 12000);
+          setPhotoFormLocked(form, false);
+        }
       });
       form.querySelectorAll('.delete-photo-btn').forEach((button) => {
         button.addEventListener('click', async () => {
+          if (form.dataset.uploading === 'true') return;
           if (!entry) return;
           const photoIndex = Number(button.dataset.photoIndex);
-          const target = sections[sectionId].entries[entryIndex];
+          const target = normalizeEntry(sectionId, sections[sectionId].entries[entryIndex], entryIndex);
           if (!target) return;
           const photos = Array.isArray(target.photos) ? target.photos : [];
           if (!confirmDelete('photo')) return;
-          if (!await setPersistedSectionEntries(sectionId, sections[sectionId].entries.map((e, i) => i === entryIndex ? { ...e, photos: photos.filter((_, i) => i !== photoIndex) } : e))) return;
-          renderSection(sectionId); showToast('Photo removed');
+          const removedPhoto = photos[photoIndex];
+          const updatedEntry = { ...target, photos: photos.filter((_, i) => i !== photoIndex) };
+          try {
+            const savedEntry = await persistArchiveEntry(sectionId, updatedEntry, entryIndex);
+            sections[sectionId].entries[entryIndex] = savedEntry;
+            await removeStoredPhoto(removedPhoto, sectionId, target.id);
+            renderSection(sectionId);
+            showToast('Photo removed');
+          } catch (error) {
+            console.error('Existing album photo removal failed:', error);
+            showToast(error?.message || String(error), 12000);
+          }
         });
       });
       return form;
@@ -1147,37 +1779,78 @@
           </div>
           <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Event title</label><input name="title" value="${esc(entry?.title || '')}" class="admin-form-field" placeholder="Event title" required /></div>
           <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Story</label><textarea name="story" class="admin-form-field" style="min-height:160px" placeholder="What happened? Why does it matter?" required>${esc(entry?.story || '')}</textarea></div>
-          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Photos (optional)</label><input name="photos" type="file" accept="image/*" multiple /><div class="selected-preview mt-3"></div></div>
+          <div><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Photos (optional)</label><input name="photos" type="file" accept="image/*" multiple /><div class="selected-preview mt-3"></div>${photoUploadPanelMarkup()}</div>
           ${entry?.photos?.length ? `<div><div class="mb-2 text-[10px] uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Existing photos</div><div class="existing-photo-list">${entry.photos.map((_, photoIndex) => `<button type="button" class="compact-secondary-btn timeline-remove-photo" data-photo-index="${photoIndex}">Remove photo ${photoIndex+1}</button>`).join('')}</div></div>` : ''}
         </div>
         <div class="admin-form-actions"><button type="button" class="admin-form-cancel bg-white dark:bg-zinc-900">Cancel</button><button type="button" class="admin-form-submit">${editing ? 'Save changes' : 'Add Event'}</button></div>
       `;
       const fileInput = form.querySelector('input[name="photos"]');
       fileInput.addEventListener('change', async (event) => {
-        const converted = await readFilesAsPhotos(event.target.files);
-        selectedPhotos.push(...converted); renderSelectedPreview(form, selectedPhotos); event.target.value='';
+        try {
+          const converted = await readFilesAsPhotos(event.target.files);
+          selectedPhotos.push(...converted);
+          renderSelectedPreview(form, selectedPhotos);
+          event.target.value = '';
+        } catch (error) {
+          showToast(`Photo selection failed: ${error.message || error}`, 10000);
+        }
       });
       renderSelectedPreview(form, selectedPhotos);
-      form.querySelector('.admin-form-cancel').addEventListener('click', () => renderSection('timeline'));
+      form.querySelector('.admin-form-cancel').addEventListener('click', () => {
+        if (form.dataset.uploading === 'true') return;
+        releaseSelectedPhotoPreviews(selectedPhotos);
+        renderSection('timeline');
+      });
       form.querySelector('.admin-form-submit').addEventListener('click', async () => {
+        if (form.dataset.uploading === 'true') return;
         const yearValue = Number(form.querySelector('[name="year"]').value);
         const monthValue = Number(form.querySelector('[name="month"]').value);
         const titleValue = form.querySelector('[name="title"]').value.trim();
         const storyValue = form.querySelector('[name="story"]').value.trim();
         if (!Number.isFinite(yearValue) || yearValue < 1900 || yearValue > 2200 || monthValue < 1 || monthValue > 12 || !titleValue || !storyValue) { showToast('Year, month, title and story are required'); return; }
         const nextEntry = { id: entry?.id || `timeline-${Date.now()}`, year:yearValue, month:monthValue, time:monthNames[monthValue-1], title:titleValue, story:storyValue, photos:[...(entry?.photos || []), ...selectedPhotos] };
-        const entries = sections.timeline.entries.map((item, index) => normalizeEntry('timeline', item, index));
-        if (editing) entries[entryIndex] = nextEntry; else entries.push(nextEntry);
-        if (!await setPersistedSectionEntries('timeline', entries)) return;
-        renderSection('timeline'); showToast(editing ? 'Timeline event updated' : 'Timeline event added');
+        const currentEntries = sections.timeline.entries.map((item, index) => normalizeEntry('timeline', item, index));
+        const saveIndex = editing ? entryIndex : currentEntries.length;
+        setPhotoFormLocked(form, true);
+        resetPhotoUploadPanel(form);
+        try {
+          const savedEntry = await persistArchiveEntry('timeline', nextEntry, saveIndex, (progress) => updatePhotoUploadPanel(form, progress));
+          if (editing) currentEntries[entryIndex] = savedEntry;
+          else currentEntries.push(savedEntry);
+          sections.timeline.entries = currentEntries;
+          releaseSelectedPhotoPreviews(selectedPhotos);
+          updatePhotoUploadPanel(form, { phase: 'saved', totalPhotos: selectedPhotos.length, overallPercent: 100 });
+          form.dataset.uploading = 'false';
+          showToast('Saved successfully.');
+          setTimeout(() => renderSection('timeline'), 500);
+        } catch (error) {
+          console.error('Timeline save failed:', error);
+          updatePhotoUploadPanel(form, { phase: 'error', totalPhotos: selectedPhotos.length });
+          showToast(error?.message || String(error), 12000);
+          setPhotoFormLocked(form, false);
+        }
       });
       form.querySelectorAll('.timeline-remove-photo').forEach((button) => {
         button.addEventListener('click', async () => {
+          if (form.dataset.uploading === 'true') return;
           if (!entry || !confirmDelete('photo')) return;
           const photoIndex = Number(button.dataset.photoIndex);
           const current = sections.timeline.entries.map((item, index) => normalizeEntry('timeline', item, index));
-          current[entryIndex].photos = current[entryIndex].photos.filter((_, i) => i !== photoIndex);
-          if (!await setPersistedSectionEntries('timeline', current)) return; renderSection('timeline'); showToast('Photo removed');
+          const target = current[entryIndex];
+          const photos = Array.isArray(target?.photos) ? target.photos : [];
+          const removedPhoto = photos[photoIndex];
+          current[entryIndex] = { ...target, photos: photos.filter((_, index) => index !== photoIndex) };
+          try {
+            const savedEntry = await persistArchiveEntry('timeline', current[entryIndex], entryIndex);
+            current[entryIndex] = savedEntry;
+            sections.timeline.entries = current;
+            await removeStoredPhoto(removedPhoto, 'timeline', target.id);
+            renderSection('timeline');
+            showToast('Photo removed');
+          } catch (error) {
+            console.error('Timeline photo removal failed:', error);
+            showToast(error?.message || String(error), 12000);
+          }
         });
       });
       return form;
@@ -1209,6 +1882,218 @@
       return wrapper;
     }
 
+    function renderMovieCatalog() {
+      const entries = sections.movies.entries.map((entry, index) => ({
+        entry: normalizeEntry('movies', entry, index),
+        index
+      })).filter(({ entry }) => selectedMovieGenre === 'All' || movieGenreKey(entry.genre) === selectedMovieGenre);
+
+      const cards = entries.map(({ entry, index }) => {
+        const posterUrl = getMoviePosterUrl(entry);
+        const poster = posterUrl
+          ? `<img class="movie-poster-image" src="${esc(posterUrl)}" alt="${esc(entry.photos?.[0]?.alt || entry.title)} poster" loading="lazy" />`
+          : `<div class="movie-poster-fallback"><div class="movie-poster-fallback-title">${esc(entry.title || 'Untitled movie')}</div></div>`;
+        const openAction = isValidUrl(entry.link)
+          ? `<a class="movie-poster-action" href="${esc(entry.link)}" target="_blank" rel="noopener noreferrer">Open Movie</a>`
+          : '<button class="movie-poster-action" type="button" disabled>Open Movie</button>';
+        const adminActions = adminOpen
+          ? `<button class="movie-poster-action movie-edit-btn" type="button" data-index="${index}">Edit</button><button class="movie-poster-action movie-poster-action-remove" type="button" data-index="${index}">Remove</button>`
+          : '';
+
+        return `<article class="movie-catalog-card" data-movie-index="${index}">
+          <div class="movie-poster-frame">
+            ${poster}
+            <div class="movie-poster-actions">${openAction}${adminActions}</div>
+          </div>
+          <div class="movie-card-copy">
+            <div class="movie-card-title" title="${esc(entry.title || 'Untitled movie')}">${esc(entry.title || 'Untitled movie')}</div>
+            ${entry.genre ? `<div class="movie-card-genre">${esc(entry.genre)}</div>` : ''}
+            ${entry.story ? `<div class="movie-card-story">${esc(entry.story)}</div>` : ''}
+          </div>
+        </article>`;
+      }).join('');
+
+      const grid = document.createElement('div');
+      grid.className = 'movie-catalog-grid fade-enter';
+      grid.innerHTML = cards || '<div class="movie-catalog-empty">No movies in this genre.</div>';
+      return grid;
+    }
+
+    function renderMovieEditForm(index) {
+      if (!adminOpen) return null;
+      const entry = normalizeEntry('movies', sections.movies.entries[index], index);
+      const form = document.createElement('form');
+      form.className = 'movie-edit-form admin-form-card p-4 sm:p-5';
+      form.innerHTML = `
+        <div class="text-xs uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">Edit movie</div>
+        <div class="mt-3 space-y-3">
+          <input name="title" class="admin-form-field" value="${esc(entry.title)}" aria-label="Movie title" required />
+          <textarea name="story" class="admin-form-field" aria-label="Movie story" placeholder="Story">${esc(entry.story || '')}</textarea>
+          <select name="genre" class="admin-form-field" aria-label="Movie genre">${movieGenres.map((genre) => `<option value="${esc(genre)}" ${movieGenreKey(entry.genre) === genre ? 'selected' : ''}>${esc(genre)}</option>`).join('')}</select>
+          <input name="imdbLink" type="url" class="admin-form-field" value="${esc(entry.imdbLink || '')}" aria-label="IMDb link" placeholder="IMDb URL for poster lookup" />
+          <input name="link" type="url" class="admin-form-field" value="${esc(entry.link || '')}" aria-label="Movie link" placeholder="Movie/watch/information URL" />
+          <input name="posterUrl" type="hidden" />
+          <input name="posterLookupIMDbLink" type="hidden" />
+          <div class="flex flex-wrap items-center gap-3"><button class="compact-secondary-btn movie-fetch-poster" type="button">Fetch Poster</button><div class="movie-poster-preview" aria-live="polite"></div></div>
+          <div class="movie-poster-status" aria-live="polite"></div>
+        </div>
+        <div class="admin-form-actions"><button class="admin-form-cancel" type="button">Cancel</button><button class="admin-form-submit" type="submit">Save changes</button></div>
+        <div class="admin-form-msg mt-3" aria-live="polite"></div>`;
+
+      bindMoviePosterLookup(form, getMoviePosterUrl(entry), entry.imdbLink || '');
+      form.querySelector('.admin-form-cancel').addEventListener('click', () => renderSection('movies'));
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const title = String(formData.get('title') || '').trim();
+        const link = String(formData.get('link') || '').trim();
+        const imdbLink = String(formData.get('imdbLink') || '').trim();
+        let posterUrl = String(formData.get('posterUrl') || '').trim();
+        const lookupSourceInput = form.querySelector('[name="posterLookupIMDbLink"]');
+        const status = form.querySelector('.movie-poster-status');
+        if (!title || (link && !isValidUrl(link))) {
+          form.querySelector('.admin-form-msg').textContent = 'Enter a title and a valid http/https movie link.';
+          return;
+        }
+        if (imdbLink && imdbLink !== lookupSourceInput.value) {
+          status.textContent = 'Checking the new IMDb Link…';
+          try {
+            const result = await requestMoviePoster(imdbLink);
+            if (result) {
+              posterUrl = result.posterUrl;
+              form.querySelector('[name="posterUrl"]').value = posterUrl;
+              lookupSourceInput.value = imdbLink;
+              if (!form.querySelector('[name="title"]').value.trim() && result.title) form.querySelector('[name="title"]').value = result.title;
+              renderMoviePosterPreview(form, posterUrl, result.title || title);
+            } else {
+              posterUrl = '';
+              status.textContent = 'Poster not found. Saving movie details without a poster.';
+            }
+          } catch (error) {
+            posterUrl = '';
+            status.textContent = 'Poster lookup failed. Saving movie details without a poster.';
+          }
+        }
+
+        const updatedEntries = sections.movies.entries.map((current, entryIndex) => entryIndex === index
+          ? { ...normalizeEntry('movies', current, entryIndex), title: form.querySelector('[name="title"]').value.trim(), story: String(formData.get('story') || '').trim(), link, imdbLink, posterUrl, genre: String(formData.get('genre') || ''), photos: moviePhotosWithPoster({ photos: imdbLink === entry.imdbLink ? entry.photos : entry.photos.slice(1) }, posterUrl, title) }
+          : normalizeEntry('movies', current, entryIndex));
+        if (!await setPersistedSectionEntries('movies', updatedEntries)) return;
+        renderSection('movies');
+        showToast('Movie updated');
+      });
+      return form;
+    }
+
+    function renderMovieAddForm() {
+      const form = document.createElement('form');
+      form.className = 'admin-form-card mb-5 p-4 sm:p-5';
+      form.innerHTML = `
+        <div class="text-xs uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">admin</div>
+        <h3 class="mt-1 text-lg font-semibold text-zinc-950 dark:text-zinc-50">Add Movie</h3>
+        <div class="mt-4 space-y-3">
+          <input name="title" type="text" class="admin-form-field" placeholder="Movie title" aria-label="Movie title" required />
+          <textarea name="story" class="admin-form-field" placeholder="Story or notes" aria-label="Movie story"></textarea>
+          <select name="genre" class="admin-form-field" aria-label="Movie genre" required><option value="" selected disabled>Select genre</option>${movieGenres.map((genre) => `<option value="${esc(genre)}">${esc(genre)}</option>`).join('')}</select>
+          <input name="imdbLink" type="url" class="admin-form-field" placeholder="IMDb link for poster lookup" aria-label="IMDb link" />
+          <input name="link" type="url" class="admin-form-field" placeholder="Movie/watch/information URL" aria-label="Movie link" required />          <input name="posterUrl" type="hidden" />
+          <input name="posterLookupIMDbLink" type="hidden" />
+          <div class="flex flex-wrap items-center gap-3"><button class="compact-secondary-btn movie-fetch-poster" type="button">Fetch Poster</button><div class="movie-poster-preview" aria-live="polite"></div></div>
+          <div class="movie-poster-status" aria-live="polite"></div>
+        </div>
+        <div class="admin-form-actions"><button class="admin-form-cancel" type="button">Clear</button><button class="admin-form-submit" type="submit">Save</button></div>
+        <div class="admin-form-msg mt-3" aria-live="polite"></div>`;
+
+      const message = form.querySelector('.admin-form-msg');
+      bindMoviePosterLookup(form);
+      form.querySelector('.admin-form-cancel').addEventListener('click', () => {
+        form.reset();
+        form.querySelector('[name="posterUrl"]').value = '';
+        renderMoviePosterPreview(form, '', '');
+        form.querySelector('.movie-poster-status').textContent = '';
+        message.textContent = '';
+      });
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const title = String(formData.get('title') || '').trim();
+        const link = String(formData.get('link') || '').trim();
+        const imdbLink = String(formData.get('imdbLink') || '').trim();
+        const genre = String(formData.get('genre') || '').trim();
+        if (imdbLink && imdbLink !== form.querySelector('[name="posterLookupIMDbLink"]').value) {
+          const status = form.querySelector('.movie-poster-status');
+          status.textContent = 'Checking the new IMDb Link…';
+          try {
+            const result = await requestMoviePoster(imdbLink);
+            if (result) {
+              form.querySelector('[name="posterUrl"]').value = result.posterUrl;
+              form.querySelector('[name="posterLookupIMDbLink"]').value = imdbLink;
+              if (!form.querySelector('[name="title"]').value.trim() && result.title) form.querySelector('[name="title"]').value = result.title;
+              renderMoviePosterPreview(form, result.posterUrl, result.title || title);
+            } else {
+              status.textContent = 'Poster not found. Saving movie details without a poster.';
+            }
+          } catch (error) {
+            status.textContent = 'Poster lookup failed. Saving movie details without a poster.';
+          }
+        }
+        const finalTitle = form.querySelector('[name="title"]').value.trim();
+        if (!finalTitle || !isValidUrl(link)) {
+          message.textContent = 'Enter a title and a valid http/https movie link.';
+          message.className = 'admin-form-msg error mt-3';
+          return;
+        }
+        if (!movieGenres.includes(genre)) {
+          message.textContent = 'Select a movie genre.';
+          message.className = 'admin-form-msg error mt-3';
+          return;
+        }
+
+        const posterUrl = String(formData.get('posterUrl') || '').trim();
+        const newEntry = {
+          id: `movie-${Date.now()}`,
+          time: 'favorite watch',
+          title: finalTitle,
+          story: String(formData.get('story') || '').trim(),
+          link,
+          imdbLink,
+          posterUrl: String(form.querySelector('[name="posterUrl"]').value || ''),
+          genre,
+          photos: moviePhotosWithPoster(null, String(form.querySelector('[name="posterUrl"]').value || ''), finalTitle)
+        };
+        const entries = [...sections.movies.entries.map((entry, index) => normalizeEntry('movies', entry, index)), newEntry];
+        if (!await setPersistedSectionEntries('movies', entries)) return;
+        renderSection('movies');
+        showToast('Movie added');
+      });
+      return form;
+    }
+
+    function bindMovieCatalog() {
+      entriesEl.querySelectorAll('.movie-poster-image').forEach((image) => {
+        image.addEventListener('error', () => {
+          const fallback = document.createElement('div');
+          fallback.className = 'movie-poster-fallback';
+          const title = document.createElement('div');
+          title.className = 'movie-poster-fallback-title';
+          title.textContent = image.closest('.movie-catalog-card')?.querySelector('.movie-card-title')?.textContent || 'Untitled movie';
+          fallback.appendChild(title);
+          image.replaceWith(fallback);
+        }, { once: true });
+      });
+      entriesEl.querySelectorAll('.movie-edit-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.index);
+          const card = button.closest('.movie-catalog-card');
+          const form = renderMovieEditForm(index);
+          if (card && form) card.replaceWith(form);
+        });
+      });
+      entriesEl.querySelectorAll('.movie-poster-action-remove').forEach((button) => {
+        button.addEventListener('click', () => deleteMovieEntry(Number(button.dataset.index)));
+      });
+    }
+
     function renderAdminComposer(sectionId) {
       if (!adminOpen) return null;
       if (albumSections.includes(sectionId)) {
@@ -1216,37 +2101,36 @@
         wrapper.appendChild(renderAlbumAdminForm(sectionId, -1, null)); return wrapper;
       }
       if (sectionId === 'timeline') return renderTimelineAdminForm();
-      if (sectionId === 'songs' || sectionId === 'movies') {
-        const isSongs = sectionId === 'songs';
+      if (sectionId === 'movies') return renderMovieAddForm();
+      if (sectionId === 'songs') {
         const wrapper = document.createElement('div'); wrapper.className = 'admin-form-card mb-5 p-4 sm:p-5';
         wrapper.innerHTML = `
-          <div class="flex items-center justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">admin</div><h3 class="mt-1 text-lg font-semibold text-zinc-950 dark:text-zinc-50">${isSongs ? 'Add Spotify Playlist' : 'Add Movie'}</h3></div></div>
+          <div class="flex items-center justify-between gap-3"><div><div class="text-[10px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">admin</div><h3 class="mt-1 text-lg font-semibold text-zinc-950 dark:text-zinc-50">Add Spotify Playlist</h3></div></div>
           <form class="mt-4" data-admin-form="${sectionId}">
             <div class="admin-form-row">
               <div>
-                <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">${isSongs ? 'Playlist name' : 'Movie name'}</label>
-                <input name="title" type="text" class="admin-form-field" placeholder="${isSongs ? 'Playlist name' : 'Movie name'}" required />
+                <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Playlist name</label>
+                <input name="title" type="text" class="admin-form-field" placeholder="Playlist name" required />
               </div>
               <div>
-                <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">${isSongs ? 'Spotify playlist link' : 'Movie link'}</label>
-                <input name="link" type="url" class="admin-form-field" placeholder="${isSongs ? 'https://open.spotify.com/playlist/...' : 'https://'}" required />
+                <label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Spotify playlist link</label>
+                <input name="link" type="url" class="admin-form-field" placeholder="https://open.spotify.com/playlist/..." required />
               </div>
             </div>
-            ${!isSongs ? `<div class="mt-4"><label class="mb-2 block text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400" for="movieGenreSelect">Movie genre</label><select id="movieGenreSelect" name="genre" class="admin-form-field" required><option value="" selected disabled>Select genre</option>${movieGenres.map((genre) => `<option value="${esc(genre)}">${esc(genre)}</option>`).join('')}</select></div>` : `<div class="mt-3 text-xs leading-6 text-zinc-500 dark:text-zinc-400">Paste a Spotify playlist link. The playlist and its tracks will appear together in your Songs section.</div>`}
-            <div class="admin-form-actions"><button type="button" class="admin-form-cancel bg-white dark:bg-zinc-900">Clear</button><button type="submit" class="admin-form-submit">${isSongs ? 'Add Playlist' : 'Add Movie'}</button></div>
+            <div class="mt-3 text-xs leading-6 text-zinc-500 dark:text-zinc-400">Paste a Spotify playlist link. The playlist and its tracks will appear together in your Songs section.</div>
+            <div class="admin-form-actions"><button type="button" class="admin-form-cancel bg-white dark:bg-zinc-900">Clear</button><button type="submit" class="admin-form-submit">Add Playlist</button></div>
             <div class="admin-form-msg mt-3" aria-live="polite"></div>
           </form>`;
         const form = wrapper.querySelector('form'); const msg = wrapper.querySelector('.admin-form-msg');
         form.addEventListener('submit', async (event) => {
           event.preventDefault(); const formData = new FormData(form);
-          const title = String(formData.get('title') || '').trim(); const link = String(formData.get('link') || '').trim(); const genre = String(formData.get('genre') || '').trim();
+          const title = String(formData.get('title') || '').trim(); const link = String(formData.get('link') || '').trim();
           if (!title || !link || !isValidUrl(link)) { msg.textContent = 'Enter a valid title and http/https link.'; msg.className='admin-form-msg error mt-3'; return; }
-          if (isSongs && !getSpotifyEmbedUrl(link)) { msg.textContent = 'Paste a valid Spotify playlist, album, or track link.'; msg.className='admin-form-msg error mt-3'; return; }
-          if (!isSongs && !movieGenres.includes(genre)) { msg.textContent = 'Select a movie genre.'; msg.className='admin-form-msg error mt-3'; return; }
-          const newEntry = isSongs ? ['playlist',title,'Added by admin.',link] : ['favorite watch',title,'Added by admin.',link,genre];
+          if (!getSpotifyEmbedUrl(link)) { msg.textContent = 'Paste a valid Spotify playlist, album, or track link.'; msg.className='admin-form-msg error mt-3'; return; }
+          const newEntry = ['playlist',title,'Added by admin.',link];
           const currentEntries = [...sections[sectionId].entries];
           if (!await setPersistedSectionEntries(sectionId, [...currentEntries, newEntry].map((entry,index)=>normalizeEntry(sectionId,entry,index)))) return;
-          form.reset(); msg.textContent = `${isSongs ? 'Playlist' : 'Movie'} added successfully.`; msg.className='admin-form-msg success mt-3'; setTimeout(()=>renderSection(sectionId),150);
+          form.reset(); msg.textContent = 'Playlist added successfully.'; msg.className='admin-form-msg success mt-3'; setTimeout(()=>renderSection(sectionId),150);
         });
         wrapper.querySelector('.admin-form-cancel').addEventListener('click',()=>form.reset());
         return wrapper;
@@ -1350,16 +2234,7 @@
 
     function renderArchivePreviewCard(sectionId, entry, idx) {
       const normalized = normalizeEntry(sectionId, entry, idx);
-      const isMovie = sectionId === 'movies';
-      const isSong = sectionId === 'songs';
-      const isExpandable = albumSections.includes(sectionId);
-      const actionLabel = isMovie ? 'Open Movie' : isSong ? 'Open Playlist' : '';
-      const deleteButton = adminOpen && isMovie ? `<button type="button" class="movie-delete-btn" data-index="${idx}">Remove</button>` : adminOpen && isSong ? `<button type="button" class="song-delete-btn" data-index="${idx}">Remove</button>` : '';
-      const extraMeta = isMovie && normalized.genre ? `<div class="compact-entry-meta">${esc(normalized.genre)}</div>` : '';
-      const linkButton = normalized.link ? `<a href="${esc(normalized.link)}" target="_blank" rel="noreferrer" class="compact-action-btn">${actionLabel}</a>` : '';
-      const copyButton = isSong && normalized.link ? `<button type="button" class="compact-secondary-btn copyBtn" data-copy="${esc(normalized.link)}">Copy link</button>` : '';
-      if (isExpandable) {
-        return `
+      return `
           <div class="compact-entry-capsule archive-entry-card" data-section="${sectionId}" data-index="${idx}">
             <div class="archive-entry-preview">
               <button type="button" class="archive-entry-main-button" data-expand-entry="true" aria-expanded="false">
@@ -1367,7 +2242,7 @@
                 <div class="archive-entry-title">${esc(normalized.title)}</div>
                 <div class="archive-preview-copy">${esc(getArchivePreviewText(normalized))}</div>
               </button>
-              <div class="archive-entry-actions">${deleteButton}${adminOpen ? `<button type="button" class="compact-secondary-btn entry-edit-btn">Edit</button>` : ''}<button type="button" class="compact-secondary-btn read-entry-btn">Read</button></div>
+              <div class="archive-entry-actions">${adminOpen ? `<button type="button" class="compact-secondary-btn entry-edit-btn">Edit</button><button type="button" class="album-delete-btn album-delete-collapsed">Delete</button>` : ''}<button type="button" class="compact-secondary-btn read-entry-btn">Read</button></div>
             </div>
             <div class="archive-expanded-panel">
               <div class="archive-expanded-layout">
@@ -1381,19 +2256,6 @@
               <div class="archive-detail-actions">${adminOpen ? `<button type="button" class="album-add-photos-btn add-photos-inline">Add Photos</button><button type="button" class="album-delete-btn delete-inline">Delete Entry</button>` : ''}</div>
             </div>
           </div>`;
-      }
-      return `
-        <div class="compact-entry-capsule archive-entry-card" data-section="${sectionId}" data-index="${idx}">
-          <div class="archive-entry-preview">
-            <div class="min-w-0">
-              <div class="archive-entry-label">${esc(getArchiveLabel(sectionId))}${normalized.time ? ` · ${esc(normalized.time)}`:''}</div>
-              <div class="archive-entry-title">${esc(normalized.title)}</div>
-              ${extraMeta}
-              ${!isMovie && !isSong && normalized.story ? `<div class="archive-preview-copy">${esc(getArchivePreviewText(normalized))}</div>` : ''}
-            </div>
-            <div class="archive-entry-actions">${linkButton}${copyButton}${deleteButton}</div>
-          </div>
-        </div>`;
     }
 
     function renderTimelineSection() {
@@ -1406,18 +2268,20 @@
         const storyText = entry.story || '';
         const previewText = storyText.replace(/\s+/g,' ').trim();
         const preview = previewText.length > 140 ? `${esc(previewText.slice(0,137))}…` : esc(previewText);
-        const paragraphs = storyText.split(/\n\s*\n|\r\n\s*\r\n/).filter(Boolean).map(p=>`<p class=\"mb-4 leading-8 text-zinc-700 dark:text-zinc-300\">${esc(p)}</p>`).join('');
-        return `<article class=\"timeline-item fade-enter\" data-timeline-index=\"${index}\">
-          <div class=\"timeline-date\">${esc(entry.year)}<br>${esc(monthNames[(entry.month||1)-1])}</div>
-          <span class=\"timeline-dot\" aria-hidden=\"true\"></span>
-          <div class=\"timeline-body\" tabindex=\"0\" role=\"button\" aria-expanded=\"false\">
-            <button type=\"button\" class=\"timeline-read\">Read</button>
+        const paragraphs = storyText.split(/\n\s*\n|\r\n\s*\r\n/).filter(Boolean).map(p=>`<p class="mb-4 leading-8 text-zinc-700 dark:text-zinc-300">${esc(p)}</p>`).join('');
+        return `<article class="timeline-item fade-enter" data-timeline-index="${index}">
+          <div class="timeline-date">${esc(entry.year)}<br>${esc(monthNames[(entry.month||1)-1])}</div>
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <div class="timeline-body" tabindex="0" role="button" aria-expanded="false">
+            <div class="archive-detail-actions timeline-action-area">
+              ${adminOpen ? `<button type="button" class="timeline-edit-btn">Edit</button><button type="button" class="timeline-delete-btn">Delete</button>` : ''}
+              <button type="button" class="timeline-read">Read</button>
+            </div>
             <h3>${esc(entry.title || 'Life event')}</h3>
-            ${preview ? `<div class=\"timeline-preview\">${preview}</div>` : ''}
-            <div class=\"timeline-full\">
-              ${paragraphs || `<p class=\"leading-8 text-zinc-700 dark:text-zinc-300\">No story added yet.</p>`}
+            ${preview ? `<div class="timeline-preview">${preview}</div>` : ''}
+            <div class="timeline-full">
+              ${paragraphs || `<p class="leading-8 text-zinc-700 dark:text-zinc-300">No story added yet.</p>`}
               ${photos}
-              ${adminOpen ? `<div class=\"archive-detail-actions\"><button type=\"button\" class=\"timeline-edit-btn\">Edit</button><button type=\"button\" class=\"timeline-delete-btn\">Delete</button></div>` : ''}
             </div>
           </div>
         </article>`;
@@ -1445,10 +2309,16 @@
     }
 
     function renderSection(id) {
-      activeSection = id;
-      currentPage = id;
-      localStorage.setItem(currentPageKey, id);
-      const sec = sections[id];
+      if (entriesEl.querySelector('[data-uploading="true"]')) {
+        showToast('Please wait for the photo upload and save to finish.', 5000);
+        return;
+      }
+      const sectionId = normalizeSectionRoute(id);
+      activeSection = sectionId;
+      appState.activeSection = sectionId;
+      localStorage.setItem(currentPageKey, sectionId);
+      syncSectionRoute(sectionId);
+      const sec = sections[sectionId];
       if (folderLabel) folderLabel.textContent = sec.title.toUpperCase();
       folderShort.textContent = sec.short;
       folderIntro.textContent = sec.intro;
@@ -1462,17 +2332,19 @@
       if (adminComposer) entriesEl.appendChild(adminComposer);
       if (id === 'timeline') { renderTimelineSection(); return; }
 
-      const visibleEntries = id === 'movies' && selectedMovieGenre !== 'All'
-        ? sec.entries.filter((entry) => movieGenreKey(normalizeEntry('movies', entry, 0).genre) === selectedMovieGenre)
-        : sec.entries;
+      if (id === 'movies') {
+        entriesEl.appendChild(renderMovieCatalog());
+        bindMovieCatalog();
+        return;
+      }
 
       if (id === 'songs') {
-        entriesEl.innerHTML = renderSpotifyLibrary();
+        entriesEl.appendChild(document.createRange().createContextualFragment(renderSpotifyLibrary()));
         bindSpotifyLibrary();
         return;
       }
 
-      visibleEntries.forEach((entry) => {
+      sec.entries.forEach((entry) => {
         const idx = sec.entries.indexOf(entry);
         const article = document.createElement('article');
         article.id = `entry-${id}-${idx}`;
@@ -1505,6 +2377,13 @@
           wrapper.scrollIntoView({behavior:'smooth', block:'center'});
         });
       });
+      entriesEl.querySelectorAll('.album-delete-collapsed').forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+          event.stopPropagation();
+          const card = button.closest('.archive-entry-card');
+          if (card) deleteAlbumEntry(sectionId, Number(card.dataset.index));
+        });
+      });
       entriesEl.querySelectorAll('.add-photos-inline').forEach((button)=>{
         button.addEventListener('click',(event)=>{
           event.stopPropagation();
@@ -1516,9 +2395,6 @@
       entriesEl.querySelectorAll('.delete-inline').forEach((button)=>{
         button.addEventListener('click',(event)=>{ event.stopPropagation(); const card=button.closest('.archive-entry-card'); deleteAlbumEntry(sectionId, Number(card.dataset.index)); });
       });
-      entriesEl.querySelectorAll('.movie-delete-btn').forEach((button)=>button.addEventListener('click',()=>deleteMovieEntry(Number(button.dataset.index))));
-      entriesEl.querySelectorAll('.song-delete-btn').forEach((button)=>button.addEventListener('click',()=>deleteSongEntry(Number(button.dataset.index))));
-      entriesEl.querySelectorAll('.copyBtn').forEach(btn=>btn.addEventListener('click',async()=>{ try { await navigator.clipboard.writeText(btn.dataset.copy); showToast('Link copied'); } catch { showToast('Copy failed'); } }));
       entriesEl.querySelectorAll('.archive-thumb-btn').forEach((thumb)=>thumb.addEventListener('click',(event)=>{
         event.stopPropagation();
         const galleryId=thumb.dataset.galleryId; const idx=Number(thumb.dataset.photoIndex); const gallery=document.getElementById(galleryId); const card=thumb.closest('.archive-entry-card'); const entryIndex=Number(card.dataset.index); const entry=normalizeEntry(sectionId,sections[sectionId].entries[entryIndex],entryIndex); const photo=entry.photos[idx];
@@ -1618,9 +2494,12 @@
     closeInfo.addEventListener('click',()=>{ infoModal.classList.add('hidden'); infoModal.classList.remove('flex'); });
     infoModal.addEventListener('click',(e)=>{ if(e.target===infoModal){ infoModal.classList.add('hidden'); infoModal.classList.remove('flex'); } });
     adminToggle.addEventListener('click', async ()=>{
-      if(adminUser){
+      if (isCurrentUserAdmin()) {
         try {
           await signOut(auth);
+          adminUser = null;
+          adminOpen = false;
+          setAdminUI();
           showToast('Admin locked');
         } catch (error) {
           console.error(error);
@@ -1641,6 +2520,10 @@
       if (adminAuthMsg) adminAuthMsg.textContent = 'Signing in…';
       try {
         await signInWithEmailAndPassword(auth, email, password);
+        if (!isCurrentUserAdmin()) {
+          if (adminAuthMsg) adminAuthMsg.textContent = 'This Firebase account is not authorized as the administrator.';
+          return;
+        }
         closeAdminModal();
       } catch (error) {
         console.error('Firebase Auth error:', error);
@@ -1652,11 +2535,37 @@
     });
     cancelAdminBtn.addEventListener('click',closeAdminModal);
     adminModal.addEventListener('click',(e)=>{ if(e.target===adminModal) closeAdminModal(); });
-    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ infoModal.classList.add('hidden'); infoModal.classList.remove('flex'); searchResults.classList.add('hidden'); closeAdminModal(); }});
+    document.addEventListener('keydown',(e)=>{
+      const isShortcut = (e.ctrlKey || e.metaKey) && e.shiftKey && (e.key.toLowerCase() === 'e');
+      if (isShortcut) {
+        e.preventDefault();
+        if (!adminModal.classList.contains('hidden')) closeAdminModal();
+        else openAdminModal();
+        return;
+      }
+      if (e.key === 'Escape') {
+        infoModal.classList.add('hidden'); infoModal.classList.remove('flex');
+        searchResults.classList.add('hidden');
+        if (!unlockAdminBtn?.disabled) closeAdminModal();
+      }
+    });
+
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash === '#/admin') {
+        openAdminModal();
+        return;
+      }
+      if (adminModal && !adminModal.classList.contains('hidden') && !unlockAdminBtn?.disabled) {
+        closeAdminModal();
+      }
+      applyRouteFromHash();
+    });
 
     onAuthStateChanged(auth, async (user) => {
       adminUser = user || null;
-      adminOpen = Boolean(user);
+      adminOpen = Boolean(user && isCurrentUserAdmin());
+      appState.admin.user = adminUser;
+      appState.admin.isAdmin = adminOpen;
       setAdminUI();
       applyTheme();
       try {
@@ -1669,9 +2578,18 @@
       renderSection(activeSection);
     });
 
+    renderProfileCard();
     applyTheme();
     initializeCarousel();
-    renderSection(activeSection);
+    const initialRouteSection = normalizeSectionRoute(routeSectionFromHash());
+    activeSection = initialRouteSection;
+    appState.activeSection = initialRouteSection;
+    if (window.location.hash === '#/admin') {
+      openAdminModal();
+    } else {
+      syncSectionRoute(initialRouteSection);
+      renderSection(initialRouteSection);
+    }
 
     setTimeout(()=>{
       const welcome=document.getElementById('welcome');
