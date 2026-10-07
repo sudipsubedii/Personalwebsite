@@ -3466,3 +3466,10 @@ html[data-theme="dark"] body {
     padding: 0 !important;
     border: 0 !important;
 }
+
+
+/* Honeypot must never occupy visible form layout. */
+.contact__honeypot {
+    display: none !important;
+    visibility: hidden !important;
+}
