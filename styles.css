@@ -3209,3 +3209,70 @@ body.dark-theme .education-logo {
     white-space: nowrap;
     border: 0;
 }
+
+
+/* ==================== EDUCATION / RESUME DARK MODE ==================== */
+/* These rules are intentionally last so they override the legacy light-card
+   declarations used by the Education / Volunteering timeline. */
+
+body.dark-theme .qual-tabs .qual-tab-btn {
+    background: var(--dark-surface-bg);
+    border-color: var(--dark-border);
+    color: var(--title-color);
+    box-shadow: 0 8px 22px var(--dark-shadow);
+}
+
+body.dark-theme .qual-tabs .qual-tab-btn:hover {
+    background: var(--dark-surface-elevated);
+    color: var(--title-color);
+}
+
+body.dark-theme .qual-tabs .qual-tab-btn.qual-tab-active {
+    background: var(--first-color);
+    border-color: var(--first-color);
+    color: #fff;
+    box-shadow: 0 10px 22px var(--dark-shadow);
+}
+
+body.dark-theme .qual-timeline::before {
+    background: rgba(166, 213, 138, .24);
+}
+
+body.dark-theme .qual-timeline-card {
+    background: var(--dark-surface-bg);
+    border-color: var(--dark-border);
+    color: var(--title-color);
+    box-shadow: 0 16px 40px var(--dark-shadow);
+}
+
+body.dark-theme .qual-timeline-card h3,
+body.dark-theme .qual-timeline-card p,
+body.dark-theme .qual-timeline-card .qual-org {
+    color: var(--title-color);
+}
+
+body.dark-theme .qual-timeline-card .qual-org {
+    color: var(--text-color);
+}
+
+body.dark-theme .qual-period {
+    color: var(--first-color);
+}
+
+body.dark-theme .qual-tags span {
+    background: rgba(123, 182, 60, .12);
+    border-color: rgba(123, 182, 60, .22);
+    color: hsl(var(--hue-color), 62%, 82%);
+}
+
+body.dark-theme .education-logo {
+    background: var(--dark-surface-elevated);
+    border-color: var(--dark-border);
+    box-shadow:
+        0 8px 22px var(--dark-shadow),
+        0 0 0 5px rgba(123, 182, 60, .08);
+}
+
+body.dark-theme .education-logo img {
+    background: var(--dark-surface-elevated);
+}
