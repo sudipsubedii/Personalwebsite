@@ -5,10 +5,7 @@ const navMenu = document.getElementById('nav-menu'),
 if (navToggle) {
     const toggleMenu = () => {
         navMenu.classList.add('show-menu')
-        document.body.classList.add('menu-open')
         navToggle.setAttribute('aria-expanded', 'true')
-        navToggle.setAttribute('aria-label', 'Close navigation')
-        setTimeout(() => navClose?.focus(), 0)
     }
 
     navToggle.addEventListener('click', toggleMenu)
@@ -22,23 +19,20 @@ if (navToggle) {
 
 if (navClose) {
     navClose.addEventListener('click', () => {
-        closeMobileMenu()
+        navMenu.classList.remove('show-menu')
+        if (navToggle) {
+            navToggle.setAttribute('aria-expanded', 'false')
+            navToggle.focus()
+        }
     })
 }
-function closeMobileMenu() {
-    navMenu.classList.remove('show-menu')
-    document.body.classList.remove('menu-open')
-    if (navToggle) {
-        navToggle.setAttribute('aria-expanded', 'false')
-        navToggle.setAttribute('aria-label', 'Open navigation')
-    }
-}
-
 
 const navLink = document.querySelectorAll('.nav__link')
 
 function linkAction() {
-    closeMobileMenu()
+    const navMenu = document.getElementById('nav-menu')
+    navMenu.classList.remove('show-menu')
+    if (navToggle) navToggle.setAttribute('aria-expanded', 'false')
 }
 
 navLink.forEach(n => n.addEventListener('click', linkAction))
@@ -262,7 +256,40 @@ function scrollUp() {
 }
 
 window.addEventListener('scroll', scrollUp)
-scrollUp.call(window)
+
+const themeButton = document.getElementById('theme-button')
+const themeIcon = themeButton ? themeButton.querySelector('i') : null
+const darkTheme = 'dark-theme'
+
+if (themeButton) {
+    const applyTheme = (isDark) => {
+        document.body.classList.toggle(darkTheme, isDark)
+        document.documentElement.classList.toggle(darkTheme, isDark)
+        document.body.dataset.theme = isDark ? 'dark' : 'light'
+        document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
+
+        if (themeIcon) {
+            themeIcon.classList.toggle('uil-sun', isDark)
+            themeIcon.classList.toggle('uil-moon', !isDark)
+        }
+
+        themeButton.setAttribute('aria-pressed', String(isDark))
+        themeButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+
+        localStorage.setItem('selected-theme', isDark ? 'dark' : 'light')
+        localStorage.setItem('selected-icon', isDark ? 'uil-sun' : 'uil-moon')
+    }
+
+    const savedTheme = localStorage.getItem('selected-theme')
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    const initialDark = savedTheme ? savedTheme === 'dark' : prefersDark
+    applyTheme(initialDark)
+
+    themeButton.addEventListener('click', () => {
+        const nextDark = !document.body.classList.contains(darkTheme)
+        applyTheme(nextDark)
+    })
+}
 
 /* ==================== Contact animations + form validation ==================== */
 
@@ -364,145 +391,3 @@ cards.forEach(card => {
 
     form.querySelectorAll('.contact__input, .contact__textarea').forEach(i => i.addEventListener('blur', () => validateField(i)))
 })()
-
-/* ==================== PREMIUM UX ENHANCEMENTS ==================== */
-document.documentElement.classList.add('js')
-
-/* Theme: localStorage when available, in-memory fallback otherwise. */
-(() => {
-  const themeButton = document.getElementById('theme-button')
-  const themeIcon = themeButton?.querySelector('i')
-  let memoryTheme = 'light'
-
-  const readTheme = () => {
-    try {
-      const saved = localStorage.getItem('selected-theme')
-      if (saved === 'dark' || saved === 'light') return saved
-    } catch (_) {}
-    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : memoryTheme
-  }
-
-  const apply = (theme) => {
-    const dark = theme === 'dark'
-    document.documentElement.classList.toggle('dark-theme', dark)
-    document.body.classList.toggle('dark-theme', dark)
-    document.documentElement.dataset.theme = theme
-    document.body.dataset.theme = theme
-    memoryTheme = theme
-    try { localStorage.setItem('selected-theme', theme) } catch (_) {}
-    if (themeIcon) {
-      themeIcon.classList.toggle('uil-sun', dark)
-      themeIcon.classList.toggle('uil-moon', !dark)
-    }
-    if (themeButton) {
-      themeButton.setAttribute('aria-pressed', String(dark))
-      themeButton.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode')
-    }
-  }
-
-  apply(readTheme())
-  themeButton?.addEventListener('click', () => {
-    const next = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark'
-    apply(next)
-  })
-})()
-
-/* Mobile focus trap + Escape close. */
-(() => {
-  const menu = document.getElementById('nav-menu')
-  const toggle = document.getElementById('nav-toggle')
-  const close = document.getElementById('nav-close')
-  if (!menu) return
-  const getFocusable = () => [...menu.querySelectorAll('a,button,[tabindex]:not([tabindex="-1"])')].filter(el => !el.hidden && el.offsetParent !== null)
-  document.addEventListener('keydown', (event) => {
-    if (!menu.classList.contains('show-menu')) return
-    if (event.key === 'Escape') { event.preventDefault(); closeMobileMenu(); toggle?.focus(); return }
-    if (event.key !== 'Tab') return
-    const items = getFocusable()
-    if (!items.length) return
-    const first = items[0], last = items[items.length - 1]
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus() }
-    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus() }
-  })
-  const observer = new MutationObserver(() => {
-    if (menu.classList.contains('show-menu')) close?.focus()
-  })
-  observer.observe(menu,{attributes:true,attributeFilter:['class']})
-})()
-
-/* Optional project links: hidden until a real URL is supplied. */
-document.querySelectorAll('.optional-project-link[data-url]').forEach((link) => {
-  const url = link.dataset.url?.trim()
-  if (!url) { link.hidden = true; return }
-  link.href = url
-  link.hidden = false
-  link.target = '_blank'
-  link.rel = 'noopener noreferrer'
-})
-
-/* Count-up stats once when they enter the viewport. */
-(() => {
-  const stats = document.querySelectorAll('.stat[data-count]')
-  if (!stats.length) return
-  const animate = (el) => {
-    if (el.dataset.animated === 'true') return
-    el.dataset.animated = 'true'
-    const target = Number(el.dataset.count) || 0
-    const suffix = el.dataset.suffix || ''
-    const start = performance.now()
-    const duration = 1000
-    const frame = (now) => {
-      const progress = Math.min((now - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      el.textContent = Math.round(target * eased) + suffix
-      if (progress < 1) requestAnimationFrame(frame)
-    }
-    requestAnimationFrame(frame)
-  }
-  if (!('IntersectionObserver' in window)) stats.forEach(animate)
-  else {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if (entry.isIntersecting) { animate(entry.target); io.unobserve(entry.target) } })
-    },{threshold:.55})
-    stats.forEach(s => io.observe(s))
-  }
-})()
-
-/* Copy email. */
-document.querySelectorAll('.copy-email').forEach((button) => {
-  button.addEventListener('click', async () => {
-    const email = button.dataset.email || ''
-    try {
-      await navigator.clipboard.writeText(email)
-      const original = button.textContent
-      button.textContent = 'Copied'
-      setTimeout(() => button.textContent = original, 1400)
-    } catch (_) {
-      window.location.href = 'mailto:' + email
-    }
-  })
-})
-
-/* Reveal-on-scroll: JS adds the hidden state; content stays visible without JS. */
-(() => {
-  const revealTargets = document.querySelectorAll('[data-anim="fade-up"]')
-  if (!revealTargets.length || !('IntersectionObserver' in window)) return
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('show')
-        io.unobserve(entry.target)
-      }
-    })
-  }, {threshold:.12})
-  revealTargets.forEach(el => io.observe(el))
-})()
-
-/* Reduced-motion carousel fallback. */
-if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('.portfolio__slides .portfolio__card').forEach((slide,index) => {
-    slide.classList.remove('card--hidden','card--left','card--right')
-    if (index===0) slide.classList.add('card--center')
-    else slide.classList.add('card--hidden')
-  })
-}
