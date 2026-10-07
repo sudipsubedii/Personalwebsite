@@ -2656,7 +2656,7 @@ body.dark-theme .qual-tags span {
   .node, .node.left, .node.right {
     width: 100%;
     left: 0;
-    padding-left: 50x;
+    padding-left: 50px;
     padding-right: 0;
     min-height: 0;
     margin: 26px 0;
@@ -3193,4 +3193,18 @@ body.dark-theme .education-logo {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+
+/* Visually hide text while keeping it available to assistive technology. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
