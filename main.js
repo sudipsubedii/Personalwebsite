@@ -264,12 +264,18 @@ const darkTheme = 'dark-theme'
 if (themeButton) {
     const applyTheme = (isDark) => {
         document.body.classList.toggle(darkTheme, isDark)
+        document.documentElement.classList.toggle(darkTheme, isDark)
+        document.body.dataset.theme = isDark ? 'dark' : 'light'
+        document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
+
         if (themeIcon) {
             themeIcon.classList.toggle('uil-sun', isDark)
             themeIcon.classList.toggle('uil-moon', !isDark)
         }
+
         themeButton.setAttribute('aria-pressed', String(isDark))
         themeButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
+
         localStorage.setItem('selected-theme', isDark ? 'dark' : 'light')
         localStorage.setItem('selected-icon', isDark ? 'uil-sun' : 'uil-moon')
     }
