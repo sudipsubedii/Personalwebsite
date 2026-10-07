@@ -8,6 +8,7 @@ if (navToggle) {
         document.body.classList.add('menu-open')
         navToggle.setAttribute('aria-expanded', 'true')
         navToggle.setAttribute('aria-label', 'Close navigation')
+        setTimeout(() => navClose?.focus(), 0)
     }
 
     navToggle.addEventListener('click', toggleMenu)
@@ -262,40 +263,6 @@ function scrollUp() {
 
 window.addEventListener('scroll', scrollUp)
 scrollUp.call(window)
-
-const themeButton = document.getElementById('theme-button')
-const themeIcon = themeButton ? themeButton.querySelector('i') : null
-const darkTheme = 'dark-theme'
-
-if (themeButton) {
-    const applyTheme = (isDark) => {
-        document.body.classList.toggle(darkTheme, isDark)
-        document.documentElement.classList.toggle(darkTheme, isDark)
-        document.body.dataset.theme = isDark ? 'dark' : 'light'
-        document.documentElement.dataset.theme = isDark ? 'dark' : 'light'
-
-        if (themeIcon) {
-            themeIcon.classList.toggle('uil-sun', isDark)
-            themeIcon.classList.toggle('uil-moon', !isDark)
-        }
-
-        themeButton.setAttribute('aria-pressed', String(isDark))
-        themeButton.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode')
-
-        localStorage.setItem('selected-theme', isDark ? 'dark' : 'light')
-        localStorage.setItem('selected-icon', isDark ? 'uil-sun' : 'uil-moon')
-    }
-
-    const savedTheme = localStorage.getItem('selected-theme')
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    const initialDark = savedTheme ? savedTheme === 'dark' : prefersDark
-    applyTheme(initialDark)
-
-    themeButton.addEventListener('click', () => {
-        const nextDark = !document.body.classList.contains(darkTheme)
-        applyTheme(nextDark)
-    })
-}
 
 /* ==================== Contact animations + form validation ==================== */
 
