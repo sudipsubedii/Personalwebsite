@@ -71,7 +71,7 @@
 
 /*========== Variables Dark theme ==========*/
 
-body.dark-theme {
+body.dark-theme, html.dark-theme, html[data-theme="dark"] {
     /* HSL color mode */
     --dark-page-bg: hsl(var(--hue-color), 22%, 9%);
     --dark-header-bg: hsl(var(--hue-color), 22%, 11%);
@@ -3427,4 +3427,27 @@ html.dark-theme .portfolio__dot.active {
 html.dark-theme .footer__bg {
     background-color: var(--dark-header-bg);
     border-top-color: var(--dark-border);
+}
+
+
+/* Root-level theme fallback: guarantees dark surfaces even when a component's
+   legacy selector is more specific than an earlier body.dark-theme rule. */
+html.dark-theme,
+html[data-theme="dark"] {
+    --page-bg: hsl(var(--hue-color), 22%, 9%);
+    --first-color-second: hsl(var(--hue-color), 22%, 9%);
+    --title-color: hsl(var(--hue-color), 18%, 95%);
+    --text-color: hsl(var(--hue-color), 12%, 75%);
+    --text-color-light: hsl(var(--hue-color), 10%, 65%);
+    --input-color: hsl(var(--hue-color), 18%, 17%);
+    --body-color: hsl(var(--hue-color), 22%, 9%);
+    --container-color: hsl(var(--hue-color), 18%, 14%);
+    --section-card-color: hsl(var(--hue-color), 18%, 14%);
+    --section-border-color: rgba(166, 213, 138, .14);
+}
+
+html.dark-theme body,
+html[data-theme="dark"] body {
+    background-color: hsl(var(--hue-color), 22%, 9%) !important;
+    color: hsl(var(--hue-color), 12%, 75%) !important;
 }
