@@ -238,6 +238,7 @@ function scrollActive() {
 }
 
 window.addEventListener('scroll', scrollActive)
+scrollActive()
 
 function scrollHeader() {
     const nav = document.getElementById('header')
@@ -245,18 +246,6 @@ function scrollHeader() {
     else nav.classList.remove('scroll-header')
 }
 
-const tabs = document.querySelectorAll('.toggle button');
-  const views = document.querySelectorAll('.view');
-
-  tabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.tab;
-      tabs.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      views.forEach(v => v.classList.remove('active'));
-      document.getElementById(target).classList.add('active');
-    });
-  });
 window.addEventListener('scroll', scrollHeader)
 
 function scrollUp() {
@@ -269,6 +258,7 @@ function scrollUp() {
 window.addEventListener('scroll', scrollUp)
 
 const themeButton = document.getElementById('theme-button')
+const themeIcon = themeButton ? themeButton.querySelector('i') : null
 const darkTheme = 'dark-theme'
 
 if (themeButton) {
