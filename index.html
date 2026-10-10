@@ -136,6 +136,98 @@
         opacity: .55;
         cursor: not-allowed;
       }
+    
+      /* Shared project poster sizing: all three cards use the same 16:9 frame.
+         Images are contained rather than cropped or stretched. */
+      .project-card .project-poster,
+      .project-card.featured .project-poster {
+        width: 100%;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 9 !important;
+        flex: 0 0 auto;
+        margin: 0 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 1rem;
+        background: #f3f6f4;
+      }
+
+      .project-card .project-poster img,
+      .project-card.featured .project-poster img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain !important;
+        object-position: center !important;
+        border-radius: 1rem;
+      }
+
+      .project-card .project-poster svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        flex: 1 1 auto;
+      }
+
+      /* Match Dastavez card typography and size to neighboring project cards. */
+      .project-card.dastavez-project {
+        align-self: stretch !important;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 30px !important;
+      }
+
+      .project-card.dastavez-project h3 {
+        min-height: 3.9rem !important;
+        margin-bottom: 15px !important;
+        font-size: 1.6rem !important;
+        line-height: inherit !important;
+      }
+
+      .project-card.dastavez-project p {
+        min-height: 5.1em !important;
+        margin-bottom: 1em !important;
+      }
+
+      /* Keep Live App, GitHub and the disabled APK button on one line.
+         Text uses the same inherited size; only horizontal padding is reduced. */
+      .project-card.dastavez-project .project-links {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .project-card.dastavez-project .project-links a,
+      .project-card.dastavez-project .project-links .apk-disabled {
+        flex: 0 0 auto;
+        padding: 9px 10px !important;
+        font-size: inherit !important;
+        line-height: 1.25;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 600px) {
+        .project-card.dastavez-project {
+          padding: 18px !important;
+        }
+
+        .project-card.dastavez-project .project-links {
+          gap: 6px;
+        }
+
+        .project-card.dastavez-project .project-links a,
+        .project-card.dastavez-project .project-links .apk-disabled {
+          padding: 8px 8px !important;
+        }
+      }
+
     </style>
 </head>
 <body>
@@ -869,7 +961,70 @@
 
         <div class="projects-grid">
 
-            <div class="project-card">
+                        <div class="project-poster seismic-poster">
+                <svg viewBox="0 0 1200 675" role="img" aria-labelledby="seismicPosterTitle seismicPosterDesc" xmlns="http://www.w3.org/2000/svg">
+                    <title id="seismicPosterTitle">Seismic Microzonation of Kathmandu Valley</title>
+                    <desc id="seismicPosterDesc">Minimal illustration of terrain contours, seismic waves, and mapped building zones.</desc>
+                    <defs>
+                        <linearGradient id="seismicBg" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#fbfcfb"/>
+                            <stop offset="1" stop-color="#e9f0ec"/>
+                        </linearGradient>
+                        <linearGradient id="seismicGreen" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#99df68"/>
+                            <stop offset="1" stop-color="#44a94b"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="1200" height="675" rx="28" fill="url(#seismicBg)"/>
+                    <g fill="none" stroke="#b7c9bd" stroke-width="3" opacity=".62">
+                        <path d="M-35 130 C145 28 250 74 325 154 S455 266 540 160 S690 35 800 110"/>
+                        <path d="M-40 180 C120 82 240 108 310 185 S450 306 545 202 S690 84 810 158"/>
+                        <path d="M-35 235 C115 140 220 155 295 220 S448 350 545 251 S700 130 825 212"/>
+                        <path d="M-40 294 C105 195 220 205 290 272 S440 400 548 310 S705 183 830 265"/>
+                        <path d="M-35 354 C100 255 220 270 292 330 S432 452 550 370 S705 244 835 325"/>
+                        <path d="M-40 410 C112 326 229 324 300 385 S438 498 560 427 S718 302 840 385"/>
+                    </g>
+                    <g transform="translate(640 90)">
+                        <path d="M28 210 C20 145 70 87 135 70 C207 50 266 91 286 146 C310 211 271 264 211 282 C142 302 77 277 50 236" fill="#dcebdc" stroke="#a9c7ad" stroke-width="4"/>
+                        <path d="M63 215 C61 168 99 127 146 117 C192 107 237 133 248 174 C263 219 229 247 189 259 C144 272 99 254 83 226" fill="#bce0a8" stroke="#80bd75" stroke-width="4"/>
+                        <path d="M100 210 C102 178 128 157 158 157 C188 157 210 177 208 204 C206 230 182 242 158 242 C134 242 113 230 100 210" fill="url(#seismicGreen)" stroke="#469c50" stroke-width="4"/>
+                        <g fill="none" stroke="#6c9ba0" stroke-width="4" stroke-linecap="round">
+                            <path d="M-25 215 C-5 195 -5 175 -25 155"/>
+                            <path d="M-52 236 C-12 201 -12 167 -52 134"/>
+                            <path d="M-80 257 C-26 208 -26 160 -80 112"/>
+                        </g>
+                        <g fill="#263945" opacity=".9">
+                            <rect x="310" y="138" width="38" height="65" rx="4"/>
+                            <rect x="355" y="114" width="48" height="89" rx="4"/>
+                            <rect x="410" y="150" width="39" height="53" rx="4"/>
+                            <rect x="461" y="126" width="45" height="77" rx="4"/>
+                            <rect x="320" y="214" width="52" height="46" rx="4"/>
+                            <rect x="380" y="214" width="42" height="46" rx="4"/>
+                            <rect x="432" y="214" width="72" height="46" rx="4"/>
+                        </g>
+                        <g fill="#e9f5e9">
+                            <path d="M320 149h8v9h-8zm0 18h8v9h-8zm45-41h9v10h-9zm0 19h9v10h-9zm56 34h8v9h-8zm52-40h9v10h-9z"/>
+                        </g>
+                        <path d="M-88 300 H520" stroke="#a9bab0" stroke-width="3"/>
+                    </g>
+                    <g font-family="Arial, Helvetica, sans-serif">
+                        <text x="72" y="96" fill="#468f4d" font-size="23" font-weight="700" letter-spacing="5">ENGINEERING PROJECT · 2026</text>
+                        <text x="72" y="168" fill="#1d2b31" font-size="56" font-weight="700">SEISMIC</text>
+                        <text x="72" y="232" fill="#1d2b31" font-size="56" font-weight="700">MICROZONATION</text>
+                        <text x="74" y="282" fill="#5f7075" font-size="26" letter-spacing="4">KATHMANDU VALLEY · NEPAL</text>
+                        <rect x="74" y="322" width="104" height="9" rx="4.5" fill="#72cf5b"/>
+                        <text x="74" y="389" fill="#51636a" font-size="25">Site response analysis</text>
+                        <text x="74" y="427" fill="#51636a" font-size="25">Soil amplification · GIS mapping</text>
+                        <g transform="translate(74 518)">
+                            <rect width="475" height="70" rx="35" fill="#ffffff" stroke="#d6e1d8" stroke-width="2"/>
+                            <circle cx="38" cy="35" r="10" fill="#7bd15d"/>
+                            <text x="64" y="44" fill="#33454b" font-size="23" font-weight="600">OpenSees  /  Python  /  GIS</text>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+
+<div class="project-card">
                 <div class="project-top">
                     <span class="project-type">Final Year Project</span>
                     <span class="year">2026</span>
@@ -903,11 +1058,6 @@
                         loading="lazy"
                         decoding="async"
                     >
-                </div>
-
-                <div class="project-top">
-                    <span class="project-type">Web Application</span>
-                    <span class="year">2026</span>
                 </div>
 
                 <h3>Dastavez — Secure Document Vault</h3>
