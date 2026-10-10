@@ -2847,7 +2847,7 @@ body.dark-theme .project-card {
 }
 
 body.dark-theme .project-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(0);
     box-shadow: 0 24px 60px var(--dark-shadow);
 }
 
