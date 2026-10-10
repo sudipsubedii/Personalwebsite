@@ -195,8 +195,19 @@
         margin-bottom: 1em !important;
       }
 
+      /* Consistent footer spacing keeps all project action rows on one baseline. */
+      .projects-grid > .project-card .project-links {
+        margin-top: auto !important;
+      }
+
+      .project-card .project-meta-placeholder {
+        visibility: hidden !important;
+        pointer-events: none;
+      }
+
       /* Force all Dastavez actions into one non-wrapping three-column row. */
       .project-card.dastavez-project .project-links {
+        margin-top: auto !important;
         display: grid !important;
         grid-template-columns: max-content max-content max-content !important;
         grid-auto-flow: column !important;
@@ -1066,6 +1077,7 @@
                     <a href="#">View Project</a>
                     <a href="#">GitHub</a>
                 </div>
+                <div class="project-meta project-meta-placeholder" aria-hidden="true">Web Application · 2026</div>
             </div>
 
             <div class="project-card featured dastavez-project">
