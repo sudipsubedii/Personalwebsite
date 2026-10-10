@@ -195,22 +195,39 @@
         margin-bottom: 1em !important;
       }
 
-      /* Keep Live App, GitHub and the disabled APK button on one line.
-         Text uses the same inherited size; only horizontal padding is reduced. */
+      /* Force all Dastavez actions into one non-wrapping three-column row. */
       .project-card.dastavez-project .project-links {
-        display: flex;
-        flex-wrap: nowrap;
+        display: grid !important;
+        grid-template-columns: max-content max-content max-content !important;
+        grid-auto-flow: column !important;
+        flex-wrap: nowrap !important;
         align-items: center;
-        gap: 8px;
+        justify-content: start;
+        justify-items: start;
+        gap: 8px !important;
+        width: max-content;
+        max-width: 100%;
+        white-space: nowrap !important;
       }
 
       .project-card.dastavez-project .project-links a,
       .project-card.dastavez-project .project-links .apk-disabled {
-        flex: 0 0 auto;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        width: max-content !important;
+        min-width: 0 !important;
+        max-width: none !important;
         padding: 9px 10px !important;
+        margin: 0 !important;
         font-size: inherit !important;
         line-height: 1.25;
-        white-space: nowrap;
+        white-space: nowrap !important;
+      }
+
+      .project-card.dastavez-project .project-links .apk-disabled {
+        opacity: .55;
+        cursor: not-allowed;
       }
 
       @media (max-width: 600px) {
@@ -219,12 +236,13 @@
         }
 
         .project-card.dastavez-project .project-links {
-          gap: 6px;
+          gap: 5px !important;
         }
 
         .project-card.dastavez-project .project-links a,
         .project-card.dastavez-project .project-links .apk-disabled {
-          padding: 8px 8px !important;
+          padding: 8px 7px !important;
+          font-size: inherit !important;
         }
       }
 
